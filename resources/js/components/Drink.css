@@ -1,0 +1,28 @@
+.drink {
+  display: inline-block;
+  font-size: 0.8em;
+  padding: 1em;
+  border: 1px solid #009900;
+  border-radius: 5px;
+  margin: 1em;
+  max-width: 250px;
+  vertical-align: top;
+}
+
+.drink ul {
+  text-align: left;
+  list-style-type: none;
+  padding-left: 1em;
+}
+
+.drink h3 {
+  margin-top: 0;
+}
+
+.drink button {
+  max-width: 150px;
+}
+
+i {
+  margin-right: 1em;
+}

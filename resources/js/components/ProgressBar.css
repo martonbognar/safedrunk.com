@@ -1,0 +1,9 @@
+#progress-bar {
+  border: 1px solid white;
+  display: none;
+}
+
+#progress-bar img {
+  max-width: 100vw;
+  max-height: 10vh;
+}
