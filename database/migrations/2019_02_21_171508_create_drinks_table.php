@@ -15,7 +15,13 @@ class CreateDrinksTable extends Migration
     {
         Schema::create('drinks', function (Blueprint $table) {
             $table->increments('id');
-            $table->timestamps();
+            $table->decimal('amount_cl', 6, 2);
+            $table->timestamp('start')->useCurrent();
+            $table->timestamp('end')->nullable()->default(null);
+            $table->unsignedInteger('session_id');
+            $table->unsignedInteger('beverage_id');
+            $table->foreign('session_id')->references('id')->on('sessions');
+            $table->foreign('beverage_id')->references('id')->on('beverages');
         });
     }
 

@@ -15,7 +15,12 @@ class CreateBeveragesTable extends Migration
     {
         Schema::create('beverages', function (Blueprint $table) {
             $table->increments('id');
-            $table->timestamps();
+            $table->decimal('percentage', 5, 2);
+            $table->string('name', 200);
+            $table->boolean('approved')->default(false);
+            $table->boolean('pending')->default(false);
+            $table->unsignedInteger('user_id')->nullable()->default(null);
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
