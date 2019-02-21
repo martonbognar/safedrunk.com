@@ -35,7 +35,11 @@ class SessionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $session = new Session();
+        $session->name = request('name');
+        $session->user_id = Auth::id();
+        $session->save();
+        return redirect('/home');
     }
 
     /**
@@ -46,7 +50,10 @@ class SessionController extends Controller
      */
     public function show(Session $session)
     {
-        //
+        $beverages = Beverage::all();
+        $drinks = $session->drinks()->get();
+        $user = Auth::user();
+        return view('session', compact(['session', 'beverages', 'drinks', 'user']));
     }
 
     /**

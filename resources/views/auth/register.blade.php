@@ -40,6 +40,34 @@
                         </div>
 
                         <div class="form-group row">
+                            <label for="sex" class="col-md-4 col-form-label text-md-right">{{ __('Sex (male/female)') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="sex" type="text" class="form-control{{ $errors->has('sex') ? ' is-invalid' : '' }}" name="sex" value="{{ old('sex') }}" required>
+
+                                @if ($errors->has('sex'))
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('sex') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="weight" class="col-md-4 col-form-label text-md-right">{{ __('Weight') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="weight" type="number" class="form-control{{ $errors->has('weight') ? ' is-invalid' : '' }}" name="weight" value="{{ old('weight') }}" required>
+
+                                @if ($errors->has('weight'))
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('weight') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
                             <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
 
                             <div class="col-md-6">

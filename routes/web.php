@@ -18,3 +18,15 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::post('/beverages/', 'BeverageController@store');
+Route::get('/beverages/create/', 'BeverageController@create');
+Route::patch('/beverages/{beverage}/', 'BeverageController@update');
+Route::delete('/beverages/{beverage}/', 'BeverageController@destroy');
+
+Route::post('/sessions/', 'SessionController@store');
+Route::get('/sessions/{session}/', 'SessionController@show');
+Route::get('/sessions/{session}/drinks/', 'DrinkController@index');
+Route::post('/sessions/{session}/drinks/', 'DrinkController@store');
+Route::patch('/sessions/{session}/drinks/{drink}/', 'DrinkController@update');
+Route::delete('/sessions/{session}/drinks/{drink}/', 'DrinkController@destroy');

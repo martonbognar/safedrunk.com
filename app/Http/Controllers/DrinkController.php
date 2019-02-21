@@ -14,7 +14,7 @@ class DrinkController extends Controller
      */
     public function index()
     {
-        //
+        return $session->drinks()->with('beverage')->get();
     }
 
     /**
@@ -35,7 +35,12 @@ class DrinkController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $drink = new Drink();
+        $drink->amount_cl = request('amount_cl');
+        $drink->session_id = $session->id;
+        $drink->beverage_id = request('beverage_id');
+        $drink->save();
+        return redirect('/home');
     }
 
     /**
@@ -69,7 +74,9 @@ class DrinkController extends Controller
      */
     public function update(Request $request, Drink $drink)
     {
-        //
+        $drink->end = Carbon::now();
+        $drink->save();
+        return 'OK';
     }
 
     /**
@@ -80,6 +87,7 @@ class DrinkController extends Controller
      */
     public function destroy(Drink $drink)
     {
-        //
+        $drink->delete();
+        return 'OK';
     }
 }

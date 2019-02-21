@@ -24,7 +24,7 @@ class BeverageController extends Controller
      */
     public function create()
     {
-        //
+        return view('drink');
     }
 
     /**
@@ -35,7 +35,11 @@ class BeverageController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $beverage = new Beverage();
+        $beverage->name = request('name');
+        $beverage->percentage = request('percentage');
+        $beverage->save();
+        return 'OK';
     }
 
     /**
@@ -69,7 +73,10 @@ class BeverageController extends Controller
      */
     public function update(Request $request, Beverage $beverage)
     {
-        //
+        $beverage->name = request('name');
+        $beverage->percentage = request('percentage');
+        $beverage->save();
+        return 'OK';
     }
 
     /**
@@ -80,6 +87,7 @@ class BeverageController extends Controller
      */
     public function destroy(Beverage $beverage)
     {
-        //
+        $beverage->delete();
+        return 'OK';
     }
 }
