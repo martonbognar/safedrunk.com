@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './Effects.css';
 import EFFECT_LIST from './data/effectList';
 
 class Effects extends Component {

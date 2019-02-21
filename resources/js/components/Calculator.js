@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Effects from './Effects'
 import ProgressBar from './ProgressBar'
-import './Calculator.css'
 
 class Calculator extends Component {
   constructor(props) {

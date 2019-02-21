@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App'
-import './index.css'
 
-ReactDOM.render(
-  <App />,
-  document.getElementById('main')
-);
+if (document.getElementById('main')) {
+  ReactDOM.render(
+    <App />,
+    document.getElementById('main')
+  );
+}
