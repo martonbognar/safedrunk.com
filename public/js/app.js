@@ -61182,24 +61182,18 @@ function (_Component) {
     _classCallCheck(this, App);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(App).call(this));
-    var localStorageExists = typeof Storage !== 'undefined';
     _this.state = {
       basicData: {
-        gender: localStorageExists && localStorage.gender ? localStorage.gender : 'female',
-        weight: localStorageExists && localStorage.weight ? localStorage.weight : ''
+        gender: '',
+        weight: ''
       },
-      drinks: localStorageExists && localStorage.drinks ? JSON.parse(localStorage.drinks) : [],
-      exported: localStorageExists,
-      keygen: localStorageExists && localStorage.keygen ? localStorage.keygen : 0,
-      canSave: localStorageExists,
+      drinks: [],
       showNewDrink: false
     };
 
     var self = _assertThisInitialized(_this);
 
     axios.get('/personal/').then(function (response) {
-      // handle success
-      console.log(response);
       self.setState({
         basicData: {
           gender: response.data.sex,
@@ -61207,26 +61201,18 @@ function (_Component) {
         }
       });
     }).catch(function (error) {
-      // handle error
-      console.log(error);
+      alert("There was a connection error. Please try reloading the page.");
     });
     _this.onNewDrinkSubmit = _this.onNewDrinkSubmit.bind(_assertThisInitialized(_this));
     _this.removeDrink = _this.removeDrink.bind(_assertThisInitialized(_this));
     _this.duplicateDrink = _this.duplicateDrink.bind(_assertThisInitialized(_this));
     _this.toggleDrinkForm = _this.toggleDrinkForm.bind(_assertThisInitialized(_this));
-    _this.toggleSave = _this.toggleSave.bind(_assertThisInitialized(_this));
-    _this.saveBasicData = _this.saveBasicData.bind(_assertThisInitialized(_this));
-    _this.saveDrinks = _this.saveDrinks.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(App, [{
     key: "onNewDrinkSubmit",
     value: function onNewDrinkSubmit(data) {
-      data.key = this.state.keygen;
-      this.setState({
-        keygen: this.state.keygen + 1
-      });
       this.setState({
         drinks: this.state.drinks.concat([data])
       }, this.saveDrinks);
@@ -61262,53 +61248,8 @@ function (_Component) {
       });
     }
   }, {
-    key: "toggleSave",
-    value: function toggleSave() {
-      this.setState({
-        exported: !this.state.exported
-      }, this.saveBasicData);
-    }
-  }, {
-    key: "saveBasicData",
-    value: function saveBasicData() {
-      if (this.state.canSave) {
-        if (this.state.exported) {
-          localStorage.gender = this.state.basicData.gender;
-          localStorage.weight = this.state.basicData.weight;
-        } else {
-          localStorage.removeItem('gender');
-          localStorage.removeItem('weight');
-        }
-      }
-    }
-  }, {
-    key: "saveDrinks",
-    value: function saveDrinks() {
-      if (this.state.canSave) {
-        localStorage.drinks = JSON.stringify(this.state.drinks);
-        localStorage.keygen = this.state.keygen;
-      }
-    }
-  }, {
     key: "render",
     value: function render() {
-      var remember = '';
-
-      if (this.state.canSave) {
-        remember = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "remember"
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-          type: "checkbox",
-          checked: this.state.exported,
-          onChange: this.toggleSave,
-          id: "remember-box"
-        }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
-          htmlFor: "remember-box"
-        }, "Remember my data"));
-      } else {
-        remember = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Your browser does not support local storage");
-      }
-
       var rows = [];
       this.state.drinks.forEach(function (drink) {
         rows.push(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Drink__WEBPACK_IMPORTED_MODULE_1__["default"], {
