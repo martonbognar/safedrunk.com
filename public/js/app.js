@@ -61147,9 +61147,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _Drink__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Drink */ "./resources/js/components/Drink.js");
 /* harmony import */ var _Calculator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Calculator */ "./resources/js/components/Calculator.js");
-/* harmony import */ var _BasicData__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./BasicData */ "./resources/js/components/BasicData.js");
-/* harmony import */ var _Welcome__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Welcome */ "./resources/js/components/Welcome.js");
-/* harmony import */ var _NewDrink__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./NewDrink */ "./resources/js/components/NewDrink.js");
+/* harmony import */ var _NewDrink__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./NewDrink */ "./resources/js/components/NewDrink.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -61173,8 +61171,6 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
-
-
 var App =
 /*#__PURE__*/
 function (_Component) {
@@ -61189,7 +61185,6 @@ function (_Component) {
     var localStorageExists = typeof Storage !== 'undefined';
     _this.state = {
       basicData: {
-        name: localStorageExists && localStorage.name ? localStorage.name : '',
         gender: localStorageExists && localStorage.gender ? localStorage.gender : 'female',
         weight: localStorageExists && localStorage.weight ? localStorage.weight : ''
       },
@@ -61197,32 +61192,35 @@ function (_Component) {
       exported: localStorageExists,
       keygen: localStorageExists && localStorage.keygen ? localStorage.keygen : 0,
       canSave: localStorageExists,
-      showBasic: !(localStorageExists && localStorage.name && localStorage.gender && localStorage.weight),
       showNewDrink: false
     };
-    _this.onBasicDataChange = _this.onBasicDataChange.bind(_assertThisInitialized(_this));
+
+    var self = _assertThisInitialized(_this);
+
+    axios.get('/personal/').then(function (response) {
+      // handle success
+      console.log(response);
+      self.setState({
+        basicData: {
+          gender: response.data.sex,
+          weight: response.data.weight
+        }
+      });
+    }).catch(function (error) {
+      // handle error
+      console.log(error);
+    });
     _this.onNewDrinkSubmit = _this.onNewDrinkSubmit.bind(_assertThisInitialized(_this));
     _this.removeDrink = _this.removeDrink.bind(_assertThisInitialized(_this));
     _this.duplicateDrink = _this.duplicateDrink.bind(_assertThisInitialized(_this));
     _this.toggleDrinkForm = _this.toggleDrinkForm.bind(_assertThisInitialized(_this));
     _this.toggleSave = _this.toggleSave.bind(_assertThisInitialized(_this));
-    _this.toggleBasic = _this.toggleBasic.bind(_assertThisInitialized(_this));
     _this.saveBasicData = _this.saveBasicData.bind(_assertThisInitialized(_this));
     _this.saveDrinks = _this.saveDrinks.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(App, [{
-    key: "onBasicDataChange",
-    value: function onBasicDataChange(data) {
-      this.setState({
-        basicData: data
-      }, this.saveBasicData);
-      this.setState({
-        showBasic: false
-      });
-    }
-  }, {
     key: "onNewDrinkSubmit",
     value: function onNewDrinkSubmit(data) {
       data.key = this.state.keygen;
@@ -61264,13 +61262,6 @@ function (_Component) {
       });
     }
   }, {
-    key: "toggleBasic",
-    value: function toggleBasic() {
-      this.setState({
-        showBasic: !this.state.showBasic
-      });
-    }
-  }, {
     key: "toggleSave",
     value: function toggleSave() {
       this.setState({
@@ -61282,11 +61273,9 @@ function (_Component) {
     value: function saveBasicData() {
       if (this.state.canSave) {
         if (this.state.exported) {
-          localStorage.name = this.state.basicData.name;
           localStorage.gender = this.state.basicData.gender;
           localStorage.weight = this.state.basicData.weight;
         } else {
-          localStorage.removeItem('name');
           localStorage.removeItem('gender');
           localStorage.removeItem('weight');
         }
@@ -61320,41 +61309,6 @@ function (_Component) {
         remember = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Your browser does not support local storage");
       }
 
-      var basicInfo = '';
-
-      if (this.state.showBasic) {
-        basicInfo = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          id: "basic-data"
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Welcome__WEBPACK_IMPORTED_MODULE_4__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_BasicData__WEBPACK_IMPORTED_MODULE_3__["default"], {
-          name: this.state.basicData.name,
-          gender: this.state.basicData.gender,
-          weight: this.state.basicData.weight,
-          onChange: this.onBasicDataChange
-        }), remember);
-      } else {
-        if (this.state.basicData.name !== '') {
-          basicInfo = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-            id: "basic-data"
-          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Using app as ", this.state.basicData.name));
-        } else {
-          basicInfo = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-            id: "basic-data"
-          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Set up basic data before using the app!"));
-        }
-      }
-
-      var toggleButton = '';
-
-      if (this.state.showBasic) {
-        toggleButton = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-          onClick: this.toggleBasic
-        }, "Hide basic info");
-      } else {
-        toggleButton = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-          onClick: this.toggleBasic
-        }, "Show basic info");
-      }
-
       var rows = [];
       this.state.drinks.forEach(function (drink) {
         rows.push(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Drink__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -61369,7 +61323,7 @@ function (_Component) {
       }, this);
       var newDrink = this.state.showNewDrink ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         id: "drink-form"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_NewDrink__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_NewDrink__WEBPACK_IMPORTED_MODULE_3__["default"], {
         onChange: this.onNewDrinkSubmit
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         onClick: this.toggleDrinkForm,
@@ -61380,7 +61334,7 @@ function (_Component) {
       var content = '';
 
       if (this.state.basicData.weight !== 0 && this.state.basicData.weight !== '') {
-        content = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, toggleButton, newDrink, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        content = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, newDrink, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           id: "drinks"
         }, rows), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Calculator__WEBPACK_IMPORTED_MODULE_2__["default"], {
           drinks: this.state.drinks,
@@ -61389,7 +61343,7 @@ function (_Component) {
         }));
       }
 
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, basicInfo, content);
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, content);
     }
   }]);
 
@@ -61397,134 +61351,6 @@ function (_Component) {
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
 /* harmony default export */ __webpack_exports__["default"] = (App);
-
-/***/ }),
-
-/***/ "./resources/js/components/BasicData.js":
-/*!**********************************************!*\
-  !*** ./resources/js/components/BasicData.js ***!
-  \**********************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-
-
-var BasicData =
-/*#__PURE__*/
-function (_Component) {
-  _inherits(BasicData, _Component);
-
-  function BasicData(props) {
-    var _this;
-
-    _classCallCheck(this, BasicData);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(BasicData).call(this, props));
-    _this.state = {
-      name: props.name,
-      weight: props.weight,
-      gender: props.gender
-    };
-    _this.changeName = _this.changeName.bind(_assertThisInitialized(_this));
-    _this.changeGender = _this.changeGender.bind(_assertThisInitialized(_this));
-    _this.changeWeight = _this.changeWeight.bind(_assertThisInitialized(_this));
-    _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_this));
-    return _this;
-  }
-
-  _createClass(BasicData, [{
-    key: "changeName",
-    value: function changeName(event) {
-      this.setState({
-        name: event.target.value
-      });
-    }
-  }, {
-    key: "changeGender",
-    value: function changeGender(event) {
-      this.setState({
-        gender: event.target.value
-      });
-    }
-  }, {
-    key: "changeWeight",
-    value: function changeWeight(event) {
-      var input = event.target.value.replace(',', '.');
-
-      if (isNaN(input)) {
-        this.setState({
-          weight: ''
-        });
-      } else {
-        this.setState({
-          weight: input
-        });
-      }
-    }
-  }, {
-    key: "handleSubmit",
-    value: function handleSubmit(event) {
-      event.preventDefault();
-      this.setState({
-        weight: parseFloat(this.state.weight)
-      }, this.props.onChange(this.state));
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
-        onSubmit: this.handleSubmit
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        type: "text",
-        placeholder: "Name",
-        required: true,
-        value: this.state.name,
-        onChange: this.changeName
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
-        value: this.state.gender,
-        onChange: this.changeGender
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-        value: "female"
-      }, "Female"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-        value: "male"
-      }, "Male")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        type: "text",
-        placeholder: "Weight (kg)",
-        required: true,
-        value: this.state.weight,
-        onChange: this.changeWeight
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        className: "submit"
-      }, "Submit"));
-    }
-  }]);
-
-  return BasicData;
-}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
-
-/* harmony default export */ __webpack_exports__["default"] = (BasicData);
 
 /***/ }),
 
@@ -62162,67 +61988,6 @@ function (_Component) {
 
 /***/ }),
 
-/***/ "./resources/js/components/Welcome.js":
-/*!********************************************!*\
-  !*** ./resources/js/components/Welcome.js ***!
-  \********************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-
-
-var Welcome =
-/*#__PURE__*/
-function (_Component) {
-  _inherits(Welcome, _Component);
-
-  function Welcome() {
-    _classCallCheck(this, Welcome);
-
-    return _possibleConstructorReturn(this, _getPrototypeOf(Welcome).apply(this, arguments));
-  }
-
-  _createClass(Welcome, [{
-    key: "render",
-    value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "welcome-div"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Hi!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Welcome to BALI, the ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://github.com/martonbognar/bali-react",
-        target: "_blank"
-      }, "open-source"), " Blood Alcohol Level Indicator."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Please enter your basic information and remember to drink responsibly. Never drink and drive and don't take the estimated figures on this website too seriously."));
-    }
-  }]);
-
-  return Welcome;
-}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
-
-/* harmony default export */ __webpack_exports__["default"] = (Welcome);
-
-/***/ }),
-
 /***/ "./resources/js/components/data/drinkList.js":
 /*!***************************************************!*\
   !*** ./resources/js/components/data/drinkList.js ***!
@@ -62367,8 +62132,8 @@ if (document.getElementById('main')) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/vagrant/code/bali-next/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /home/vagrant/code/bali-next/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /home/vagrant/code/safedrunk/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /home/vagrant/code/safedrunk/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

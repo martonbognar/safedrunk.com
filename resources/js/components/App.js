@@ -1,19 +1,16 @@
 import React, { Component } from 'react';
 import Drink from './Drink'
 import Calculator from './Calculator'
-import BasicData from './BasicData'
-import Welcome from './Welcome'
 import NewDrink from './NewDrink'
 
 class App extends Component {
   constructor() {
     super();
 
-    let localStorageExists = typeof(Storage) !== 'undefined';
+    let localStorageExists = typeof (Storage) !== 'undefined';
 
     this.state = {
       basicData: {
-        name: localStorageExists && localStorage.name ? localStorage.name : '',
         gender: localStorageExists && localStorage.gender ? localStorage.gender : 'female',
         weight: localStorageExists && localStorage.weight ? localStorage.weight : '',
       },
@@ -21,38 +18,43 @@ class App extends Component {
       exported: localStorageExists,
       keygen: localStorageExists && localStorage.keygen ? localStorage.keygen : 0,
       canSave: localStorageExists,
-      showBasic: !(localStorageExists && localStorage.name && localStorage.gender && localStorage.weight),
       showNewDrink: false,
     };
 
-    this.onBasicDataChange = this.onBasicDataChange.bind(this);
+    let self = this;
+
+    axios.get('/personal/')
+      .then(function (response) {
+        // handle success
+        console.log(response);
+        self.setState({ basicData: { gender: response.data.sex, weight: response.data.weight } });
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      });
+
     this.onNewDrinkSubmit = this.onNewDrinkSubmit.bind(this);
     this.removeDrink = this.removeDrink.bind(this);
     this.duplicateDrink = this.duplicateDrink.bind(this);
     this.toggleDrinkForm = this.toggleDrinkForm.bind(this);
     this.toggleSave = this.toggleSave.bind(this);
-    this.toggleBasic = this.toggleBasic.bind(this);
     this.saveBasicData = this.saveBasicData.bind(this);
     this.saveDrinks = this.saveDrinks.bind(this);
   }
 
-  onBasicDataChange(data) {
-    this.setState({basicData: data}, this.saveBasicData);
-    this.setState({showBasic: false});
-  }
-
   onNewDrinkSubmit(data) {
     data.key = this.state.keygen;
-    this.setState({keygen: this.state.keygen + 1});
-    this.setState({drinks: this.state.drinks.concat([data])}, this.saveDrinks);
-    this.setState({showNewDrink: false});
+    this.setState({ keygen: this.state.keygen + 1 });
+    this.setState({ drinks: this.state.drinks.concat([data]) }, this.saveDrinks);
+    this.setState({ showNewDrink: false });
   }
 
   removeDrink(drink) {
     let tempDrinks = this.state.drinks;
     let index = tempDrinks.indexOf(drink);
     tempDrinks.splice(index, 1);
-    this.setState({drinks: tempDrinks}, this.saveDrinks);
+    this.setState({ drinks: tempDrinks }, this.saveDrinks);
   }
 
   duplicateDrink(drink) {
@@ -65,25 +67,19 @@ class App extends Component {
   }
 
   toggleDrinkForm(event) {
-    this.setState({showNewDrink: !this.state.showNewDrink});
-  }
-
-  toggleBasic() {
-    this.setState({showBasic: !this.state.showBasic});
+    this.setState({ showNewDrink: !this.state.showNewDrink });
   }
 
   toggleSave() {
-    this.setState({exported: !this.state.exported}, this.saveBasicData);
+    this.setState({ exported: !this.state.exported }, this.saveBasicData);
   }
 
   saveBasicData() {
     if (this.state.canSave) {
       if (this.state.exported) {
-        localStorage.name = this.state.basicData.name;
         localStorage.gender = this.state.basicData.gender;
         localStorage.weight = this.state.basicData.weight;
       } else {
-        localStorage.removeItem('name');
         localStorage.removeItem('gender');
         localStorage.removeItem('weight');
       }
@@ -105,42 +101,9 @@ class App extends Component {
           <input type='checkbox' checked={this.state.exported} onChange={this.toggleSave} id='remember-box' />
           <label htmlFor='remember-box'>Remember my data</label>
         </div>
-        );
+      );
     } else {
       remember = <p>Your browser does not support local storage</p>;
-    }
-
-    let basicInfo = '';
-    if (this.state.showBasic) {
-      basicInfo = (
-        <div id='basic-data'>
-          <Welcome />
-          <BasicData name={this.state.basicData.name} gender={this.state.basicData.gender} weight={this.state.basicData.weight} onChange={this.onBasicDataChange} />
-          {remember}
-        </div>
-        );
-    } else {
-      if (this.state.basicData.name !== '') {
-        basicInfo = (
-          <div id='basic-data'>
-            <h2>Using app as {this.state.basicData.name}</h2>
-          </div>
-        );
-      } else {
-        basicInfo = (
-          <div id='basic-data'>
-            <h2>Set up basic data before using the app!</h2>
-          </div>
-        );
-      }
-    }
-
-    let toggleButton = '';
-
-    if (this.state.showBasic) {
-      toggleButton = (<button onClick={this.toggleBasic}>Hide basic info</button>);
-    } else {
-      toggleButton = (<button onClick={this.toggleBasic}>Show basic info</button>);
     }
 
     let rows = [];
@@ -156,7 +119,6 @@ class App extends Component {
     if (this.state.basicData.weight !== 0 && this.state.basicData.weight !== '') {
       content = (
         <div>
-          {toggleButton}
           {newDrink}
           <div id='drinks'>
             {rows}
@@ -168,7 +130,6 @@ class App extends Component {
 
     return (
       <div>
-        {basicInfo}
         {content}
       </div>
     );

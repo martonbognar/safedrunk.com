@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use App\Session;
+use App\Beverage;
 use Illuminate\Http\Request;
 
 class SessionController extends Controller
