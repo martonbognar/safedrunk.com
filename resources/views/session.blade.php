@@ -6,28 +6,8 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">{{ $session->name }}</div>
-
                     <div class="card-body">
-                        <script>
-                            var request = new XMLHttpRequest();
-                            request.responseType = 'json';
-                            request.onreadystatechange = function () {
-                                if (request.readyState === 4) {
-                                    drinks = request.response;
-                                    token = "{{ csrf_token() }}";
-                                    sex = "{{ $user->sex }}";
-                                    weight = {{ $user->weight }};
-                                    renderDrinks();
-                                }
-                            };
-                            request.open("GET", "/sessions/" + {{ $session->id }} +"/drinks/");
-                            request.send();
-                        </script>
-                        <ul id='drink-container'>
-                        </ul>
-                        <p>
-                            Alcohol content: <span id='ebac'>0</span>%.
-                        </p>
+                        <div id="main"></div>
                         <form method='post' action='/sessions/{{ $session->id }}/drinks'>
                             {{ csrf_field() }}
                             <input required type='number' step='1' min='1' name='amount_cl' placeholder='Amount (cl)'>

@@ -5,7 +5,7 @@ class ProgressBar extends Component {
     return (
       <div>
         <div id='progress-bar'>
-          <img alt='Progress bar' src={process.env.PUBLIC_URL + '/img/progress.png'} />
+          <img alt='Progress bar' src={'/images/progress.png'} />
         </div>
       </div>
     );

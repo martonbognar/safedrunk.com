@@ -61182,6 +61182,14 @@ function (_Component) {
     _classCallCheck(this, App);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(App).call(this));
+    var url = window.location.href;
+
+    if (url.slice(-1) !== '/') {
+      url += "/";
+    }
+
+    var pieces = url.split("/");
+    console.log(pieces[pieces.length - 2]);
     _this.state = {
       basicData: {
         gender: '',
@@ -61917,7 +61925,7 @@ function (_Component) {
         id: "progress-bar"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
         alt: "Progress bar",
-        src: Object({"MIX_PUSHER_APP_KEY":"","MIX_PUSHER_APP_CLUSTER":"mt1","NODE_ENV":"development"}).PUBLIC_URL + '/img/progress.png'
+        src: '/images/progress.png'
       })));
     }
   }]);

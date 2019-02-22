@@ -7,6 +7,13 @@ class App extends Component {
   constructor() {
     super();
 
+    let url = window.location.href;
+    if (url.slice(-1) !== '/') {
+      url += "/";
+    }
+    let pieces = url.split("/");
+    console.log(pieces[pieces.length - 2]);
+
     this.state = {
       basicData: {
         gender: '',

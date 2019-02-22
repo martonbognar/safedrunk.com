@@ -7,7 +7,7 @@
             @guest
                 <p>Log in.</p>
             @else
-                <div id="main"></div>
+                Welcome.
             @endif
         </div>
     </div>
