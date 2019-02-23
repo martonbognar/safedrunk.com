@@ -61239,14 +61239,16 @@ function (_Component) {
   _createClass(App, [{
     key: "onNewDrinkSubmit",
     value: function onNewDrinkSubmit(data) {
-      this.setState({
-        drinks: this.state.drinks.concat([data])
-      });
+      var self = this;
       axios.post("/sessions/".concat(this.state.id, "/drinks/"), {
         'amount_cl': data.amount,
         'beverage_id': data.beverage_id
       }).then(function (response) {
         console.log(response);
+        data.key = response.data.id;
+        self.setState({
+          drinks: self.state.drinks.concat([data])
+        });
       }).catch(function (error) {
         console.log(error);
         alert("There was a connection error. Please try reloading the page.");
@@ -61258,14 +61260,26 @@ function (_Component) {
   }, {
     key: "removeDrink",
     value: function removeDrink(drink) {
+      var self = this;
+      var index = -1;
+      this.state.drinks.forEach(function (d, i) {
+        if (d.key === drink.props.id) {
+          index = i;
+        }
+      });
       var tempDrinks = this.state.drinks;
-      var index = tempDrinks.indexOf(drink);
+      console.log(this.state.drinks);
+      console.log("index: ".concat(index));
+      var id = drink.props.id;
+      console.log(id);
+      console.log(drink);
       tempDrinks.splice(index, 1);
-      this.setState({
-        drinks: tempDrinks
-      }, this.saveDrinks);
-      axios.delete("/sessions/".concat(this.state.id, "/drinks/").concat(drink.props.id)).then(function (response) {
+      console.log(tempDrinks);
+      axios.delete("/sessions/".concat(this.state.id, "/drinks/").concat(id)).then(function (response) {
         console.log(response);
+        self.setState({
+          drinks: tempDrinks
+        });
       }).catch(function (error) {
         console.log(error);
         alert("There was a connection error. Please try reloading the page.");

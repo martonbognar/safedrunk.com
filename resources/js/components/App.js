@@ -61,10 +61,11 @@ class App extends Component {
   }
 
   onNewDrinkSubmit(data) {
-    this.setState({ drinks: this.state.drinks.concat([data]) });
+    let self = this;
     axios.post(`/sessions/${this.state.id}/drinks/`, { 'amount_cl': data.amount, 'beverage_id': data.beverage_id })
       .then(function (response) {
-        console.log(response);
+        data.key = response.data.id;
+        self.setState({ drinks: self.state.drinks.concat([data]) });
       })
       .catch(function (error) {
         console.log(error);
@@ -74,13 +75,19 @@ class App extends Component {
   }
 
   removeDrink(drink) {
+    let self = this;
+    let index = -1;
+    this.state.drinks.forEach(function (d, i) {
+      if (d.key === drink.props.id) {
+        index = i;
+      }
+    })
     let tempDrinks = this.state.drinks;
-    let index = tempDrinks.indexOf(drink);
+    let id = drink.props.id;
     tempDrinks.splice(index, 1);
-    this.setState({ drinks: tempDrinks }, this.saveDrinks);
-    axios.delete(`/sessions/${this.state.id}/drinks/${drink.props.id}`)
+    axios.delete(`/sessions/${this.state.id}/drinks/${id}`)
       .then(function (response) {
-        console.log(response);
+        self.setState({ drinks: tempDrinks });
       })
       .catch(function (error) {
         console.log(error);

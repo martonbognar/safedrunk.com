@@ -42,7 +42,7 @@ class DrinkController extends Controller
         $drink->session_id = $session->id;
         $drink->beverage_id = request('beverage_id');
         $drink->save();
-        return redirect('/home');
+        return response()->json(['id' => $drink->id]);
     }
 
     /**
