@@ -21,6 +21,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/personal/', 'UserController@personal');
 
+Route::get('/beverages/', 'BeverageController@list');
 Route::post('/beverages/', 'BeverageController@store');
 Route::get('/beverages/create/', 'BeverageController@create');
 Route::patch('/beverages/{beverage}/', 'BeverageController@update');

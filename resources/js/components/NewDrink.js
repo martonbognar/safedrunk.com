@@ -1,10 +1,30 @@
 import React, { Component } from 'react';
-import DRINKS from './data/drinkList';
 
 class NewDrink extends Component {
+
+
   constructor(props) {
     super(props);
-    this.state = {name: '', amount: '', strength: '', startTime: new Date().getTime(), selectedDrink: ''};
+
+    this.state = {
+      name: '',
+      amount: '',
+      strength: '',
+      startTime: new Date().getTime(),
+      selectedDrink: '',
+      beverage_id: undefined,
+      drinkList: [],
+    };
+
+    let self = this;
+
+    axios.get('/beverages/')
+      .then(function (response) {
+        self.setState({ drinkList: response.data });
+      })
+      .catch(function (error) {
+        alert("There was a connection error. Please try reloading the page.");
+      });
 
     this.resetState = this.resetState.bind(this);
     this.refreshStartTime = this.refreshStartTime.bind(this);
@@ -17,56 +37,49 @@ class NewDrink extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  componentWillMount() {
-    this.setState({
-      drinkList: DRINKS
-    });
-  }
-
   resetState() {
-    this.setState({name: '', amount: '', strength: '', startTime: new Date().getTime(), selectedDrink: ''});
+    this.setState({ name: '', amount: '', strength: '', startTime: new Date().getTime(), selectedDrink: '' });
   }
 
   refreshStartTime(event) {
     event.preventDefault();
-    this.setState({startTime: new Date().getTime()});
+    this.setState({ startTime: new Date().getTime() });
   }
 
   handlePresetChanged(event) {
-    this.state.drinkList.forEach(function (category) {
-      category.values.forEach(function (drink) {
-        if (drink.key === event.target.value) {
-          this.setState({name: drink.name, amount: drink.amount, strength: drink.strength});
-        }
-      }, this);
+    this.state.drinkList.forEach(function (drink) {
+      console.log(`${drink.id} - ${event.target.value}`);
+      if (drink.id === Number(event.target.value)) {
+        this.setState({ name: drink.name, strength: drink.percentage, beverage_id: drink.id });
+      }
     }, this);
-    this.setState({selectedDrink: event.target.value});
+    this.setState({ selectedDrink: event.target.value });
   }
 
   handleNameChanged(event) {
-    this.setState({name: event.target.value});
+    this.setState({ name: event.target.value });
   }
 
   handleAmountChanged(event) {
     let input = event.target.value.replace(',', '.');
     if (isNaN(input)) {
-      this.setState({amount: ''});
+      this.setState({ amount: '' });
     } else {
-      this.setState({amount: input});
+      this.setState({ amount: input });
     }
   }
 
   handleStrengthChanged(event) {
     let input = event.target.value.replace(',', '.');
     if (isNaN(input)) {
-      this.setState({strength: ''});
+      this.setState({ strength: '' });
     } else {
-      this.setState({strength: input});
+      this.setState({ strength: input });
     }
   }
 
   handleStartTimeChanged(event) {
-    this.setState({startTime: new Date(event.target.value).getTime()});
+    this.setState({ startTime: new Date(event.target.value).getTime() });
   }
 
   submitData() {
@@ -76,7 +89,7 @@ class NewDrink extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    this.setState({amount: parseFloat(this.state.amount), strength: parseFloat(this.state.strength)}, this.submitData);
+    this.setState({ amount: parseFloat(this.state.amount), strength: parseFloat(this.state.strength) }, this.submitData);
   }
 
   render() {
@@ -85,12 +98,8 @@ class NewDrink extends Component {
 
     let drinks = [];
 
-    this.state.drinkList.forEach(function (category) {
-      let values = [];
-      category.values.forEach(function (drink) {
-        values.push(<option value={drink.key} key={drink.key}>{drink.name}</option>);
-      });
-      drinks.push(<optgroup label={category.categoryName}>{values}</optgroup>);
+    this.state.drinkList.forEach(function (drink) {
+      drinks.push(<option value={drink.id} key={drink.id}>{drink.name}</option>);
     });
 
     return (

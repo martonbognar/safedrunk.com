@@ -17,6 +17,11 @@ class BeverageController extends Controller
         //
     }
 
+    public function list()
+    {
+        return Beverage::all();
+    }
+
     /**
      * Show the form for creating a new resource.
      *

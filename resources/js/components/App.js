@@ -12,9 +12,9 @@ class App extends Component {
       url += "/";
     }
     let pieces = url.split("/");
-    console.log(pieces[pieces.length - 2]);
 
     this.state = {
+      id: pieces[pieces.length - 2],
       basicData: {
         gender: '',
         weight: '',
@@ -30,6 +30,27 @@ class App extends Component {
         self.setState({ basicData: { gender: response.data.sex, weight: response.data.weight } });
       })
       .catch(function (error) {
+        console.log(error);
+        alert("There was a connection error. Please try reloading the page.");
+      });
+
+    axios.get(`/sessions/${self.state.id}/drinks/`)
+      .then(function (response) {
+        response.data.forEach(function (drink) {
+          self.setState({
+            drinks: self.state.drinks.concat([{
+              name: drink.beverage.name,
+              amount: drink.amount_cl,
+              strength: drink.beverage.percentage,
+              beverage_id: drink.beverage_id,
+              startTime: new Date(drink.start),
+              key: drink.id,
+            }])
+          });
+        });
+      })
+      .catch(function (error) {
+        console.log(error);
         alert("There was a connection error. Please try reloading the page.");
       });
 
@@ -40,7 +61,15 @@ class App extends Component {
   }
 
   onNewDrinkSubmit(data) {
-    this.setState({ drinks: this.state.drinks.concat([data]) }, this.saveDrinks);
+    this.setState({ drinks: this.state.drinks.concat([data]) });
+    axios.post(`/sessions/${this.state.id}/drinks/`, { 'amount_cl': data.amount, 'beverage_id': data.beverage_id })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+        alert("There was a connection error. Please try reloading the page.");
+      });
     this.setState({ showNewDrink: false });
   }
 
@@ -56,6 +85,7 @@ class App extends Component {
       name: drink.props.name,
       amount: drink.props.amount,
       strength: drink.props.strength,
+      beverage_id: drink.props.beverage_id,
       startTime: new Date().getTime(),
     });
   }
@@ -68,7 +98,7 @@ class App extends Component {
     let rows = [];
 
     this.state.drinks.forEach(function (drink) {
-      rows.push(<Drink key={drink.key} name={drink.name} amount={drink.amount} strength={drink.strength} startTime={drink.startTime} onRemove={this.removeDrink} onDuplicate={this.duplicateDrink} />);
+      rows.push(<Drink key={drink.key} name={drink.name} amount={drink.amount} strength={drink.strength} startTime={drink.startTime} onRemove={this.removeDrink} beverage_id={drink.beverage_id} onDuplicate={this.duplicateDrink} />);
     }, this);
 
     let newDrink = this.state.showNewDrink ? <div id='drink-form'><NewDrink onChange={this.onNewDrinkSubmit} /><button onClick={this.toggleDrinkForm} className='remove'>Cancel</button></div> : <button onClick={this.toggleDrinkForm}>New Drink</button>;

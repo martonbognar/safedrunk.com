@@ -14,7 +14,7 @@ class DrinkController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Session $session)
     {
         return $session->drinks()->with('beverage')->get();
     }
@@ -35,7 +35,7 @@ class DrinkController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Session $session)
     {
         $drink = new Drink();
         $drink->amount_cl = request('amount_cl');

@@ -61189,8 +61189,8 @@ function (_Component) {
     }
 
     var pieces = url.split("/");
-    console.log(pieces[pieces.length - 2]);
     _this.state = {
+      id: pieces[pieces.length - 2],
       basicData: {
         gender: '',
         weight: ''
@@ -61209,6 +61209,24 @@ function (_Component) {
         }
       });
     }).catch(function (error) {
+      console.log(error);
+      alert("There was a connection error. Please try reloading the page.");
+    });
+    axios.get("/sessions/".concat(self.state.id, "/drinks/")).then(function (response) {
+      response.data.forEach(function (drink) {
+        self.setState({
+          drinks: self.state.drinks.concat([{
+            name: drink.beverage.name,
+            amount: drink.amount_cl,
+            strength: drink.beverage.percentage,
+            beverage_id: drink.beverage_id,
+            startTime: new Date(drink.start),
+            key: drink.id
+          }])
+        });
+      });
+    }).catch(function (error) {
+      console.log(error);
       alert("There was a connection error. Please try reloading the page.");
     });
     _this.onNewDrinkSubmit = _this.onNewDrinkSubmit.bind(_assertThisInitialized(_this));
@@ -61223,7 +61241,16 @@ function (_Component) {
     value: function onNewDrinkSubmit(data) {
       this.setState({
         drinks: this.state.drinks.concat([data])
-      }, this.saveDrinks);
+      });
+      axios.post("/sessions/".concat(this.state.id, "/drinks/"), {
+        'amount_cl': data.amount,
+        'beverage_id': data.beverage_id
+      }).then(function (response) {
+        console.log(response);
+      }).catch(function (error) {
+        console.log(error);
+        alert("There was a connection error. Please try reloading the page.");
+      });
       this.setState({
         showNewDrink: false
       });
@@ -61245,6 +61272,7 @@ function (_Component) {
         name: drink.props.name,
         amount: drink.props.amount,
         strength: drink.props.strength,
+        beverage_id: drink.props.beverage_id,
         startTime: new Date().getTime()
       });
     }
@@ -61267,6 +61295,7 @@ function (_Component) {
           strength: drink.strength,
           startTime: drink.startTime,
           onRemove: this.removeDrink,
+          beverage_id: drink.beverage_id,
           onDuplicate: this.duplicateDrink
         }));
       }, this);
@@ -61655,7 +61684,6 @@ function (_Component) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _data_drinkList__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./data/drinkList */ "./resources/js/components/data/drinkList.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -61676,7 +61704,6 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
-
 var NewDrink =
 /*#__PURE__*/
 function (_Component) {
@@ -61693,8 +61720,20 @@ function (_Component) {
       amount: '',
       strength: '',
       startTime: new Date().getTime(),
-      selectedDrink: ''
+      selectedDrink: '',
+      beverage_id: undefined,
+      drinkList: []
     };
+
+    var self = _assertThisInitialized(_this);
+
+    axios.get('/beverages/').then(function (response) {
+      self.setState({
+        drinkList: response.data
+      });
+    }).catch(function (error) {
+      alert("There was a connection error. Please try reloading the page.");
+    });
     _this.resetState = _this.resetState.bind(_assertThisInitialized(_this));
     _this.refreshStartTime = _this.refreshStartTime.bind(_assertThisInitialized(_this));
     _this.handlePresetChanged = _this.handlePresetChanged.bind(_assertThisInitialized(_this));
@@ -61708,13 +61747,6 @@ function (_Component) {
   }
 
   _createClass(NewDrink, [{
-    key: "componentWillMount",
-    value: function componentWillMount() {
-      this.setState({
-        drinkList: _data_drinkList__WEBPACK_IMPORTED_MODULE_1__["default"]
-      });
-    }
-  }, {
     key: "resetState",
     value: function resetState() {
       this.setState({
@@ -61736,16 +61768,16 @@ function (_Component) {
   }, {
     key: "handlePresetChanged",
     value: function handlePresetChanged(event) {
-      this.state.drinkList.forEach(function (category) {
-        category.values.forEach(function (drink) {
-          if (drink.key === event.target.value) {
-            this.setState({
-              name: drink.name,
-              amount: drink.amount,
-              strength: drink.strength
-            });
-          }
-        }, this);
+      this.state.drinkList.forEach(function (drink) {
+        console.log("".concat(drink.id, " - ").concat(event.target.value));
+
+        if (drink.id === Number(event.target.value)) {
+          this.setState({
+            name: drink.name,
+            strength: drink.percentage,
+            beverage_id: drink.id
+          });
+        }
       }, this);
       this.setState({
         selectedDrink: event.target.value
@@ -61816,17 +61848,11 @@ function (_Component) {
       var startTime = new Date(this.state.startTime);
       var startString = startTime.getFullYear() + '-' + ('0' + (startTime.getMonth() + 1)).slice(-2) + '-' + ('0' + startTime.getDate()).slice(-2) + 'T' + ('0' + startTime.getHours()).slice(-2) + ':' + ('0' + startTime.getMinutes()).slice(-2);
       var drinks = [];
-      this.state.drinkList.forEach(function (category) {
-        var values = [];
-        category.values.forEach(function (drink) {
-          values.push(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-            value: drink.key,
-            key: drink.key
-          }, drink.name));
-        });
-        drinks.push(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("optgroup", {
-          label: category.categoryName
-        }, values));
+      this.state.drinkList.forEach(function (drink) {
+        drinks.push(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+          value: drink.id,
+          key: drink.id
+        }, drink.name));
       });
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
         onSubmit: this.handleSubmit,
@@ -61934,59 +61960,6 @@ function (_Component) {
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
 /* harmony default export */ __webpack_exports__["default"] = (ProgressBar);
-
-/***/ }),
-
-/***/ "./resources/js/components/data/drinkList.js":
-/*!***************************************************!*\
-  !*** ./resources/js/components/data/drinkList.js ***!
-  \***************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-var DRINKS = [{
-  "categoryName": "Beers",
-  "values": [{
-    "key": "aszok50",
-    "name": "Arany Ászok 0.5l",
-    "amount": 50,
-    "strength": 4.3
-  }, {
-    "key": "dreher50",
-    "name": "Dreher 0.5l",
-    "amount": 50,
-    "strength": 5.2
-  }, {
-    "key": "dreherbak50",
-    "name": "Dreher Bak 0.5l",
-    "amount": 50,
-    "strength": 7.3
-  }, {
-    "key": "kozel50",
-    "name": "Kozel 0.5l",
-    "amount": 50,
-    "strength": 4
-  }]
-}, {
-  "categoryName": "Whiskies",
-  "values": [{
-    "key": "famous4",
-    "name": "Famous Grouse 4cl",
-    "amount": 4,
-    "strength": 40
-  }]
-}, {
-  "categoryName": "Vodkas",
-  "values": [{
-    "key": "royal4",
-    "name": "Royal 4cl",
-    "amount": 4,
-    "strength": 37.5
-  }]
-}];
-/* harmony default export */ __webpack_exports__["default"] = (DRINKS);
 
 /***/ }),
 
