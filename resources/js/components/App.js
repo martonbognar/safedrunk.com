@@ -78,6 +78,14 @@ class App extends Component {
     let index = tempDrinks.indexOf(drink);
     tempDrinks.splice(index, 1);
     this.setState({ drinks: tempDrinks }, this.saveDrinks);
+    axios.delete(`/sessions/${this.state.id}/drinks/${drink.props.id}`)
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+        alert("There was a connection error. Please try reloading the page.");
+      });
   }
 
   duplicateDrink(drink) {
@@ -98,7 +106,7 @@ class App extends Component {
     let rows = [];
 
     this.state.drinks.forEach(function (drink) {
-      rows.push(<Drink key={drink.key} name={drink.name} amount={drink.amount} strength={drink.strength} startTime={drink.startTime} onRemove={this.removeDrink} beverage_id={drink.beverage_id} onDuplicate={this.duplicateDrink} />);
+      rows.push(<Drink key={drink.key} id={drink.key} name={drink.name} amount={drink.amount} strength={drink.strength} startTime={drink.startTime} onRemove={this.removeDrink} beverage_id={drink.beverage_id} onDuplicate={this.duplicateDrink} />);
     }, this);
 
     let newDrink = this.state.showNewDrink ? <div id='drink-form'><NewDrink onChange={this.onNewDrinkSubmit} /><button onClick={this.toggleDrinkForm} className='remove'>Cancel</button></div> : <button onClick={this.toggleDrinkForm}>New Drink</button>;

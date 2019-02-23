@@ -61264,6 +61264,12 @@ function (_Component) {
       this.setState({
         drinks: tempDrinks
       }, this.saveDrinks);
+      axios.delete("/sessions/".concat(this.state.id, "/drinks/").concat(drink.props.id)).then(function (response) {
+        console.log(response);
+      }).catch(function (error) {
+        console.log(error);
+        alert("There was a connection error. Please try reloading the page.");
+      });
     }
   }, {
     key: "duplicateDrink",
@@ -61290,6 +61296,7 @@ function (_Component) {
       this.state.drinks.forEach(function (drink) {
         rows.push(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Drink__WEBPACK_IMPORTED_MODULE_1__["default"], {
           key: drink.key,
+          id: drink.key,
           name: drink.name,
           amount: drink.amount,
           strength: drink.strength,

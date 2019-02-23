@@ -87,7 +87,7 @@ class DrinkController extends Controller
      * @param  \App\Drink  $drink
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Drink $drink)
+    public function destroy(Session $session, Drink $drink)
     {
         $drink->delete();
         return 'OK';
