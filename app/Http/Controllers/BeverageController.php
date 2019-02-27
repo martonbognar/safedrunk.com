@@ -20,7 +20,8 @@ class BeverageController extends Controller
 
     public function list()
     {
-        return Beverage::all();
+        $custom = Beverage::where('user_id', Auth::id())->get();
+        return $custom->merge(Beverage::where([['user_id', null], ['approved', true]])->get());
     }
 
     /**

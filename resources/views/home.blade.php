@@ -5,7 +5,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">Dashboard</div>
+                    <div class="card-header">Sessions</div>
 
                     <div class="card-body">
                         @if (session('status'))
@@ -19,6 +19,12 @@
                                 <li><a href='/sessions/{{ $session->id }}'>{{ $session->name }}</a></li>
                             @endforeach
                         </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">New session</div>
+
+                    <div class="card-body">
                         <form method='post' action='/sessions/'>
                             {{ csrf_field() }}
                             <input type='text' name='name' id='name' placeholder='Name'>

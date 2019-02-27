@@ -41,7 +41,7 @@ class SessionController extends Controller
         $session->name = request('name');
         $session->user_id = Auth::id();
         $session->save();
-        return redirect('/home');
+        return response()->json(['id' => $session->id]);
     }
 
     /**
