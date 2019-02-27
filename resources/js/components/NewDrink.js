@@ -14,6 +14,8 @@ class NewDrink extends Component {
       selectedDrink: '',
       beverage_id: undefined,
       drinkList: [],
+      store: false,
+      submit: false,
     };
 
     let self = this;
@@ -31,6 +33,7 @@ class NewDrink extends Component {
     this.handlePresetChanged = this.handlePresetChanged.bind(this);
     this.handleNameChanged = this.handleNameChanged.bind(this);
     this.handleAmountChanged = this.handleAmountChanged.bind(this);
+    this.handleCheckboxChanged = this.handleCheckboxChanged.bind(this);
     this.handleStrengthChanged = this.handleStrengthChanged.bind(this);
     this.handleStartTimeChanged = this.handleStartTimeChanged.bind(this);
     this.submitData = this.submitData.bind(this);
@@ -69,6 +72,14 @@ class NewDrink extends Component {
     }
   }
 
+  handleCheckboxChanged(event) {
+    const name = event.target.name;
+
+    this.setState({
+      [name]: event.target.checked
+    });
+  }
+
   handleStrengthChanged(event) {
     let input = event.target.value.replace(',', '.');
     if (isNaN(input)) {
@@ -102,6 +113,18 @@ class NewDrink extends Component {
       drinks.push(<option value={drink.id} key={drink.id}>{drink.name}</option>);
     });
 
+    let submitBeverage = null;
+
+    if (this.state.store) {
+      submitBeverage = <div><input
+        name="submit"
+        id="submit"
+        type="checkbox"
+        checked={this.state.submit}
+        onChange={this.handleCheckboxChanged} />
+        <label htmlFor="submit">Submit this beverage to the public database</label></div>;
+    }
+
     return (
       <form onSubmit={this.handleSubmit} id='new-drink'>
         <select onChange={this.handlePresetChanged} value={this.state.selectedDrink}>
@@ -120,6 +143,15 @@ class NewDrink extends Component {
         <input type='datetime-local' onChange={this.handleStartTimeChanged} required value={startString} />
         <br />
         <a href='#' onClick={this.refreshStartTime}>Set to now</a>
+        <br />
+        <input
+          name="store"
+          id="store"
+          type="checkbox"
+          checked={this.state.store}
+          onChange={this.handleCheckboxChanged} />
+        <label htmlFor="store">Store this beverage for later use</label>
+        {submitBeverage}
         <br />
         <button className='submit'>Submit</button>
       </form>

@@ -61244,8 +61244,21 @@ function (_Component) {
         'amount_cl': data.amount,
         'beverage_id': data.beverage_id
       }).then(function (response) {
-        console.log(response);
         data.key = response.data.id;
+
+        if (data.store) {
+          axios.post("/beverages/", {
+            'name': data.name,
+            'percentage': data.strength,
+            'pending': data.submit
+          }).then(function (response) {
+            console.log(response);
+          }).catch(function (error) {
+            console.log(error);
+            alert("There was a connection error. Please try reloading the page.");
+          });
+        }
+
         self.setState({
           drinks: self.state.drinks.concat([data])
         });
@@ -61268,15 +61281,9 @@ function (_Component) {
         }
       });
       var tempDrinks = this.state.drinks;
-      console.log(this.state.drinks);
-      console.log("index: ".concat(index));
       var id = drink.props.id;
-      console.log(id);
-      console.log(drink);
       tempDrinks.splice(index, 1);
-      console.log(tempDrinks);
       axios.delete("/sessions/".concat(this.state.id, "/drinks/").concat(id)).then(function (response) {
-        console.log(response);
         self.setState({
           drinks: tempDrinks
         });
@@ -61707,6 +61714,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -61743,7 +61752,9 @@ function (_Component) {
       startTime: new Date().getTime(),
       selectedDrink: '',
       beverage_id: undefined,
-      drinkList: []
+      drinkList: [],
+      store: false,
+      submit: false
     };
 
     var self = _assertThisInitialized(_this);
@@ -61760,6 +61771,7 @@ function (_Component) {
     _this.handlePresetChanged = _this.handlePresetChanged.bind(_assertThisInitialized(_this));
     _this.handleNameChanged = _this.handleNameChanged.bind(_assertThisInitialized(_this));
     _this.handleAmountChanged = _this.handleAmountChanged.bind(_assertThisInitialized(_this));
+    _this.handleCheckboxChanged = _this.handleCheckboxChanged.bind(_assertThisInitialized(_this));
     _this.handleStrengthChanged = _this.handleStrengthChanged.bind(_assertThisInitialized(_this));
     _this.handleStartTimeChanged = _this.handleStartTimeChanged.bind(_assertThisInitialized(_this));
     _this.submitData = _this.submitData.bind(_assertThisInitialized(_this));
@@ -61827,6 +61839,12 @@ function (_Component) {
       }
     }
   }, {
+    key: "handleCheckboxChanged",
+    value: function handleCheckboxChanged(event) {
+      var name = event.target.name;
+      this.setState(_defineProperty({}, name, event.target.checked));
+    }
+  }, {
     key: "handleStrengthChanged",
     value: function handleStrengthChanged(event) {
       var input = event.target.value.replace(',', '.');
@@ -61875,6 +61893,20 @@ function (_Component) {
           key: drink.id
         }, drink.name));
       });
+      var submitBeverage = null;
+
+      if (this.state.store) {
+        submitBeverage = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+          name: "submit",
+          id: "submit",
+          type: "checkbox",
+          checked: this.state.submit,
+          onChange: this.handleCheckboxChanged
+        }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+          htmlFor: "submit"
+        }, "Submit this beverage to the public database"));
+      }
+
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
         onSubmit: this.handleSubmit,
         id: "new-drink"
@@ -61910,7 +61942,15 @@ function (_Component) {
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
         href: "#",
         onClick: this.refreshStartTime
-      }, "Set to now"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      }, "Set to now"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        name: "store",
+        id: "store",
+        type: "checkbox",
+        checked: this.state.store,
+        onChange: this.handleCheckboxChanged
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+        htmlFor: "store"
+      }, "Store this beverage for later use"), submitBeverage, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         className: "submit"
       }, "Submit"));
     }

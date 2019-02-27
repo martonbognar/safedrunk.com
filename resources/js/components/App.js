@@ -65,6 +65,16 @@ class App extends Component {
     axios.post(`/sessions/${this.state.id}/drinks/`, { 'amount_cl': data.amount, 'beverage_id': data.beverage_id })
       .then(function (response) {
         data.key = response.data.id;
+        if (data.store) {
+          axios.post(`/beverages/`, { 'name': data.name, 'percentage': data.strength, 'pending': data.submit })
+            .then(function (response) {
+              console.log(response);
+            })
+            .catch(function (error) {
+              console.log(error);
+              alert("There was a connection error. Please try reloading the page.");
+            });
+        }
         self.setState({ drinks: self.state.drinks.concat([data]) });
       })
       .catch(function (error) {

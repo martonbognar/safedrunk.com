@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use App\Beverage;
 use Illuminate\Http\Request;
 
@@ -43,6 +44,8 @@ class BeverageController extends Controller
         $beverage = new Beverage();
         $beverage->name = request('name');
         $beverage->percentage = request('percentage');
+        $beverage->pending = request('pending');
+        $beverage->user_id = Auth::id();
         $beverage->save();
         return 'OK';
     }
