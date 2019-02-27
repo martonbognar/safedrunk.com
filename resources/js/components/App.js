@@ -30,7 +30,7 @@ class App extends Component {
         self.setState({ basicData: { gender: response.data.sex, weight: response.data.weight } });
       })
       .catch(function (error) {
-        console.log(error);
+        console.error(error);
         alert("There was a connection error. Please try reloading the page.");
       });
 
@@ -50,38 +50,46 @@ class App extends Component {
         });
       })
       .catch(function (error) {
-        console.log(error);
+        console.error(error);
         alert("There was a connection error. Please try reloading the page.");
       });
 
+    this.submitDrink = this.submitDrink.bind(this);
     this.onNewDrinkSubmit = this.onNewDrinkSubmit.bind(this);
     this.removeDrink = this.removeDrink.bind(this);
     this.duplicateDrink = this.duplicateDrink.bind(this);
     this.toggleDrinkForm = this.toggleDrinkForm.bind(this);
   }
 
-  onNewDrinkSubmit(data) {
+  submitDrink(data) {
     let self = this;
     axios.post(`/sessions/${this.state.id}/drinks/`, { 'amount_cl': data.amount, 'beverage_id': data.beverage_id })
       .then(function (response) {
         data.key = response.data.id;
-        if (data.store) {
-          axios.post(`/beverages/`, { 'name': data.name, 'percentage': data.strength, 'pending': data.submit })
-            .then(function (response) {
-              console.log(response);
-            })
-            .catch(function (error) {
-              console.log(error);
-              alert("There was a connection error. Please try reloading the page.");
-            });
-        }
         self.setState({ drinks: self.state.drinks.concat([data]) });
       })
       .catch(function (error) {
-        console.log(error);
+        console.error(error);
         alert("There was a connection error. Please try reloading the page.");
       });
     this.setState({ showNewDrink: false });
+  }
+
+  onNewDrinkSubmit(data) {
+    let self = this;
+    if (data.beverage_id === undefined) {
+      axios.post(`/beverages/`, { 'name': data.name, 'percentage': data.strength, 'pending': data.submit })
+        .then(function (response) {
+          data.beverage_id = response.data.id;
+          self.submitDrink(data);
+        })
+        .catch(function (error) {
+          console.error(error);
+          alert("There was a connection error. Please try reloading the page.");
+        });
+    } else {
+      this.submitDrink(data);
+    }
   }
 
   removeDrink(drink) {
@@ -100,7 +108,7 @@ class App extends Component {
         self.setState({ drinks: tempDrinks });
       })
       .catch(function (error) {
-        console.log(error);
+        console.error(error);
         alert("There was a connection error. Please try reloading the page.");
       });
   }

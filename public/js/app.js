@@ -61229,6 +61229,7 @@ function (_Component) {
       console.log(error);
       alert("There was a connection error. Please try reloading the page.");
     });
+    _this.submitDrink = _this.submitDrink.bind(_assertThisInitialized(_this));
     _this.onNewDrinkSubmit = _this.onNewDrinkSubmit.bind(_assertThisInitialized(_this));
     _this.removeDrink = _this.removeDrink.bind(_assertThisInitialized(_this));
     _this.duplicateDrink = _this.duplicateDrink.bind(_assertThisInitialized(_this));
@@ -61237,28 +61238,14 @@ function (_Component) {
   }
 
   _createClass(App, [{
-    key: "onNewDrinkSubmit",
-    value: function onNewDrinkSubmit(data) {
+    key: "submitDrink",
+    value: function submitDrink(data) {
       var self = this;
       axios.post("/sessions/".concat(this.state.id, "/drinks/"), {
         'amount_cl': data.amount,
         'beverage_id': data.beverage_id
       }).then(function (response) {
         data.key = response.data.id;
-
-        if (data.store) {
-          axios.post("/beverages/", {
-            'name': data.name,
-            'percentage': data.strength,
-            'pending': data.submit
-          }).then(function (response) {
-            console.log(response);
-          }).catch(function (error) {
-            console.log(error);
-            alert("There was a connection error. Please try reloading the page.");
-          });
-        }
-
         self.setState({
           drinks: self.state.drinks.concat([data])
         });
@@ -61269,6 +61256,28 @@ function (_Component) {
       this.setState({
         showNewDrink: false
       });
+    }
+  }, {
+    key: "onNewDrinkSubmit",
+    value: function onNewDrinkSubmit(data) {
+      var self = this;
+
+      if (data.beverage_id === undefined) {
+        axios.post("/beverages/", {
+          'name': data.name,
+          'percentage': data.strength,
+          'pending': data.submit
+        }).then(function (response) {
+          console.log(response);
+          data.beverage_id = response.data.id;
+          self.submitDrink(data);
+        }).catch(function (error) {
+          console.log(error);
+          alert("There was a connection error. Please try reloading the page.");
+        });
+      } else {
+        this.submitDrink(data);
+      }
     }
   }, {
     key: "removeDrink",
@@ -61753,7 +61762,7 @@ function (_Component) {
       selectedDrink: '',
       beverage_id: undefined,
       drinkList: [],
-      store: false,
+      customBeverage: true,
       submit: false
     };
 
@@ -61769,6 +61778,7 @@ function (_Component) {
     _this.resetState = _this.resetState.bind(_assertThisInitialized(_this));
     _this.refreshStartTime = _this.refreshStartTime.bind(_assertThisInitialized(_this));
     _this.handlePresetChanged = _this.handlePresetChanged.bind(_assertThisInitialized(_this));
+    _this.invalidatePreset = _this.invalidatePreset.bind(_assertThisInitialized(_this));
     _this.handleNameChanged = _this.handleNameChanged.bind(_assertThisInitialized(_this));
     _this.handleAmountChanged = _this.handleAmountChanged.bind(_assertThisInitialized(_this));
     _this.handleCheckboxChanged = _this.handleCheckboxChanged.bind(_assertThisInitialized(_this));
@@ -61802,18 +61812,24 @@ function (_Component) {
     key: "handlePresetChanged",
     value: function handlePresetChanged(event) {
       this.state.drinkList.forEach(function (drink) {
-        console.log("".concat(drink.id, " - ").concat(event.target.value));
-
         if (drink.id === Number(event.target.value)) {
           this.setState({
             name: drink.name,
             strength: drink.percentage,
-            beverage_id: drink.id
+            beverage_id: drink.id,
+            selectedDrink: event.target.value,
+            customBeverage: false
           });
         }
       }, this);
+    }
+  }, {
+    key: "invalidatePreset",
+    value: function invalidatePreset() {
       this.setState({
-        selectedDrink: event.target.value
+        beverage_id: undefined,
+        selectedDrink: '',
+        customBeverage: true
       });
     }
   }, {
@@ -61822,6 +61838,7 @@ function (_Component) {
       this.setState({
         name: event.target.value
       });
+      this.invalidatePreset();
     }
   }, {
     key: "handleAmountChanged",
@@ -61858,6 +61875,8 @@ function (_Component) {
           strength: input
         });
       }
+
+      this.invalidatePreset();
     }
   }, {
     key: "handleStartTimeChanged",
@@ -61895,7 +61914,7 @@ function (_Component) {
       });
       var submitBeverage = null;
 
-      if (this.state.store) {
+      if (this.state.customBeverage) {
         submitBeverage = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
           name: "submit",
           id: "submit",
@@ -61942,15 +61961,7 @@ function (_Component) {
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
         href: "#",
         onClick: this.refreshStartTime
-      }, "Set to now"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        name: "store",
-        id: "store",
-        type: "checkbox",
-        checked: this.state.store,
-        onChange: this.handleCheckboxChanged
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
-        htmlFor: "store"
-      }, "Store this beverage for later use"), submitBeverage, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      }, "Set to now"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), submitBeverage, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         className: "submit"
       }, "Submit"));
     }

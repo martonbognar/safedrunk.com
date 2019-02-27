@@ -47,7 +47,7 @@ class BeverageController extends Controller
         $beverage->pending = request('pending');
         $beverage->user_id = Auth::id();
         $beverage->save();
-        return 'OK';
+        return response()->json(['id' => $beverage->id]);
     }
 
     /**
@@ -84,7 +84,7 @@ class BeverageController extends Controller
         $beverage->name = request('name');
         $beverage->percentage = request('percentage');
         $beverage->save();
-        return 'OK';
+        return response()->json(['id' => $beverage->id]);
     }
 
     /**
@@ -96,6 +96,6 @@ class BeverageController extends Controller
     public function destroy(Beverage $beverage)
     {
         $beverage->delete();
-        return 'OK';
+        return response()->json(['id' => $beverage->id]);
     }
 }

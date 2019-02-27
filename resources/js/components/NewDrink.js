@@ -14,7 +14,7 @@ class NewDrink extends Component {
       selectedDrink: '',
       beverage_id: undefined,
       drinkList: [],
-      store: false,
+      customBeverage: true,
       submit: false,
     };
 
@@ -31,6 +31,7 @@ class NewDrink extends Component {
     this.resetState = this.resetState.bind(this);
     this.refreshStartTime = this.refreshStartTime.bind(this);
     this.handlePresetChanged = this.handlePresetChanged.bind(this);
+    this.invalidatePreset = this.invalidatePreset.bind(this);
     this.handleNameChanged = this.handleNameChanged.bind(this);
     this.handleAmountChanged = this.handleAmountChanged.bind(this);
     this.handleCheckboxChanged = this.handleCheckboxChanged.bind(this);
@@ -51,16 +52,19 @@ class NewDrink extends Component {
 
   handlePresetChanged(event) {
     this.state.drinkList.forEach(function (drink) {
-      console.log(`${drink.id} - ${event.target.value}`);
       if (drink.id === Number(event.target.value)) {
-        this.setState({ name: drink.name, strength: drink.percentage, beverage_id: drink.id });
+        this.setState({ name: drink.name, strength: drink.percentage, beverage_id: drink.id, selectedDrink: event.target.value, customBeverage: false });
       }
     }, this);
-    this.setState({ selectedDrink: event.target.value });
+  }
+
+  invalidatePreset() {
+    this.setState({ beverage_id: undefined, selectedDrink: '', customBeverage: true });
   }
 
   handleNameChanged(event) {
     this.setState({ name: event.target.value });
+    this.invalidatePreset();
   }
 
   handleAmountChanged(event) {
@@ -74,7 +78,6 @@ class NewDrink extends Component {
 
   handleCheckboxChanged(event) {
     const name = event.target.name;
-
     this.setState({
       [name]: event.target.checked
     });
@@ -87,6 +90,7 @@ class NewDrink extends Component {
     } else {
       this.setState({ strength: input });
     }
+    this.invalidatePreset();
   }
 
   handleStartTimeChanged(event) {
@@ -115,7 +119,7 @@ class NewDrink extends Component {
 
     let submitBeverage = null;
 
-    if (this.state.store) {
+    if (this.state.customBeverage) {
       submitBeverage = <div><input
         name="submit"
         id="submit"
@@ -144,13 +148,6 @@ class NewDrink extends Component {
         <br />
         <a href='#' onClick={this.refreshStartTime}>Set to now</a>
         <br />
-        <input
-          name="store"
-          id="store"
-          type="checkbox"
-          checked={this.state.store}
-          onChange={this.handleCheckboxChanged} />
-        <label htmlFor="store">Store this beverage for later use</label>
         {submitBeverage}
         <br />
         <button className='submit'>Submit</button>
