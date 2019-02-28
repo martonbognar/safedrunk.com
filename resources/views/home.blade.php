@@ -14,22 +14,8 @@
                             </div>
                         @endif
 
-                        <ul>
-                            @foreach($sessions as $session)
-                                <li><a href='/sessions/{{ $session->id }}'>{{ $session->name }}</a></li>
-                            @endforeach
-                        </ul>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-header">New session</div>
-
-                    <div class="card-body">
-                        <form method='post' action='/sessions/'>
-                            {{ csrf_field() }}
-                            <input type='text' name='name' id='name' placeholder='Name'>
-                            <input type='submit'>
-                        </form>
+                        <div id="session-manager">
+                        </div>
                     </div>
                 </div>
             </div>

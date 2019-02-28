@@ -20,7 +20,7 @@ class CreateDrinksTable extends Migration
             $table->timestamp('end')->nullable()->default(null);
             $table->unsignedInteger('session_id');
             $table->unsignedInteger('beverage_id');
-            $table->foreign('session_id')->references('id')->on('sessions');
+            $table->foreign('session_id')->references('id')->on('sessions')->onDelete('cascade');
             $table->foreign('beverage_id')->references('id')->on('beverages');
         });
     }
