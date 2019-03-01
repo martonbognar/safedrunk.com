@@ -9,6 +9,11 @@ use Illuminate\Http\Request;
 
 class SessionController extends Controller
 {
+    public function list()
+    {
+        return Session::where('user_id', Auth::id())->get();
+    }
+
     /**
      * Display a listing of the resource.
      *

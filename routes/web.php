@@ -23,6 +23,7 @@ Route::get('/beverages/create/', 'BeverageController@create');
 Route::patch('/beverages/{beverage}/', 'BeverageController@update');
 Route::delete('/beverages/{beverage}/', 'BeverageController@destroy');
 
+Route::get('/sessions/', 'SessionController@list');
 Route::post('/sessions/', 'SessionController@store');
 Route::get('/sessions/{session}/', 'SessionController@show');
 Route::get('/sessions/{session}/drinks/', 'DrinkController@index');

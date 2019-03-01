@@ -62077,8 +62077,20 @@ function (_Component) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Sessions).call(this));
     _this.state = {
+      sessions: [],
       name: ''
     };
+
+    var self = _assertThisInitialized(_this);
+
+    axios.get("/sessions/").then(function (response) {
+      self.setState({
+        sessions: response.data
+      });
+    }).catch(function (error) {
+      console.error(error);
+      alert("There was a connection error. Please try reloading the page.");
+    });
     _this.handleNameChanged = _this.handleNameChanged.bind(_assertThisInitialized(_this));
     _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_this));
     return _this;
@@ -62100,7 +62112,12 @@ function (_Component) {
         'name': this.state.name
       }).then(function (response) {
         var id = response.data.id;
+        var sessions = self.state.sessions.concat([{
+          'id': id,
+          'name': self.state.name
+        }]);
         self.setState({
+          sessions: sessions,
           name: ''
         });
       }).catch(function (error) {
@@ -62111,7 +62128,14 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "Session")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
+      var sessions = this.state.sessions.map(function (session) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+          key: session.id
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+          href: "/sessions/".concat(session.id)
+        }, session.name));
+      });
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null, sessions), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
         onSubmit: this.handleSubmit,
         id: "new-session"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {

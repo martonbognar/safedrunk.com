@@ -5,8 +5,20 @@ class Sessions extends Component {
         super();
 
         this.state = {
+            sessions: [],
             name: '',
         };
+
+        let self = this;
+
+        axios.get(`/sessions/`)
+            .then(function (response) {
+                self.setState({ sessions: response.data });
+            })
+            .catch(function (error) {
+                console.error(error);
+                alert("There was a connection error. Please try reloading the page.");
+            });
 
         this.handleNameChanged = this.handleNameChanged.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -22,7 +34,8 @@ class Sessions extends Component {
         axios.post(`/sessions/`, { 'name': this.state.name })
             .then(function (response) {
                 let id = response.data.id;
-                self.setState({ name: '' });
+                let sessions = self.state.sessions.concat([{ 'id': id, 'name': self.state.name }]);
+                self.setState({ sessions: sessions, name: '' });
             })
             .catch(function (error) {
                 console.error(error);
@@ -31,10 +44,13 @@ class Sessions extends Component {
     }
 
     render() {
+        let sessions = this.state.sessions.map(function (session) {
+            return <li key={session.id}><a href={`/sessions/${session.id}`}>{session.name}</a></li>
+        });
         return (
             <div>
                 <ul>
-                    <li>Session</li>
+                    {sessions}
                 </ul>
                 <form onSubmit={this.handleSubmit} id='new-session'>
                     <input type='text' onChange={this.handleNameChanged} value={this.state.name} placeholder='New Session Name' required />

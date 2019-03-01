@@ -25,7 +25,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $sessions = Session::where('user_id', Auth::id())->get();
-        return view('home', compact('sessions'));
+        return view('home');
     }
 }
