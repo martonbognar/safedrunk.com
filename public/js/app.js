@@ -62093,6 +62093,7 @@ function (_Component) {
     });
     _this.handleNameChanged = _this.handleNameChanged.bind(_assertThisInitialized(_this));
     _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_this));
+    _this.removeSession = _this.removeSession.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -62126,15 +62127,43 @@ function (_Component) {
       });
     }
   }, {
+    key: "removeSession",
+    value: function removeSession(id) {
+      console.log(id);
+      var self = this;
+      var index = -1;
+      this.state.sessions.forEach(function (s, i) {
+        if (s.id === id) {
+          index = i;
+        }
+      });
+      var temp = this.state.sessions;
+      temp.splice(index, 1);
+      axios.delete("/sessions/".concat(id)).then(function (response) {
+        self.setState({
+          sessions: temp
+        });
+      }).catch(function (error) {
+        console.error(error);
+        alert("There was a connection error. Please try reloading the page.");
+      });
+    }
+  }, {
     key: "render",
     value: function render() {
       var sessions = this.state.sessions.map(function (session) {
+        var _this2 = this;
+
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
           key: session.id
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
           href: "/sessions/".concat(session.id)
-        }, session.name));
-      });
+        }, session.name), " : ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          onClick: function onClick() {
+            return _this2.removeSession(session.id);
+          }
+        }, "Remove"));
+      }, this);
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null, sessions), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
         onSubmit: this.handleSubmit,
         id: "new-session"

@@ -94,6 +94,8 @@ class SessionController extends Controller
      */
     public function destroy(Session $session)
     {
-        //
+        $id = $session->id;
+        $session->delete();
+        return response()->json(['id' => $id]);
     }
 }
