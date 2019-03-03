@@ -22,7 +22,7 @@ class Drink extends Component {
   }
 
   intervalToText(timestamp) {
-    let diff = ((new Date()).getTime() - (new Date(timestamp)).getTime()) / 1000;
+    let diff = ((new Date()).getTime() - timestamp.getTime()) / 1000;
 
     if (diff < 10) {
       return 'just now';
