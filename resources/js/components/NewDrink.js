@@ -10,7 +10,7 @@ class NewDrink extends Component {
             name: '',
             amount: '',
             strength: '',
-            startTime: new Date().getTime(),
+            startTime: new Date(),
             selectedDrink: '',
             beverage_id: undefined,
             drinkList: [],
@@ -42,12 +42,12 @@ class NewDrink extends Component {
     }
 
     resetState() {
-        this.setState({ name: '', amount: '', strength: '', startTime: new Date().getTime(), selectedDrink: '' });
+        this.setState({ name: '', amount: '', strength: '', startTime: new Date(), selectedDrink: '' });
     }
 
     refreshStartTime(event) {
         event.preventDefault();
-        this.setState({ startTime: new Date().getTime() });
+        this.setState({ startTime: new Date() });
     }
 
     handlePresetChanged(event) {
@@ -94,7 +94,7 @@ class NewDrink extends Component {
     }
 
     handleStartTimeChanged(event) {
-        this.setState({ startTime: new Date(event.target.value).getTime() });
+        this.setState({ startTime: new Date(event.target.value) });
     }
 
     submitData() {

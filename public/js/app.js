@@ -62567,7 +62567,7 @@ function (_Component) {
       name: '',
       amount: '',
       strength: '',
-      startTime: new Date().getTime(),
+      startTime: new Date(),
       selectedDrink: '',
       beverage_id: undefined,
       drinkList: [],
@@ -62605,7 +62605,7 @@ function (_Component) {
         name: '',
         amount: '',
         strength: '',
-        startTime: new Date().getTime(),
+        startTime: new Date(),
         selectedDrink: ''
       });
     }
@@ -62614,7 +62614,7 @@ function (_Component) {
     value: function refreshStartTime(event) {
       event.preventDefault();
       this.setState({
-        startTime: new Date().getTime()
+        startTime: new Date()
       });
     }
   }, {
@@ -62691,7 +62691,7 @@ function (_Component) {
     key: "handleStartTimeChanged",
     value: function handleStartTimeChanged(event) {
       this.setState({
-        startTime: new Date(event.target.value).getTime()
+        startTime: new Date(event.target.value)
       });
     }
   }, {
