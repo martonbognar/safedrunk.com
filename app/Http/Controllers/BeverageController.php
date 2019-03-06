@@ -18,7 +18,12 @@ class BeverageController extends Controller
         //
     }
 
-    public function list()
+    public function listOwn()
+    {
+        return Beverage::where('user_id', Auth::id())->get();
+    }
+
+    public function listCombined()
     {
         $custom = Beverage::where('user_id', Auth::id())->get();
         return $custom->merge(Beverage::where([['user_id', null], ['approved', true]])->get());
@@ -31,7 +36,7 @@ class BeverageController extends Controller
      */
     public function create()
     {
-        return view('drink');
+        return view('beverages');
     }
 
     /**

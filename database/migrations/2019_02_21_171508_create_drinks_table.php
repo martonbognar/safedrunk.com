@@ -21,7 +21,7 @@ class CreateDrinksTable extends Migration
             $table->unsignedInteger('session_id');
             $table->unsignedInteger('beverage_id');
             $table->foreign('session_id')->references('id')->on('sessions')->onDelete('cascade');
-            $table->foreign('beverage_id')->references('id')->on('beverages');
+            $table->foreign('beverage_id')->references('id')->on('beverages')->onDelete('cascade');
         });
     }
 

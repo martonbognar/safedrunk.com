@@ -61983,6 +61983,206 @@ function (_Component) {
 
 /***/ }),
 
+/***/ "./resources/js/components/Beverages.js":
+/*!**********************************************!*\
+  !*** ./resources/js/components/Beverages.js ***!
+  \**********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+var Beverages =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(Beverages, _Component);
+
+  function Beverages() {
+    var _this;
+
+    _classCallCheck(this, Beverages);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Beverages).call(this));
+    _this.state = {
+      beverages: [],
+      name: '',
+      percentage: '',
+      submit: false
+    };
+
+    var self = _assertThisInitialized(_this);
+
+    axios.get("/beverages/own/").then(function (response) {
+      self.setState({
+        beverages: response.data
+      });
+    }).catch(function (error) {
+      console.error(error);
+      alert("There was a connection error. Please try reloading the page.");
+    });
+    _this.handleInputChanged = _this.handleInputChanged.bind(_assertThisInitialized(_this));
+    _this.handleCheckboxChanged = _this.handleCheckboxChanged.bind(_assertThisInitialized(_this));
+    _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_this));
+    _this.remove = _this.remove.bind(_assertThisInitialized(_this));
+    return _this;
+  }
+
+  _createClass(Beverages, [{
+    key: "handleInputChanged",
+    value: function handleInputChanged(event) {
+      var name = event.target.name;
+      this.setState(_defineProperty({}, name, event.target.value));
+    }
+  }, {
+    key: "handleCheckboxChanged",
+    value: function handleCheckboxChanged(event) {
+      var name = event.target.name;
+      this.setState(_defineProperty({}, name, event.target.checked));
+    }
+  }, {
+    key: "handleSubmit",
+    value: function handleSubmit(event) {
+      event.preventDefault();
+      var self = this;
+      var beverage = {
+        'name': this.state.name,
+        'percentage': this.state.percentage,
+        'pending': this.state.submit
+      };
+      axios.post("/beverages/", beverage).then(function (response) {
+        beverage.id = response.data.id;
+        var beverages = self.state.beverages.concat([beverage]);
+        self.setState({
+          beverages: beverages,
+          name: '',
+          percentage: '',
+          submit: false
+        });
+      }).catch(function (error) {
+        console.error(error);
+        alert("There was a connection error. Please try reloading the page.");
+      });
+    }
+  }, {
+    key: "remove",
+    value: function remove(id) {
+      var self = this;
+      var index = -1;
+      this.state.beverages.forEach(function (s, i) {
+        if (s.id === id) {
+          index = i;
+        }
+      });
+      var temp = this.state.beverages;
+      temp.splice(index, 1);
+      axios.delete("/beverages/".concat(id)).then(function (response) {
+        self.setState({
+          beverages: temp
+        });
+      }).catch(function (error) {
+        console.error(error);
+        alert("There was a connection error. Please try reloading the page.");
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var beverages = this.state.beverages.map(function (beverage) {
+        var _this2 = this;
+
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+          className: "list-group-item d-flex justify-content-between align-items-center",
+          key: beverage.id
+        }, beverage.name, " (", beverage.percentage, "%)", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          type: "button",
+          className: "btn btn-danger",
+          onClick: function onClick() {
+            return _this2.remove(beverage.id);
+          }
+        }, "Remove"));
+      }, this);
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
+        onSubmit: this.handleSubmit
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "form-group"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+        htmlFor: "name"
+      }, "Beverage name"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "text",
+        className: "form-control",
+        onChange: this.handleInputChanged,
+        value: this.state.name,
+        name: "name",
+        placeholder: "Beverage Name",
+        id: "name",
+        required: true
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "form-group"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+        htmlFor: "percentage"
+      }, "Alcohol percentage (%)"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "text",
+        className: "form-control",
+        onChange: this.handleInputChanged,
+        value: this.state.percentage,
+        name: "percentage",
+        placeholder: "Alcohol percentage (%)",
+        id: "percentage",
+        required: true
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "form-group"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "form-check"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        className: "form-check-input",
+        type: "checkbox",
+        name: "submit",
+        id: "submit",
+        checked: this.state.submit,
+        onChange: this.handleCheckboxChanged
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+        className: "form-check-label",
+        htmlFor: "submit"
+      }, "Submit this beverage to the public database"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "submit",
+        className: "btn btn-primary"
+      }, "Create beverage")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
+        className: "list-group mt-3"
+      }, beverages));
+    }
+  }]);
+
+  return Beverages;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (Beverages);
+
+/***/ }),
+
 /***/ "./resources/js/components/Calculator.js":
 /*!***********************************************!*\
   !*** ./resources/js/components/Calculator.js ***!
@@ -62780,7 +62980,6 @@ function (_Component) {
   }, {
     key: "removeSession",
     value: function removeSession(id) {
-      console.log(id);
       var self = this;
       var index = -1;
       this.state.sessions.forEach(function (s, i) {
@@ -62827,14 +63026,14 @@ function (_Component) {
         className: "form-control",
         onChange: this.handleNameChanged,
         value: this.state.name,
-        placeholder: "New Session Name",
+        placeholder: "New session",
         required: true
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "input-group-append"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         className: "btn btn-primary",
         type: "submit"
-      }, "Submit")))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
+      }, "Create")))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
         className: "list-group"
       }, sessions));
     }
@@ -62910,7 +63109,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _App__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./App */ "./resources/js/components/App.js");
-/* harmony import */ var _Sessions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Sessions */ "./resources/js/components/Sessions.js");
+/* harmony import */ var _Beverages__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Beverages */ "./resources/js/components/Beverages.js");
+/* harmony import */ var _Sessions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Sessions */ "./resources/js/components/Sessions.js");
+
 
 
 
@@ -62921,7 +63122,11 @@ if (document.getElementById('main')) {
 }
 
 if (document.getElementById('session-manager')) {
-  react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Sessions__WEBPACK_IMPORTED_MODULE_3__["default"], null), document.getElementById('session-manager'));
+  react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Sessions__WEBPACK_IMPORTED_MODULE_4__["default"], null), document.getElementById('session-manager'));
+}
+
+if (document.getElementById('beverage-manager')) {
+  react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Beverages__WEBPACK_IMPORTED_MODULE_3__["default"], null), document.getElementById('beverage-manager'));
 }
 
 /***/ }),

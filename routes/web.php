@@ -13,13 +13,15 @@
 
 Auth::routes();
 
-Route::get('/', 'HomeController@index')->name('home');
+Route::get('/', 'HomeController@index')->name('sessions');
 
 Route::get('/personal/', 'UserController@personal');
 
-Route::get('/beverages/', 'BeverageController@list');
+Route::get('/beverages/own/', 'BeverageController@listOwn');
+
+Route::get('/beverages/', 'BeverageController@listCombined');
 Route::post('/beverages/', 'BeverageController@store');
-Route::get('/beverages/create/', 'BeverageController@create');
+Route::get('/beverages/create/', 'BeverageController@create')->name('beverage_create');
 Route::patch('/beverages/{beverage}/', 'BeverageController@update');
 Route::delete('/beverages/{beverage}/', 'BeverageController@destroy');
 

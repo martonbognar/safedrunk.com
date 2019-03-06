@@ -45,7 +45,6 @@ class Sessions extends Component {
     }
 
     removeSession(id) {
-        console.log(id);
         let self = this;
         let index = -1;
         this.state.sessions.forEach(function (s, i) {
@@ -74,9 +73,9 @@ class Sessions extends Component {
             <div>
                 <form onSubmit={this.handleSubmit}>
                     <div className="input-group mb-3">
-                        <input type="text" className="form-control" onChange={this.handleNameChanged} value={this.state.name} placeholder='New Session Name' required />
+                        <input type="text" className="form-control" onChange={this.handleNameChanged} value={this.state.name} placeholder='New session' required />
                         <div className="input-group-append">
-                            <button className="btn btn-primary" type="submit">Submit</button>
+                            <button className="btn btn-primary" type="submit">Create</button>
                         </div>
                     </div>
                 </form>
