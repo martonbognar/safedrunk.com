@@ -62806,27 +62806,37 @@ function (_Component) {
         var _this2 = this;
 
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+          className: "list-group-item d-flex justify-content-between align-items-center",
           key: session.id
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
           href: "/sessions/".concat(session.id)
-        }, session.name), " : ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        }, session.name), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          type: "button",
+          className: "btn btn-danger",
           onClick: function onClick() {
             return _this2.removeSession(session.id);
           }
         }, "Remove"));
       }, this);
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null, sessions), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
-        onSubmit: this.handleSubmit,
-        id: "new-session"
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
+        onSubmit: this.handleSubmit
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "input-group mb-3"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         type: "text",
+        className: "form-control",
         onChange: this.handleNameChanged,
         value: this.state.name,
         placeholder: "New Session Name",
         required: true
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        className: "submit"
-      }, "Submit")));
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "input-group-append"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "btn btn-primary",
+        type: "submit"
+      }, "Submit")))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
+        className: "list-group"
+      }, sessions));
     }
   }]);
 

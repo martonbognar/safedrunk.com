@@ -67,17 +67,22 @@ class Sessions extends Component {
 
     render() {
         let sessions = this.state.sessions.map(function (session) {
-            return <li key={session.id}><a href={`/sessions/${session.id}`}>{session.name}</a> : <button onClick={() => this.removeSession(session.id)}>Remove</button></li>
+            return <li className="list-group-item d-flex justify-content-between align-items-center" key={session.id}><a href={`/sessions/${session.id}`}>{session.name}</a>
+                <button type="button" className="btn btn-danger" onClick={() => this.removeSession(session.id)}>Remove</button></li>;
         }, this);
         return (
             <div>
-                <ul>
+                <form onSubmit={this.handleSubmit}>
+                    <div className="input-group mb-3">
+                        <input type="text" className="form-control" onChange={this.handleNameChanged} value={this.state.name} placeholder='New Session Name' required />
+                        <div className="input-group-append">
+                            <button className="btn btn-primary" type="submit">Submit</button>
+                        </div>
+                    </div>
+                </form>
+                <ul className="list-group">
                     {sessions}
                 </ul>
-                <form onSubmit={this.handleSubmit} id='new-session'>
-                    <input type='text' onChange={this.handleNameChanged} value={this.state.name} placeholder='New Session Name' required />
-                    <button className='submit'>Submit</button>
-                </form>
             </div>
         );
     }
