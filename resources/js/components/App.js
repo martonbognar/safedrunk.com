@@ -119,7 +119,7 @@ class App extends Component {
             amount: drink.props.amount,
             strength: drink.props.strength,
             beverage_id: drink.props.beverage_id,
-            startTime: new Date().getTime(),
+            startTime: new Date(),
         });
     }
 

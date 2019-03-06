@@ -1,17 +1,12 @@
 import React, { Component } from 'react';
 import EFFECT_LIST from './data/effectList';
+import ProgressBar from './ProgressBar';
 
 class Effects extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = { description: EFFECT_LIST, hideAll: true };
-    }
-
     render() {
         let stage = null;
 
-        this.state.description.forEach(function (obj) {
+        EFFECT_LIST.forEach(function (obj) {
             if (this.props.percentage >= obj.percentageFloor && this.props.percentage < obj.percentageCeiling) {
                 stage = obj;
             }
@@ -33,6 +28,7 @@ class Effects extends Component {
 
         return (
             <div id='effects'>
+                <ProgressBar percentage={this.props.percentage} />
                 <div id='behavior'>
                     <h3>Effects</h3>
                     <ul>
