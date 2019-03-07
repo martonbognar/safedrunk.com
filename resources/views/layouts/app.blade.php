@@ -81,6 +81,12 @@
         <main class="py-4">
             @yield('content')
         </main>
+
+        <footer class="footer">
+            <div class="container text-center">
+                <span class="text-muted">If you have any comments or feedback, please visit <a href="https://www.reddit.com/r/safedrunk/">r/safedrunk</a>!</span>
+            </div>
+        </footer>
     </div>
 </body>
 </html>
