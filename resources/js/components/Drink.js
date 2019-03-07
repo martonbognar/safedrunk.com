@@ -54,13 +54,15 @@ class Drink extends Component {
     render() {
         return (
             <div className="col-md-4 mb-3">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">{this.props.name}</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">{this.props.amount} cl · {this.props.strength}%</h6>
-                        <p class="card-text">{this.state.timeText}</p>
-                        <button onClick={this.duplicate} className='btn btn-sm btn-primary'>Duplicate</button>
-                        <button onClick={this.remove} className='btn btn-sm btn-danger'>Remove</button>
+                <div className="card">
+                    <div className="card-body">
+                        <h5 className="card-title">{this.props.name}</h5>
+                        <h6 className="card-subtitle mb-2 text-muted">{this.props.amount} cl · {this.props.strength}%</h6>
+                        <p className="card-text">{this.state.timeText}</p>
+                        <div class="btn-group" role="group" aria-label="Drink controls">
+                            <button onClick={this.duplicate} className='btn btn-sm btn-primary'>Duplicate</button>
+                            <button onClick={this.remove} className='btn btn-sm btn-danger'>Remove</button>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -1,22 +1,18 @@
 import React, { Component } from 'react';
-import './ProgressBar.css';
 
 class ProgressBar extends Component {
     render() {
         let percentage = (0.2 - this.props.percentage) * 500;
 
-        percentage = Math.max(percentage, 0);
+        percentage = 100 - Math.max(percentage, 0);
 
         let style = {
             width: percentage + '%',
         }
 
         return (
-            <div>
-                <div id='progress-bar'>
-                    <img alt='Progress bar' src={'/images/progress.png'} />
-                    <div id='progress-cover' style={style}></div>
-                </div>
+            <div className="progress">
+                <div className="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" aria-valuenow={percentage} aria-valuemin="0" aria-valuemax="100" style={style}></div>
             </div>
         );
     }

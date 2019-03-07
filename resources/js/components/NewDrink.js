@@ -96,14 +96,14 @@ class NewDrink extends Component {
             <form onSubmit={this.handleSubmit} id='new-drink'>
                 <div className="form-row">
                     <div className="form-group col-md-6">
-                        <label for="beverage">Select your beverage</label>
+                        <label htmlFor="beverage">Select your beverage</label>
                         <select onChange={this.handlePresetChanged} value={this.state.selectedDrink} className="form-control" id="beverage" required>
                             <option value='' disabled>Choose from a preset</option>
                             {drinks}
                         </select>
                     </div>
                     <div className="form-group col-md-6">
-                        <label for="amount">Amount (cl)</label>
+                        <label htmlFor="amount">Amount (cl)</label>
                         <input type='number' step='1' min='1' onChange={this.handleAmountChanged} value={this.state.amount} placeholder='Amount (cl)' required className="form-control" id="amount" />
                     </div>
                 </div>

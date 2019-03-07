@@ -18,28 +18,39 @@ class Effects extends Component {
 
         let behaviorList = [];
         stage.behavior.forEach(function (string, index) {
-            behaviorList.push(<li key={index}>{string}</li>);
+            behaviorList.push(<li className="list-group-item" key={index}>{string}</li>);
         });
 
         let impairmentList = [];
         stage.impairment.forEach(function (string, index) {
-            impairmentList.push(<li key={index}>{string}</li>);
+            impairmentList.push(<li className="list-group-item" key={index}>{string}</li>);
         });
 
         return (
             <div id='effects'>
                 <ProgressBar percentage={this.props.percentage} />
-                <div id='behavior'>
-                    <h3>Effects</h3>
-                    <ul>
-                        {behaviorList}
-                    </ul>
-                </div>
-                <div id='impairment'>
-                    <h3>Impairment</h3>
-                    <ul>
-                        {impairmentList}
-                    </ul>
+                <hr />
+                <div className="row">
+                    <div className="col-md-6">
+                        <div className="card">
+                            <div className="card-header">
+                                Effects
+                            </div>
+                            <ul className="list-group list-group-flush">
+                                {behaviorList}
+                            </ul>
+                        </div>
+                    </div>
+                    <div className="col-md-6">
+                        <div className="card">
+                            <div className="card-header">
+                                Impairment
+                            </div>
+                            <ul className="list-group list-group-flush">
+                                {impairmentList}
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         );
