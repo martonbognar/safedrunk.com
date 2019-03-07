@@ -59,7 +59,7 @@ class Drink extends Component {
                         <h5 className="card-title">{this.props.name}</h5>
                         <h6 className="card-subtitle mb-2 text-muted">{this.props.amount} cl · {this.props.strength}%</h6>
                         <p className="card-text">{this.state.timeText}</p>
-                        <div class="btn-group" role="group" aria-label="Drink controls">
+                        <div className="btn-group" role="group" aria-label="Drink controls">
                             <button onClick={this.duplicate} className='btn btn-sm btn-primary'>Duplicate</button>
                             <button onClick={this.remove} className='btn btn-sm btn-danger'>Remove</button>
                         </div>

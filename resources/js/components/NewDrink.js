@@ -101,15 +101,16 @@ class NewDrink extends Component {
                             <option value='' disabled>Choose from a preset</option>
                             {drinks}
                         </select>
+                        <small className="form-text text-muted"><a href="/beverages/create/">Click here</a> to add your own beverages.</small>
                     </div>
                     <div className="form-group col-md-6">
                         <label htmlFor="amount">Amount (cl)</label>
                         <input type='number' step='1' min='1' onChange={this.handleAmountChanged} value={this.state.amount} placeholder='Amount (cl)' required className="form-control" id="amount" />
                     </div>
                 </div>
-                <div class="btn-group" role="group" aria-label="Form controls">
-                    <button type="submit" class="btn btn-outline-success">Submit</button>
-                    <button type="button" class="btn btn-outline-danger" onClick={this.props.cancel}>Cancel</button>
+                <div className="btn-group" role="group" aria-label="Form controls">
+                    <button type="submit" className="btn btn-outline-success">Submit</button>
+                    <button type="button" className="btn btn-outline-danger" onClick={this.props.cancel}>Cancel</button>
                 </div>
             </form>
         );

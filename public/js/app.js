@@ -61796,7 +61796,7 @@ function (_Component) {
       }, this.props.amount, " cl \xB7 ", this.props.strength, "%"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
         className: "card-text"
       }, this.state.timeText), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        class: "btn-group",
+        className: "btn-group",
         role: "group",
         "aria-label": "Drink controls"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
@@ -62107,7 +62107,11 @@ function (_Component) {
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
         value: "",
         disabled: true
-      }, "Choose from a preset"), drinks)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, "Choose from a preset"), drinks), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", {
+        className: "form-text text-muted"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "/beverages/create/"
+      }, "Click here"), " to add your own beverages.")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "form-group col-md-6"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
         htmlFor: "amount"
@@ -62122,15 +62126,15 @@ function (_Component) {
         className: "form-control",
         id: "amount"
       }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        class: "btn-group",
+        className: "btn-group",
         role: "group",
         "aria-label": "Form controls"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "submit",
-        class: "btn btn-outline-success"
+        className: "btn btn-outline-success"
       }, "Submit"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
-        class: "btn btn-outline-danger",
+        className: "btn btn-outline-danger",
         onClick: this.props.cancel
       }, "Cancel")));
     }
@@ -62186,6 +62190,23 @@ function (_Component) {
   }
 
   _createClass(ProgressBar, [{
+    key: "getClass",
+    value: function getClass(percentage) {
+      if (percentage < 25) {
+        return "bg-success";
+      }
+
+      if (percentage < 50) {
+        return "bg-info";
+      }
+
+      if (percentage < 75) {
+        return "bg-warning";
+      }
+
+      return "bg-danger";
+    }
+  }, {
     key: "render",
     value: function render() {
       var percentage = (0.2 - this.props.percentage) * 500;
@@ -62193,10 +62214,11 @@ function (_Component) {
       var style = {
         width: percentage + '%'
       };
+      var htmlClass = "progress-bar progress-bar-striped progress-bar-animated " + this.getClass(percentage);
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "progress"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "progress-bar progress-bar-striped progress-bar-animated bg-warning",
+        className: htmlClass,
         role: "progressbar",
         "aria-valuenow": percentage,
         "aria-valuemin": "0",
