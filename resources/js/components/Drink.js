@@ -53,7 +53,7 @@ class Drink extends Component {
 
     render() {
         return (
-            <div className="col-md-4 mb-3">
+            <div className="col-lg-4 mb-3">
                 <div className="card">
                     <div className="card-body">
                         <h5 className="card-title">{this.props.name}</h5>
