@@ -61950,21 +61950,18 @@ function (_Component) {
           onDuplicate: this.duplicateDrink
         }));
       }, this);
-      var newDrink = this.state.showNewDrink ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        id: "drink-form"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_NewDrink__WEBPACK_IMPORTED_MODULE_3__["default"], {
-        onChange: this.onNewDrinkSubmit
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        onClick: this.toggleDrinkForm,
-        className: "remove"
-      }, "Cancel")) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      var newDrink = this.state.showNewDrink ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_NewDrink__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        onChange: this.onNewDrinkSubmit,
+        cancel: this.toggleDrinkForm
+      }) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "btn btn-success",
         onClick: this.toggleDrinkForm
-      }, "New Drink");
+      }, "Add a new drink");
       var content = '';
 
       if (this.state.basicData.weight !== 0 && this.state.basicData.weight !== '') {
-        content = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, newDrink, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          id: "drinks"
+        content = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, newDrink, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "row"
         }, rows), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Calculator__WEBPACK_IMPORTED_MODULE_2__["default"], {
           drinks: this.state.drinks,
           weight: this.state.basicData.weight,
@@ -62170,7 +62167,7 @@ function (_Component) {
       }, "Submit this beverage to the public database"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "submit",
         className: "btn btn-primary"
-      }, "Create beverage")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
+      }, "Create beverage")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
         className: "list-group mt-3"
       }, beverages));
     }
@@ -62402,22 +62399,24 @@ function (_Component) {
     key: "render",
     value: function render() {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "drink"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, this.props.name), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fa fa-glass",
-        "aria-hidden": "true"
-      }), " ", this.props.amount, " cl"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fa fa-percent",
-        "aria-hidden": "true"
-      }), " ", this.props.strength, "%"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fa fa-clock-o",
-        "aria-hidden": "true"
-      }), " ", this.state.timeText)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "col-md-4 mb-3"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        class: "card"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        class: "card-body"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
+        class: "card-title"
+      }, this.props.name), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h6", {
+        class: "card-subtitle mb-2 text-muted"
+      }, this.props.amount, " cl \xB7 ", this.props.strength, "%"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+        class: "card-text"
+      }, this.state.timeText), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        onClick: this.duplicate,
+        className: "btn btn-sm btn-primary"
+      }, "Duplicate"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         onClick: this.remove,
-        className: "remove"
-      }, "Remove"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        onClick: this.duplicate
-      }, "Duplicate"));
+        className: "btn btn-sm btn-danger"
+      }, "Remove"))));
     }
   }]);
 
@@ -62532,8 +62531,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -62588,10 +62585,7 @@ function (_Component) {
     _this.refreshStartTime = _this.refreshStartTime.bind(_assertThisInitialized(_this));
     _this.handlePresetChanged = _this.handlePresetChanged.bind(_assertThisInitialized(_this));
     _this.invalidatePreset = _this.invalidatePreset.bind(_assertThisInitialized(_this));
-    _this.handleNameChanged = _this.handleNameChanged.bind(_assertThisInitialized(_this));
     _this.handleAmountChanged = _this.handleAmountChanged.bind(_assertThisInitialized(_this));
-    _this.handleCheckboxChanged = _this.handleCheckboxChanged.bind(_assertThisInitialized(_this));
-    _this.handleStrengthChanged = _this.handleStrengthChanged.bind(_assertThisInitialized(_this));
     _this.handleStartTimeChanged = _this.handleStartTimeChanged.bind(_assertThisInitialized(_this));
     _this.submitData = _this.submitData.bind(_assertThisInitialized(_this));
     _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_this));
@@ -62642,14 +62636,6 @@ function (_Component) {
       });
     }
   }, {
-    key: "handleNameChanged",
-    value: function handleNameChanged(event) {
-      this.setState({
-        name: event.target.value
-      });
-      this.invalidatePreset();
-    }
-  }, {
     key: "handleAmountChanged",
     value: function handleAmountChanged(event) {
       var input = event.target.value.replace(',', '.');
@@ -62663,29 +62649,6 @@ function (_Component) {
           amount: input
         });
       }
-    }
-  }, {
-    key: "handleCheckboxChanged",
-    value: function handleCheckboxChanged(event) {
-      var name = event.target.name;
-      this.setState(_defineProperty({}, name, event.target.checked));
-    }
-  }, {
-    key: "handleStrengthChanged",
-    value: function handleStrengthChanged(event) {
-      var input = event.target.value.replace(',', '.');
-
-      if (isNaN(input)) {
-        this.setState({
-          strength: ''
-        });
-      } else {
-        this.setState({
-          strength: input
-        });
-      }
-
-      this.invalidatePreset();
     }
   }, {
     key: "handleStartTimeChanged",
@@ -62721,58 +62684,50 @@ function (_Component) {
           key: drink.id
         }, drink.name));
       });
-      var submitBeverage = null;
-
-      if (this.state.customBeverage) {
-        submitBeverage = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-          name: "submit",
-          id: "submit",
-          type: "checkbox",
-          checked: this.state.submit,
-          onChange: this.handleCheckboxChanged
-        }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
-          htmlFor: "submit"
-        }, "Submit this beverage to the public database"));
-      }
-
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
         onSubmit: this.handleSubmit,
         id: "new-drink"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "form-row"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "form-group col-md-6"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+        for: "beverage"
+      }, "Select your beverage"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
         onChange: this.handlePresetChanged,
-        value: this.state.selectedDrink
+        value: this.state.selectedDrink,
+        className: "form-control",
+        id: "beverage",
+        required: true
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
         value: "",
         disabled: true
-      }, "Choose from a preset"), drinks), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Or define your own:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        type: "text",
-        onChange: this.handleNameChanged,
-        value: this.state.name,
-        placeholder: "Drink Name",
-        required: true
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        type: "text",
+      }, "Choose from a preset"), drinks)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "form-group col-md-6"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+        for: "amount"
+      }, "Amount (cl)"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "number",
+        step: "1",
+        min: "1",
         onChange: this.handleAmountChanged,
         value: this.state.amount,
         placeholder: "Amount (cl)",
-        required: true
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        type: "text",
-        onChange: this.handleStrengthChanged,
-        value: this.state.strength,
-        placeholder: "Strength (%)",
-        required: true
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        type: "datetime-local",
-        onChange: this.handleStartTimeChanged,
         required: true,
-        value: startString
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "#",
-        onClick: this.refreshStartTime
-      }, "Set to now"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), submitBeverage, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        className: "submit"
-      }, "Submit"));
+        className: "form-control",
+        id: "amount"
+      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        class: "btn-group",
+        role: "group",
+        "aria-label": "Form controls"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "submit",
+        class: "btn btn-outline-success"
+      }, "Submit"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "button",
+        class: "btn btn-outline-danger",
+        onClick: this.props.cancel
+      }, "Cancel")));
     }
   }]);
 
@@ -63033,7 +62988,7 @@ function (_Component) {
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         className: "btn btn-primary",
         type: "submit"
-      }, "Create")))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
+      }, "Create")))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
         className: "list-group"
       }, sessions));
     }

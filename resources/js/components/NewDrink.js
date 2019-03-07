@@ -32,10 +32,7 @@ class NewDrink extends Component {
         this.refreshStartTime = this.refreshStartTime.bind(this);
         this.handlePresetChanged = this.handlePresetChanged.bind(this);
         this.invalidatePreset = this.invalidatePreset.bind(this);
-        this.handleNameChanged = this.handleNameChanged.bind(this);
         this.handleAmountChanged = this.handleAmountChanged.bind(this);
-        this.handleCheckboxChanged = this.handleCheckboxChanged.bind(this);
-        this.handleStrengthChanged = this.handleStrengthChanged.bind(this);
         this.handleStartTimeChanged = this.handleStartTimeChanged.bind(this);
         this.submitData = this.submitData.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -62,11 +59,6 @@ class NewDrink extends Component {
         this.setState({ beverage_id: undefined, selectedDrink: '', customBeverage: true });
     }
 
-    handleNameChanged(event) {
-        this.setState({ name: event.target.value });
-        this.invalidatePreset();
-    }
-
     handleAmountChanged(event) {
         let input = event.target.value.replace(',', '.');
         if (isNaN(input)) {
@@ -74,23 +66,6 @@ class NewDrink extends Component {
         } else {
             this.setState({ amount: input });
         }
-    }
-
-    handleCheckboxChanged(event) {
-        const name = event.target.name;
-        this.setState({
-            [name]: event.target.checked
-        });
-    }
-
-    handleStrengthChanged(event) {
-        let input = event.target.value.replace(',', '.');
-        if (isNaN(input)) {
-            this.setState({ strength: '' });
-        } else {
-            this.setState({ strength: input });
-        }
-        this.invalidatePreset();
     }
 
     handleStartTimeChanged(event) {
@@ -117,40 +92,25 @@ class NewDrink extends Component {
             drinks.push(<option value={drink.id} key={drink.id}>{drink.name}</option>);
         });
 
-        let submitBeverage = null;
-
-        if (this.state.customBeverage) {
-            submitBeverage = <div><input
-                name="submit"
-                id="submit"
-                type="checkbox"
-                checked={this.state.submit}
-                onChange={this.handleCheckboxChanged} />
-                <label htmlFor="submit">Submit this beverage to the public database</label></div>;
-        }
-
         return (
             <form onSubmit={this.handleSubmit} id='new-drink'>
-                <select onChange={this.handlePresetChanged} value={this.state.selectedDrink}>
-                    <option value='' disabled>Choose from a preset</option>
-                    {drinks}
-                </select>
-                <br />
-                Or define your own:
-        <br />
-                <input type='text' onChange={this.handleNameChanged} value={this.state.name} placeholder='Drink Name' required />
-                <br />
-                <input type='text' onChange={this.handleAmountChanged} value={this.state.amount} placeholder='Amount (cl)' required />
-                <br />
-                <input type='text' onChange={this.handleStrengthChanged} value={this.state.strength} placeholder='Strength (%)' required />
-                <br />
-                <input type='datetime-local' onChange={this.handleStartTimeChanged} required value={startString} />
-                <br />
-                <a href='#' onClick={this.refreshStartTime}>Set to now</a>
-                <br />
-                {submitBeverage}
-                <br />
-                <button className='submit'>Submit</button>
+                <div className="form-row">
+                    <div className="form-group col-md-6">
+                        <label for="beverage">Select your beverage</label>
+                        <select onChange={this.handlePresetChanged} value={this.state.selectedDrink} className="form-control" id="beverage" required>
+                            <option value='' disabled>Choose from a preset</option>
+                            {drinks}
+                        </select>
+                    </div>
+                    <div className="form-group col-md-6">
+                        <label for="amount">Amount (cl)</label>
+                        <input type='number' step='1' min='1' onChange={this.handleAmountChanged} value={this.state.amount} placeholder='Amount (cl)' required className="form-control" id="amount" />
+                    </div>
+                </div>
+                <div class="btn-group" role="group" aria-label="Form controls">
+                    <button type="submit" class="btn btn-outline-success">Submit</button>
+                    <button type="button" class="btn btn-outline-danger" onClick={this.props.cancel}>Cancel</button>
+                </div>
             </form>
         );
     }

@@ -79,6 +79,7 @@ class Sessions extends Component {
                         </div>
                     </div>
                 </form>
+                <hr />
                 <ul className="list-group">
                     {sessions}
                 </ul>

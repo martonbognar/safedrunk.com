@@ -101,6 +101,7 @@ class Beverages extends Component {
                     </div>
                     <button type="submit" className="btn btn-primary">Create beverage</button>
                 </form>
+                <hr />
                 <ul className="list-group mt-3">
                     {beverages}
                 </ul>

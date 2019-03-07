@@ -53,15 +53,16 @@ class Drink extends Component {
 
     render() {
         return (
-            <div className='drink'>
-                <h3>{this.props.name}</h3>
-                <ul>
-                    <li><i className='fa fa-glass' aria-hidden='true'></i> {this.props.amount} cl</li>
-                    <li><i className='fa fa-percent' aria-hidden='true'></i> {this.props.strength}%</li>
-                    <li><i className='fa fa-clock-o' aria-hidden='true'></i> {this.state.timeText}</li>
-                </ul>
-                <button onClick={this.remove} className='remove'>Remove</button>
-                <button onClick={this.duplicate}>Duplicate</button>
+            <div className="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{this.props.name}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{this.props.amount} cl · {this.props.strength}%</h6>
+                        <p class="card-text">{this.state.timeText}</p>
+                        <button onClick={this.duplicate} className='btn btn-sm btn-primary'>Duplicate</button>
+                        <button onClick={this.remove} className='btn btn-sm btn-danger'>Remove</button>
+                    </div>
+                </div>
             </div>
         );
     }

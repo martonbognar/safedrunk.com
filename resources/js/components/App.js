@@ -134,7 +134,7 @@ class App extends Component {
             rows.push(<Drink key={drink.key} id={drink.key} name={drink.name} amount={drink.amount} strength={drink.strength} startTime={drink.startTime} onRemove={this.removeDrink} beverage_id={drink.beverage_id} onDuplicate={this.duplicateDrink} />);
         }, this);
 
-        let newDrink = this.state.showNewDrink ? <div id='drink-form'><NewDrink onChange={this.onNewDrinkSubmit} /><button onClick={this.toggleDrinkForm} className='remove'>Cancel</button></div> : <button onClick={this.toggleDrinkForm}>New Drink</button>;
+        let newDrink = this.state.showNewDrink ? <NewDrink onChange={this.onNewDrinkSubmit} cancel={this.toggleDrinkForm} /> : <button className="btn btn-success" onClick={this.toggleDrinkForm}>Add a new drink</button>;
 
         let content = '';
 
@@ -142,7 +142,8 @@ class App extends Component {
             content = (
                 <div>
                     {newDrink}
-                    <div id='drinks'>
+                    <hr />
+                    <div className="row">
                         {rows}
                     </div>
                     <Calculator drinks={this.state.drinks} weight={this.state.basicData.weight} gender={this.state.basicData.gender} />
