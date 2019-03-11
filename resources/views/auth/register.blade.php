@@ -40,7 +40,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="sex" class="col-md-4 col-form-label text-md-right">{{ __('Sex (male/female)') }}</label>
+                            <label for="sex" class="col-md-4 col-form-label text-md-right">{{ __('Sex') }}</label>
 
                             <div class="col-md-6">
                                 <select id="sex" name="sex" class="form-control{{ $errors->has('sex') ? ' is-invalid' : '' }}" required>
