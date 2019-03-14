@@ -79,7 +79,7 @@ class NewDrink extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        this.setState({ amount: parseFloat(this.state.amount), strength: parseFloat(this.state.strength) }, this.submitData);
+        this.setState({ amount: parseFloat(this.state.amount), percentage: parseFloat(this.state.percentage) }, this.submitData);
     }
 
     render() {

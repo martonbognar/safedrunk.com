@@ -62073,7 +62073,7 @@ function (_Component) {
       event.preventDefault();
       this.setState({
         amount: parseFloat(this.state.amount),
-        strength: parseFloat(this.state.strength)
+        percentage: parseFloat(this.state.percentage)
       }, this.submitData);
     }
   }, {
