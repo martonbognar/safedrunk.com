@@ -61636,6 +61636,8 @@ function (_Component) {
   }, {
     key: "calculateEbac",
     value: function calculateEbac() {
+      var _this3 = this;
+
       if (this.props.drinks.length === 0) {
         this.setState({
           value: 0
@@ -61644,16 +61646,13 @@ function (_Component) {
       }
 
       var alcohol = 0;
-      var period = (new Date().getTime() - this.props.drinks[0].startTime.getTime()) / (1000 * 60 * 60);
-
-      for (var i = 0; i < this.props.drinks.length; i++) {
-        var alcoholml = parseInt(this.props.drinks[i].amount, 10) / 10 * parseInt(this.props.drinks[i].strength, 10);
+      this.props.drinks.forEach(function (drink) {
+        var alcoholml = parseInt(drink.amount, 10) / 10 * parseInt(drink.strength, 10);
         var grams = alcoholml * 0.789;
-        alcohol += grams;
-      }
-
+        alcohol += _this3.ebac(grams, (new Date().getTime() - drink.startTime.getTime()) / (1000 * 60 * 60));
+      });
       this.setState({
-        value: this.ebac(alcohol, period).toFixed(5)
+        value: alcohol.toFixed(5)
       });
     }
   }, {
