@@ -16,7 +16,7 @@ class App extends Component {
         this.state = {
             id: pieces[pieces.length - 2],
             basicData: {
-                gender: '',
+                sex: '',
                 weight: '',
             },
             drinks: [],
@@ -27,7 +27,7 @@ class App extends Component {
 
         axios.get('/personal/')
             .then(function (response) {
-                self.setState({ basicData: { gender: response.data.sex, weight: response.data.weight } });
+                self.setState({ basicData: { sex: response.data.sex, weight: response.data.weight } });
             })
             .catch(function (error) {
                 console.error(error);
@@ -41,7 +41,7 @@ class App extends Component {
                         drinks: self.state.drinks.concat([{
                             name: drink.beverage.name,
                             amount: drink.amount_cl,
-                            strength: drink.beverage.percentage,
+                            percentage: drink.beverage.percentage,
                             beverage_id: drink.beverage_id,
                             startTime: new Date(drink.start + "Z"),
                             key: drink.id,
@@ -78,7 +78,7 @@ class App extends Component {
     onNewDrinkSubmit(data) {
         let self = this;
         if (data.beverage_id === undefined) {
-            axios.post(`/beverages/`, { 'name': data.name, 'percentage': data.strength, 'pending': data.submit })
+            axios.post(`/beverages/`, { 'name': data.name, 'percentage': data.percentage, 'pending': data.submit })
                 .then(function (response) {
                     data.beverage_id = response.data.id;
                     self.submitDrink(data);
@@ -117,7 +117,7 @@ class App extends Component {
         this.onNewDrinkSubmit({
             name: drink.props.name,
             amount: drink.props.amount,
-            strength: drink.props.strength,
+            percentage: drink.props.percentage,
             beverage_id: drink.props.beverage_id,
             startTime: new Date(),
         });
@@ -131,7 +131,7 @@ class App extends Component {
         let rows = [];
 
         this.state.drinks.forEach(function (drink) {
-            rows.push(<Drink key={drink.key} id={drink.key} name={drink.name} amount={drink.amount} strength={drink.strength} startTime={drink.startTime} onRemove={this.removeDrink} beverage_id={drink.beverage_id} onDuplicate={this.duplicateDrink} />);
+            rows.push(<Drink key={drink.key} id={drink.key} name={drink.name} amount={drink.amount} percentage={drink.percentage} startTime={drink.startTime} onRemove={this.removeDrink} beverage_id={drink.beverage_id} onDuplicate={this.duplicateDrink} />);
         }, this);
 
         let newDrink = this.state.showNewDrink ? <NewDrink onChange={this.onNewDrinkSubmit} cancel={this.toggleDrinkForm} /> : <button className="btn btn-success" onClick={this.toggleDrinkForm}>Add a new drink</button>;
@@ -146,7 +146,7 @@ class App extends Component {
                     <div className="row">
                         {rows}
                     </div>
-                    <Calculator drinks={this.state.drinks} weight={this.state.basicData.weight} gender={this.state.basicData.gender} />
+                    <Calculator drinks={this.state.drinks} weight={this.state.basicData.weight} sex={this.state.basicData.sex} />
                 </div>
             );
         }

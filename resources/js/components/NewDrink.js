@@ -9,7 +9,7 @@ class NewDrink extends Component {
         this.state = {
             name: '',
             amount: '',
-            strength: '',
+            percentage: '',
             startTime: new Date(),
             selectedDrink: '',
             beverage_id: undefined,
@@ -39,7 +39,7 @@ class NewDrink extends Component {
     }
 
     resetState() {
-        this.setState({ name: '', amount: '', strength: '', startTime: new Date(), selectedDrink: '' });
+        this.setState({ name: '', amount: '', percentage: '', startTime: new Date(), selectedDrink: '' });
     }
 
     refreshStartTime(event) {
@@ -50,7 +50,7 @@ class NewDrink extends Component {
     handlePresetChanged(event) {
         this.state.drinkList.forEach(function (drink) {
             if (drink.id === Number(event.target.value)) {
-                this.setState({ name: drink.name, strength: drink.percentage, beverage_id: drink.id, selectedDrink: event.target.value, customBeverage: false });
+                this.setState({ name: drink.name, percentage: drink.percentage, beverage_id: drink.id, selectedDrink: event.target.value, customBeverage: false });
             }
         }, this);
     }

@@ -32,7 +32,7 @@ class Calculator extends Component {
         let alcohol = 0;
 
         this.props.drinks.forEach(drink => {
-            let alcoholml = (parseInt(drink.amount, 10) / 10) * parseInt(drink.strength, 10);
+            let alcoholml = (parseInt(drink.amount, 10) / 10) * parseInt(drink.percentage, 10);
             let grams = alcoholml * 0.789;
             alcohol += this.ebac(grams, ((new Date()).getTime() - drink.startTime.getTime()) / (1000 * 60 * 60));
         });
@@ -41,7 +41,7 @@ class Calculator extends Component {
     }
 
     ebac(alcohol, period) {
-        let bw = this.props.gender === 'male' ? 0.58 : 0.49;
+        let bw = this.props.sex === 'male' ? 0.58 : 0.49;
         let result = ((0.806 * (alcohol / 10) * 1.2) / (bw * this.props.weight)) - (0.017 * period);
         return result > 0 ? result : 0;
     }

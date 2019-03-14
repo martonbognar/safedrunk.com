@@ -61192,7 +61192,7 @@ function (_Component) {
     _this.state = {
       id: pieces[pieces.length - 2],
       basicData: {
-        gender: '',
+        sex: '',
         weight: ''
       },
       drinks: [],
@@ -61204,7 +61204,7 @@ function (_Component) {
     axios.get('/personal/').then(function (response) {
       self.setState({
         basicData: {
-          gender: response.data.sex,
+          sex: response.data.sex,
           weight: response.data.weight
         }
       });
@@ -61218,7 +61218,7 @@ function (_Component) {
           drinks: self.state.drinks.concat([{
             name: drink.beverage.name,
             amount: drink.amount_cl,
-            strength: drink.beverage.percentage,
+            percentage: drink.beverage.percentage,
             beverage_id: drink.beverage_id,
             startTime: new Date(drink.start + "Z"),
             key: drink.id
@@ -61265,7 +61265,7 @@ function (_Component) {
       if (data.beverage_id === undefined) {
         axios.post("/beverages/", {
           'name': data.name,
-          'percentage': data.strength,
+          'percentage': data.percentage,
           'pending': data.submit
         }).then(function (response) {
           data.beverage_id = response.data.id;
@@ -61306,7 +61306,7 @@ function (_Component) {
       this.onNewDrinkSubmit({
         name: drink.props.name,
         amount: drink.props.amount,
-        strength: drink.props.strength,
+        percentage: drink.props.percentage,
         beverage_id: drink.props.beverage_id,
         startTime: new Date()
       });
@@ -61328,7 +61328,7 @@ function (_Component) {
           id: drink.key,
           name: drink.name,
           amount: drink.amount,
-          strength: drink.strength,
+          percentage: drink.percentage,
           startTime: drink.startTime,
           onRemove: this.removeDrink,
           beverage_id: drink.beverage_id,
@@ -61350,7 +61350,7 @@ function (_Component) {
         }, rows), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Calculator__WEBPACK_IMPORTED_MODULE_2__["default"], {
           drinks: this.state.drinks,
           weight: this.state.basicData.weight,
-          gender: this.state.basicData.gender
+          sex: this.state.basicData.sex
         }));
       }
 
@@ -61647,7 +61647,7 @@ function (_Component) {
 
       var alcohol = 0;
       this.props.drinks.forEach(function (drink) {
-        var alcoholml = parseInt(drink.amount, 10) / 10 * parseInt(drink.strength, 10);
+        var alcoholml = parseInt(drink.amount, 10) / 10 * parseInt(drink.percentage, 10);
         var grams = alcoholml * 0.789;
         alcohol += _this3.ebac(grams, (new Date().getTime() - drink.startTime.getTime()) / (1000 * 60 * 60));
       });
@@ -61658,7 +61658,7 @@ function (_Component) {
   }, {
     key: "ebac",
     value: function ebac(alcohol, period) {
-      var bw = this.props.gender === 'male' ? 0.58 : 0.49;
+      var bw = this.props.sex === 'male' ? 0.58 : 0.49;
       var result = 0.806 * (alcohol / 10) * 1.2 / (bw * this.props.weight) - 0.017 * period;
       return result > 0 ? result : 0;
     }
@@ -61792,7 +61792,7 @@ function (_Component) {
         className: "card-title"
       }, this.props.name), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h6", {
         className: "card-subtitle mb-2 text-muted"
-      }, this.props.amount, " cl \xB7 ", this.props.strength, "%"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+      }, this.props.amount, " cl \xB7 ", this.props.percentage, "%"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
         className: "card-text"
       }, this.state.timeText), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "btn-group",
@@ -61967,7 +61967,7 @@ function (_Component) {
     _this.state = {
       name: '',
       amount: '',
-      strength: '',
+      percentage: '',
       startTime: new Date(),
       selectedDrink: '',
       beverage_id: undefined,
@@ -62002,7 +62002,7 @@ function (_Component) {
       this.setState({
         name: '',
         amount: '',
-        strength: '',
+        percentage: '',
         startTime: new Date(),
         selectedDrink: ''
       });
@@ -62022,7 +62022,7 @@ function (_Component) {
         if (drink.id === Number(event.target.value)) {
           this.setState({
             name: drink.name,
-            strength: drink.percentage,
+            percentage: drink.percentage,
             beverage_id: drink.id,
             selectedDrink: event.target.value,
             customBeverage: false
