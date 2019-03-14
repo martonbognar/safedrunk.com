@@ -61971,25 +61971,17 @@ function (_Component) {
       startTime: new Date(),
       selectedDrink: '',
       beverage_id: undefined,
-      drinkList: [],
+      beverageList: [],
       customBeverage: true,
-      submit: false
+      submit: false,
+      keyword: ''
     };
-
-    var self = _assertThisInitialized(_this);
-
-    axios.get('/beverages/').then(function (response) {
-      self.setState({
-        drinkList: response.data
-      });
-    }).catch(function (error) {
-      alert("There was a connection error. Please try reloading the page.");
-    });
     _this.resetState = _this.resetState.bind(_assertThisInitialized(_this));
     _this.refreshStartTime = _this.refreshStartTime.bind(_assertThisInitialized(_this));
     _this.handlePresetChanged = _this.handlePresetChanged.bind(_assertThisInitialized(_this));
     _this.invalidatePreset = _this.invalidatePreset.bind(_assertThisInitialized(_this));
     _this.handleAmountChanged = _this.handleAmountChanged.bind(_assertThisInitialized(_this));
+    _this.handleKeywordChanged = _this.handleKeywordChanged.bind(_assertThisInitialized(_this));
     _this.handleStartTimeChanged = _this.handleStartTimeChanged.bind(_assertThisInitialized(_this));
     _this.submitData = _this.submitData.bind(_assertThisInitialized(_this));
     _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_this));
@@ -62018,7 +62010,7 @@ function (_Component) {
   }, {
     key: "handlePresetChanged",
     value: function handlePresetChanged(event) {
-      this.state.drinkList.forEach(function (drink) {
+      this.state.beverageList.forEach(function (drink) {
         if (drink.id === Number(event.target.value)) {
           this.setState({
             name: drink.name,
@@ -62055,6 +62047,29 @@ function (_Component) {
       }
     }
   }, {
+    key: "handleKeywordChanged",
+    value: function handleKeywordChanged(event) {
+      var keyword = event.target.value;
+      this.setState({
+        keyword: keyword
+      });
+
+      if (keyword !== "") {
+        var self = this;
+        axios.get('/beverages/filter/' + keyword).then(function (response) {
+          self.setState({
+            beverageList: response.data
+          });
+        }).catch(function (error) {
+          alert("There was a connection error. Please try reloading the page.");
+        });
+      } else {
+        this.setState({
+          beverageList: []
+        });
+      }
+    }
+  }, {
     key: "handleStartTimeChanged",
     value: function handleStartTimeChanged(event) {
       this.setState({
@@ -62082,11 +62097,11 @@ function (_Component) {
       var startTime = new Date(this.state.startTime);
       var startString = startTime.getFullYear() + '-' + ('0' + (startTime.getMonth() + 1)).slice(-2) + '-' + ('0' + startTime.getDate()).slice(-2) + 'T' + ('0' + startTime.getHours()).slice(-2) + ':' + ('0' + startTime.getMinutes()).slice(-2);
       var drinks = [];
-      this.state.drinkList.forEach(function (drink) {
+      this.state.beverageList.forEach(function (drink) {
         drinks.push(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
           value: drink.id,
           key: drink.id
-        }, drink.name));
+        }, drink.name, " (", drink.percentage, "%)"));
       });
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
         onSubmit: this.handleSubmit,
@@ -62094,24 +62109,34 @@ function (_Component) {
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "form-row"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "form-group col-md-6"
+        className: "form-group col-md-4"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+        htmlFor: "keyword"
+      }, "Search for a beverage"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "text",
+        onChange: this.handleKeywordChanged,
+        value: this.state.keyword,
+        placeholder: "Start typing...",
+        required: true,
+        className: "form-control",
+        id: "keyword"
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "form-group col-md-4"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
         htmlFor: "beverage"
-      }, "Select your beverage"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+      }, "Search results"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
         onChange: this.handlePresetChanged,
         value: this.state.selectedDrink,
         className: "form-control",
         id: "beverage",
-        required: true
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-        value: "",
-        disabled: true
-      }, "Choose from a preset"), drinks), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", {
+        required: true,
+        size: "5"
+      }, drinks), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", {
         className: "form-text text-muted"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
         href: "/beverages/create/"
       }, "Click here"), " to add your own beverages.")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "form-group col-md-6"
+        className: "form-group col-md-4"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
         htmlFor: "amount"
       }, "Amount (cl)"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {

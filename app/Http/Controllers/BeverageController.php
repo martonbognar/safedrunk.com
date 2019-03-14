@@ -29,6 +29,12 @@ class BeverageController extends Controller
         return $custom->merge(Beverage::where([['user_id', null], ['approved', true]])->get());
     }
 
+    public function listFiltered($keyword)
+    {
+        $custom = Beverage::where([['user_id', Auth::id()], ['name', 'LIKE', '%' . $keyword . '%']])->orderBy('name', 'asc')->get();
+        return $custom->merge(Beverage::where([['user_id', null], ['approved', true], ['name', 'LIKE', '%' . $keyword . '%']])->orderBy('name', 'asc')->get());
+    }
+
     /**
      * Show the form for creating a new resource.
      *

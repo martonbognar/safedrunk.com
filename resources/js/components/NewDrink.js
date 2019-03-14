@@ -13,26 +13,18 @@ class NewDrink extends Component {
             startTime: new Date(),
             selectedDrink: '',
             beverage_id: undefined,
-            drinkList: [],
+            beverageList: [],
             customBeverage: true,
             submit: false,
+            keyword: '',
         };
-
-        let self = this;
-
-        axios.get('/beverages/')
-            .then(function (response) {
-                self.setState({ drinkList: response.data });
-            })
-            .catch(function (error) {
-                alert("There was a connection error. Please try reloading the page.");
-            });
 
         this.resetState = this.resetState.bind(this);
         this.refreshStartTime = this.refreshStartTime.bind(this);
         this.handlePresetChanged = this.handlePresetChanged.bind(this);
         this.invalidatePreset = this.invalidatePreset.bind(this);
         this.handleAmountChanged = this.handleAmountChanged.bind(this);
+        this.handleKeywordChanged = this.handleKeywordChanged.bind(this);
         this.handleStartTimeChanged = this.handleStartTimeChanged.bind(this);
         this.submitData = this.submitData.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -48,7 +40,7 @@ class NewDrink extends Component {
     }
 
     handlePresetChanged(event) {
-        this.state.drinkList.forEach(function (drink) {
+        this.state.beverageList.forEach(function (drink) {
             if (drink.id === Number(event.target.value)) {
                 this.setState({ name: drink.name, percentage: drink.percentage, beverage_id: drink.id, selectedDrink: event.target.value, customBeverage: false });
             }
@@ -65,6 +57,25 @@ class NewDrink extends Component {
             this.setState({ amount: '' });
         } else {
             this.setState({ amount: input });
+        }
+    }
+
+    handleKeywordChanged(event) {
+        let keyword = event.target.value;
+        this.setState({ keyword: keyword });
+
+        if (keyword !== "") {
+            let self = this;
+
+            axios.get('/beverages/filter/' + keyword)
+                .then(function (response) {
+                    self.setState({ beverageList: response.data });
+                })
+                .catch(function (error) {
+                    alert("There was a connection error. Please try reloading the page.");
+                });
+        } else {
+            this.setState({ beverageList: [] });
         }
     }
 
@@ -88,22 +99,25 @@ class NewDrink extends Component {
 
         let drinks = [];
 
-        this.state.drinkList.forEach(function (drink) {
-            drinks.push(<option value={drink.id} key={drink.id}>{drink.name}</option>);
+        this.state.beverageList.forEach(function (drink) {
+            drinks.push(<option value={drink.id} key={drink.id}>{drink.name} ({drink.percentage}%)</option>);
         });
 
         return (
             <form onSubmit={this.handleSubmit} id='new-drink'>
                 <div className="form-row">
-                    <div className="form-group col-md-6">
-                        <label htmlFor="beverage">Select your beverage</label>
-                        <select onChange={this.handlePresetChanged} value={this.state.selectedDrink} className="form-control" id="beverage" required>
-                            <option value='' disabled>Choose from a preset</option>
+                    <div className="form-group col-md-4">
+                        <label htmlFor="keyword">Search for a beverage</label>
+                        <input type='text' onChange={this.handleKeywordChanged} value={this.state.keyword} placeholder='Start typing...' required className="form-control" id="keyword" />
+                    </div>
+                    <div className="form-group col-md-4">
+                        <label htmlFor="beverage">Search results</label>
+                        <select onChange={this.handlePresetChanged} value={this.state.selectedDrink} className="form-control" id="beverage" required size='5'>
                             {drinks}
                         </select>
                         <small className="form-text text-muted"><a href="/beverages/create/">Click here</a> to add your own beverages.</small>
                     </div>
-                    <div className="form-group col-md-6">
+                    <div className="form-group col-md-4">
                         <label htmlFor="amount">Amount (cl)</label>
                         <input type='number' step='1' min='1' onChange={this.handleAmountChanged} value={this.state.amount} placeholder='Amount (cl)' required className="form-control" id="amount" />
                     </div>

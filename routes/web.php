@@ -21,6 +21,7 @@ Route::get('/', 'HomeController@index')->name('sessions');
 Route::get('/personal/', 'UserController@personal');
 
 Route::get('/beverages/own/', 'BeverageController@listOwn');
+Route::get('/beverages/filter/{keyword}', 'BeverageController@listFiltered');
 
 Route::get('/beverages/', 'BeverageController@listCombined');
 Route::post('/beverages/', 'BeverageController@store');
