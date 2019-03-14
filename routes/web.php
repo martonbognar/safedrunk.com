@@ -13,6 +13,9 @@
 
 Auth::routes();
 
+Route::get('auth/{provider}', 'Auth\SocialController@redirectToProvider');
+Route::get('auth/{provider}/callback', 'Auth\SocialController@handleProviderCallback');
+
 Route::get('/', 'HomeController@index')->name('sessions');
 
 Route::get('/personal/', 'UserController@personal');
