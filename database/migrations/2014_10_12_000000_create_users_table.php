@@ -21,8 +21,8 @@ class CreateUsersTable extends Migration
             $table->string('provider')->nullable();
             $table->string('provider_id')->nullable();
             $table->string('password')->nullable();
-            $table->enum('sex', ['male', 'female']);
-            $table->integer('weight');
+            $table->enum('sex', ['male', 'female'])->nullable();
+            $table->integer('weight')->nullable();
             $table->boolean('administrator')->default(false);
             $table->rememberToken();
             $table->timestamps();

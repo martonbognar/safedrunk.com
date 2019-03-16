@@ -18,6 +18,9 @@ Route::get('auth/{provider}/callback', 'Auth\SocialController@handleProviderCall
 
 Route::get('/', 'HomeController@index')->name('sessions');
 
+Route::get('/modify/', 'Auth\ModifyController@edit')->name('modify');
+Route::post('/modify/', 'Auth\ModifyController@update')->name('modify_post');
+
 Route::get('/personal/', 'UserController@personal');
 
 Route::get('/beverages/own/', 'BeverageController@listOwn');
