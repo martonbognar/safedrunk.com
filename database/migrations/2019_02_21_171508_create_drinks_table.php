@@ -15,7 +15,8 @@ class CreateDrinksTable extends Migration
     {
         Schema::create('drinks', function (Blueprint $table) {
             $table->increments('id');
-            $table->decimal('amount_cl', 6, 2);
+            $table->decimal('amount', 6, 2);
+            $table->enum('unit', ['cl', 'dl', 'fl_oz', 'pint_uk', 'pint_us']);
             $table->timestamp('start')->useCurrent();
             $table->timestamp('end')->nullable()->default(null);
             $table->unsignedInteger('session_id');

@@ -61217,7 +61217,8 @@ function (_Component) {
         self.setState({
           drinks: self.state.drinks.concat([{
             name: drink.beverage.name,
-            amount: drink.amount_cl,
+            amount: drink.amount,
+            unit: drink.unit,
             percentage: drink.beverage.percentage,
             beverage_id: drink.beverage_id,
             startTime: new Date(drink.start + "Z"),
@@ -61230,7 +61231,6 @@ function (_Component) {
       alert("There was a connection error. Please try reloading the page.");
     });
     _this.submitDrink = _this.submitDrink.bind(_assertThisInitialized(_this));
-    _this.onNewDrinkSubmit = _this.onNewDrinkSubmit.bind(_assertThisInitialized(_this));
     _this.removeDrink = _this.removeDrink.bind(_assertThisInitialized(_this));
     _this.duplicateDrink = _this.duplicateDrink.bind(_assertThisInitialized(_this));
     _this.toggleDrinkForm = _this.toggleDrinkForm.bind(_assertThisInitialized(_this));
@@ -61242,7 +61242,8 @@ function (_Component) {
     value: function submitDrink(data) {
       var self = this;
       axios.post("/sessions/".concat(this.state.id, "/drinks/"), {
-        'amount_cl': data.amount,
+        'amount': data.amount,
+        unit: data.unit,
         'beverage_id': data.beverage_id
       }).then(function (response) {
         data.key = response.data.id;
@@ -61256,27 +61257,6 @@ function (_Component) {
       this.setState({
         showNewDrink: false
       });
-    }
-  }, {
-    key: "onNewDrinkSubmit",
-    value: function onNewDrinkSubmit(data) {
-      var self = this;
-
-      if (data.beverage_id === undefined) {
-        axios.post("/beverages/", {
-          'name': data.name,
-          'percentage': data.percentage,
-          'pending': data.submit
-        }).then(function (response) {
-          data.beverage_id = response.data.id;
-          self.submitDrink(data);
-        }).catch(function (error) {
-          console.error(error);
-          alert("There was a connection error. Please try reloading the page.");
-        });
-      } else {
-        this.submitDrink(data);
-      }
     }
   }, {
     key: "removeDrink",
@@ -61303,9 +61283,10 @@ function (_Component) {
   }, {
     key: "duplicateDrink",
     value: function duplicateDrink(drink) {
-      this.onNewDrinkSubmit({
+      this.submitDrink({
         name: drink.props.name,
         amount: drink.props.amount,
+        unit: drink.props.unit,
         percentage: drink.props.percentage,
         beverage_id: drink.props.beverage_id,
         startTime: new Date()
@@ -61328,6 +61309,7 @@ function (_Component) {
           id: drink.key,
           name: drink.name,
           amount: drink.amount,
+          unit: drink.unit,
           percentage: drink.percentage,
           startTime: drink.startTime,
           onRemove: this.removeDrink,
@@ -61336,7 +61318,7 @@ function (_Component) {
         }));
       }, this);
       var newDrink = this.state.showNewDrink ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_NewDrink__WEBPACK_IMPORTED_MODULE_3__["default"], {
-        onChange: this.onNewDrinkSubmit,
+        onChange: this.submitDrink,
         cancel: this.toggleDrinkForm
       }) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         className: "btn btn-success",
@@ -61577,7 +61559,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _Effects__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Effects */ "./resources/js/components/Effects.js");
-/* harmony import */ var _ProgressBar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ProgressBar */ "./resources/js/components/ProgressBar.js");
+/* harmony import */ var _data_units__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./data/units */ "./resources/js/components/data/units.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -61647,7 +61629,8 @@ function (_Component) {
 
       var alcohol = 0;
       this.props.drinks.forEach(function (drink) {
-        var alcoholml = parseInt(drink.amount, 10) / 10 * parseInt(drink.percentage, 10);
+        var amount = _data_units__WEBPACK_IMPORTED_MODULE_2__["default"][drink.unit]['multiplier'] * drink.amount;
+        var alcoholml = parseInt(amount, 10) / 10 * parseInt(drink.percentage, 10);
         var grams = alcoholml * 0.789;
         alcohol += _this3.ebac(grams, (new Date().getTime() - drink.startTime.getTime()) / (1000 * 60 * 60));
       });
@@ -61792,7 +61775,7 @@ function (_Component) {
         className: "card-title"
       }, this.props.name), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h6", {
         className: "card-subtitle mb-2 text-muted"
-      }, this.props.amount, " cl \xB7 ", this.props.percentage, "%"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+      }, this.props.amount, " ", this.props.unit, " \xB7 ", this.props.percentage, "%"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
         className: "card-text"
       }, this.state.timeText), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "btn-group",
@@ -61933,6 +61916,7 @@ function (_Component) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _data_units__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./data/units */ "./resources/js/components/data/units.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -61953,6 +61937,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
 var NewDrink =
 /*#__PURE__*/
 function (_Component) {
@@ -61967,12 +61952,11 @@ function (_Component) {
     _this.state = {
       name: '',
       amount: '',
+      unit: '',
       percentage: '',
       startTime: new Date(),
-      selectedDrink: '',
       beverage_id: undefined,
       beverageList: [],
-      customBeverage: true,
       submit: false,
       keyword: ''
     };
@@ -61983,6 +61967,7 @@ function (_Component) {
     _this.handleAmountChanged = _this.handleAmountChanged.bind(_assertThisInitialized(_this));
     _this.handleKeywordChanged = _this.handleKeywordChanged.bind(_assertThisInitialized(_this));
     _this.handleStartTimeChanged = _this.handleStartTimeChanged.bind(_assertThisInitialized(_this));
+    _this.handleUnitChanged = _this.handleUnitChanged.bind(_assertThisInitialized(_this));
     _this.submitData = _this.submitData.bind(_assertThisInitialized(_this));
     _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_this));
     return _this;
@@ -61994,9 +61979,10 @@ function (_Component) {
       this.setState({
         name: '',
         amount: '',
+        unit: '',
         percentage: '',
         startTime: new Date(),
-        selectedDrink: ''
+        beverage_id: undefined
       });
     }
   }, {
@@ -62010,14 +61996,12 @@ function (_Component) {
   }, {
     key: "handlePresetChanged",
     value: function handlePresetChanged(event) {
-      this.state.beverageList.forEach(function (drink) {
-        if (drink.id === Number(event.target.value)) {
+      this.state.beverageList.forEach(function (beverage) {
+        if (beverage.id === Number(event.target.value)) {
           this.setState({
-            name: drink.name,
-            percentage: drink.percentage,
-            beverage_id: drink.id,
-            selectedDrink: event.target.value,
-            customBeverage: false
+            name: beverage.name,
+            percentage: beverage.percentage,
+            beverage_id: beverage.id
           });
         }
       }, this);
@@ -62026,9 +62010,7 @@ function (_Component) {
     key: "invalidatePreset",
     value: function invalidatePreset() {
       this.setState({
-        beverage_id: undefined,
-        selectedDrink: '',
-        customBeverage: true
+        beverage_id: undefined
       });
     }
   }, {
@@ -62042,14 +62024,14 @@ function (_Component) {
         });
       } else {
         this.setState({
-          amount: input
+          amount: parseFloat(input)
         });
       }
     }
   }, {
     key: "handleKeywordChanged",
     value: function handleKeywordChanged(event) {
-      var keyword = event.target.value;
+      var keyword = event.target.value.trim();
       this.setState({
         keyword: keyword
       });
@@ -62060,6 +62042,12 @@ function (_Component) {
           self.setState({
             beverageList: response.data
           });
+
+          if (response.data.length === 0) {
+            self.setState({
+              beverage_id: undefined
+            });
+          }
         }).catch(function (error) {
           alert("There was a connection error. Please try reloading the page.");
         });
@@ -62068,6 +62056,14 @@ function (_Component) {
           beverageList: []
         });
       }
+    }
+  }, {
+    key: "handleUnitChanged",
+    value: function handleUnitChanged(event) {
+      var unit = event.target.value;
+      this.setState({
+        unit: unit
+      });
     }
   }, {
     key: "handleStartTimeChanged",
@@ -62086,10 +62082,7 @@ function (_Component) {
     key: "handleSubmit",
     value: function handleSubmit(event) {
       event.preventDefault();
-      this.setState({
-        amount: parseFloat(this.state.amount),
-        percentage: parseFloat(this.state.percentage)
-      }, this.submitData);
+      this.submitData();
     }
   }, {
     key: "render",
@@ -62102,6 +62095,12 @@ function (_Component) {
           value: drink.id,
           key: drink.id
         }, drink.name, " (", drink.percentage, "%)"));
+      });
+      var unitList = Object.keys(_data_units__WEBPACK_IMPORTED_MODULE_1__["default"]).map(function (unit) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+          key: unit,
+          value: unit
+        }, _data_units__WEBPACK_IMPORTED_MODULE_1__["default"][unit].name);
       });
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
         onSubmit: this.handleSubmit,
@@ -62124,9 +62123,9 @@ function (_Component) {
         className: "form-group col-md-4"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
         htmlFor: "beverage"
-      }, "Search results"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+      }, this.state.beverageList.length, " results found:"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
         onChange: this.handlePresetChanged,
-        value: this.state.selectedDrink,
+        value: this.state.beverage_id,
         className: "form-control",
         id: "beverage",
         required: true,
@@ -62136,20 +62135,30 @@ function (_Component) {
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
         href: "/beverages/create/"
       }, "Click here"), " to add your own beverages.")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "form-group col-md-4"
+        className: "form-group col-md-2"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
         htmlFor: "amount"
-      }, "Amount (cl)"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      }, "Amount"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         type: "number",
-        step: "1",
+        step: "0.1",
         min: "1",
         onChange: this.handleAmountChanged,
         value: this.state.amount,
-        placeholder: "Amount (cl)",
+        placeholder: "Amount",
         required: true,
         className: "form-control",
         id: "amount"
-      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "form-group col-md-2"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+        htmlFor: "unit"
+      }, "Unit"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+        onChange: this.handleUnitChanged,
+        value: this.state.unit,
+        className: "form-control",
+        id: "unit",
+        required: true
+      }, unitList))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "btn-group",
         role: "group",
         "aria-label": "Form controls"
@@ -62466,6 +62475,41 @@ var EFFECT_LIST = [{
   impairment: ["Breathing", "Heart rate", "Positional alcohol nystagmus"]
 }];
 /* harmony default export */ __webpack_exports__["default"] = (EFFECT_LIST);
+
+/***/ }),
+
+/***/ "./resources/js/components/data/units.js":
+/*!***********************************************!*\
+  !*** ./resources/js/components/data/units.js ***!
+  \***********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var UNITS = {
+  'cl': {
+    name: 'cl',
+    multiplier: 1
+  },
+  'dl': {
+    name: 'dl',
+    multiplier: 10
+  },
+  'fl_oz': {
+    name: 'fl oz',
+    multiplier: 2.9
+  },
+  'pint_uk': {
+    name: 'pint (UK)',
+    multiplier: 56.8
+  },
+  'pint_us': {
+    name: 'pint (US)',
+    multiplier: 47.2
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = (UNITS);
 
 /***/ }),
 

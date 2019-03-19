@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Effects from './Effects'
-import ProgressBar from './ProgressBar'
+import UNITS from './data/units';
 
 class Calculator extends Component {
     constructor(props) {
@@ -32,7 +32,8 @@ class Calculator extends Component {
         let alcohol = 0;
 
         this.props.drinks.forEach(drink => {
-            let alcoholml = (parseInt(drink.amount, 10) / 10) * parseInt(drink.percentage, 10);
+            let amount = UNITS[drink.unit]['multiplier'] * drink.amount;
+            let alcoholml = (parseInt(amount, 10) / 10) * parseInt(drink.percentage, 10);
             let grams = alcoholml * 0.789;
             alcohol += this.ebac(grams, ((new Date()).getTime() - drink.startTime.getTime()) / (1000 * 60 * 60));
         });

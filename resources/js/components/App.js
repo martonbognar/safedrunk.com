@@ -40,7 +40,8 @@ class App extends Component {
                     self.setState({
                         drinks: self.state.drinks.concat([{
                             name: drink.beverage.name,
-                            amount: drink.amount_cl,
+                            amount: drink.amount,
+                            unit: drink.unit,
                             percentage: drink.beverage.percentage,
                             beverage_id: drink.beverage_id,
                             startTime: new Date(drink.start + "Z"),
@@ -55,7 +56,6 @@ class App extends Component {
             });
 
         this.submitDrink = this.submitDrink.bind(this);
-        this.onNewDrinkSubmit = this.onNewDrinkSubmit.bind(this);
         this.removeDrink = this.removeDrink.bind(this);
         this.duplicateDrink = this.duplicateDrink.bind(this);
         this.toggleDrinkForm = this.toggleDrinkForm.bind(this);
@@ -63,7 +63,7 @@ class App extends Component {
 
     submitDrink(data) {
         let self = this;
-        axios.post(`/sessions/${this.state.id}/drinks/`, { 'amount_cl': data.amount, 'beverage_id': data.beverage_id })
+        axios.post(`/sessions/${this.state.id}/drinks/`, { 'amount': data.amount, unit: data.unit, 'beverage_id': data.beverage_id })
             .then(function (response) {
                 data.key = response.data.id;
                 self.setState({ drinks: self.state.drinks.concat([data]) });
@@ -73,23 +73,6 @@ class App extends Component {
                 alert("There was a connection error. Please try reloading the page.");
             });
         this.setState({ showNewDrink: false });
-    }
-
-    onNewDrinkSubmit(data) {
-        let self = this;
-        if (data.beverage_id === undefined) {
-            axios.post(`/beverages/`, { 'name': data.name, 'percentage': data.percentage, 'pending': data.submit })
-                .then(function (response) {
-                    data.beverage_id = response.data.id;
-                    self.submitDrink(data);
-                })
-                .catch(function (error) {
-                    console.error(error);
-                    alert("There was a connection error. Please try reloading the page.");
-                });
-        } else {
-            this.submitDrink(data);
-        }
     }
 
     removeDrink(drink) {
@@ -114,9 +97,10 @@ class App extends Component {
     }
 
     duplicateDrink(drink) {
-        this.onNewDrinkSubmit({
+        this.submitDrink({
             name: drink.props.name,
             amount: drink.props.amount,
+            unit: drink.props.unit,
             percentage: drink.props.percentage,
             beverage_id: drink.props.beverage_id,
             startTime: new Date(),
@@ -131,10 +115,10 @@ class App extends Component {
         let rows = [];
 
         this.state.drinks.forEach(function (drink) {
-            rows.push(<Drink key={drink.key} id={drink.key} name={drink.name} amount={drink.amount} percentage={drink.percentage} startTime={drink.startTime} onRemove={this.removeDrink} beverage_id={drink.beverage_id} onDuplicate={this.duplicateDrink} />);
+            rows.push(<Drink key={drink.key} id={drink.key} name={drink.name} amount={drink.amount} unit={drink.unit} percentage={drink.percentage} startTime={drink.startTime} onRemove={this.removeDrink} beverage_id={drink.beverage_id} onDuplicate={this.duplicateDrink} />);
         }, this);
 
-        let newDrink = this.state.showNewDrink ? <NewDrink onChange={this.onNewDrinkSubmit} cancel={this.toggleDrinkForm} /> : <button className="btn btn-success" onClick={this.toggleDrinkForm}>Add a new drink</button>;
+        let newDrink = this.state.showNewDrink ? <NewDrink onChange={this.submitDrink} cancel={this.toggleDrinkForm} /> : <button className="btn btn-success" onClick={this.toggleDrinkForm}>Add a new drink</button>;
 
         let content = '';
 

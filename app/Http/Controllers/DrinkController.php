@@ -38,7 +38,8 @@ class DrinkController extends Controller
     public function store(Request $request, Session $session)
     {
         $drink = new Drink();
-        $drink->amount_cl = request('amount_cl');
+        $drink->amount = request('amount');
+        $drink->unit = request('unit');
         $drink->session_id = $session->id;
         $drink->beverage_id = request('beverage_id');
         $drink->save();
