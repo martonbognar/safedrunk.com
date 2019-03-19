@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use Auth;
 use Socialite;
 
+use App\User;
+
 class SocialController extends Controller
 {
     public function redirectToProvider($provider)
@@ -21,7 +23,7 @@ class SocialController extends Controller
 
         $authUser = $this->findOrCreateUser($user, $provider);
         Auth::login($authUser, true);
-        return redirect($this->redirectTo);
+        return redirect('/');
     }
 
     public function findOrCreateUser($user, $provider)
