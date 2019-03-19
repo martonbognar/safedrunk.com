@@ -11,7 +11,7 @@ class Sessions extends Component {
 
         let self = this;
 
-        axios.get(`/sessions/`)
+        axios.get(`/sessions`)
             .then(function (response) {
                 self.setState({ sessions: response.data });
             })
@@ -32,7 +32,7 @@ class Sessions extends Component {
     handleSubmit(event) {
         event.preventDefault();
         let self = this;
-        axios.post(`/sessions/`, { 'name': this.state.name })
+        axios.post(`/sessions`, { 'name': this.state.name })
             .then(function (response) {
                 let id = response.data.id;
                 let sessions = self.state.sessions.concat([{ 'id': id, 'name': self.state.name }]);

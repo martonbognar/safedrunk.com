@@ -34,7 +34,7 @@ class App extends Component {
                 alert("There was a connection error. Please try reloading the page.");
             });
 
-        axios.get(`/sessions/${self.state.id}/drinks/`)
+        axios.get(`/sessions/${self.state.id}/drinks`)
             .then(function (response) {
                 response.data.forEach(function (drink) {
                     self.setState({
@@ -63,7 +63,7 @@ class App extends Component {
 
     submitDrink(data) {
         let self = this;
-        axios.post(`/sessions/${this.state.id}/drinks/`, { 'amount': data.amount, unit: data.unit, 'beverage_id': data.beverage_id })
+        axios.post(`/sessions/${this.state.id}/drinks`, { 'amount': data.amount, unit: data.unit, 'beverage_id': data.beverage_id })
             .then(function (response) {
                 data.key = response.data.id;
                 self.setState({ drinks: self.state.drinks.concat([data]) });

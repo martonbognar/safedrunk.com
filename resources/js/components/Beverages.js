@@ -13,7 +13,7 @@ class Beverages extends Component {
 
         let self = this;
 
-        axios.get(`/beverages/own/`)
+        axios.get(`/beverages/own`)
             .then(function (response) {
                 self.setState({ beverages: response.data });
             })
@@ -45,7 +45,7 @@ class Beverages extends Component {
         let self = this;
         let beverage = { 'name': this.state.name, 'percentage': this.state.percentage, 'pending': this.state.submit };
 
-        axios.post(`/beverages/`, beverage)
+        axios.post(`/beverages`, beverage)
             .then(function (response) {
                 beverage.id = response.data.id;
                 let beverages = self.state.beverages.concat([beverage]);
