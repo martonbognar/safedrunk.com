@@ -112,6 +112,12 @@ class App extends Component {
     }
 
     render() {
+        if (this.state.basicData.sex === null || this.state.basicData.weight === null) {
+            return (
+                <div>In order to calculate your blood alcohol content, please fill out your <a href="/modify">basic data</a> first.</div>
+            );
+        }
+
         let rows = [];
 
         this.state.drinks.forEach(function (drink) {

@@ -61302,6 +61302,12 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
+      if (this.state.basicData.sex === null || this.state.basicData.weight === null) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "In order to calculate your blood alcohol content, please fill out your ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+          href: "/modify"
+        }, "basic data"), " first.");
+      }
+
       var rows = [];
       this.state.drinks.forEach(function (drink) {
         rows.push(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Drink__WEBPACK_IMPORTED_MODULE_1__["default"], {
