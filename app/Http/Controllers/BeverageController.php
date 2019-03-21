@@ -8,16 +8,6 @@ use Illuminate\Http\Request;
 
 class BeverageController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
     public function listOwn()
     {
         return Beverage::where('user_id', Auth::id())->get();
@@ -60,28 +50,6 @@ class BeverageController extends Controller
         $beverage->user_id = Auth::id();
         $beverage->save();
         return response()->json(['id' => $beverage->id]);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Beverage  $beverage
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Beverage $beverage)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Beverage  $beverage
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Beverage $beverage)
-    {
-        //
     }
 
     /**

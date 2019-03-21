@@ -15,26 +15,6 @@ class SessionController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -61,29 +41,6 @@ class SessionController extends Controller
         $drinks = $session->drinks()->get();
         $user = Auth::user();
         return view('session', compact(['session', 'beverages', 'drinks', 'user']));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Session  $session
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Session $session)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Session  $session
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Session $session)
-    {
-        //
     }
 
     /**

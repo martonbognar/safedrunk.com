@@ -36,7 +36,7 @@ Route::get('/sessions/', 'SessionController@list');
 Route::post('/sessions/', 'SessionController@store');
 Route::get('/sessions/{session}/', 'SessionController@show');
 Route::delete('/sessions/{session}/', 'SessionController@destroy');
+
 Route::get('/sessions/{session}/drinks/', 'DrinkController@index');
 Route::post('/sessions/{session}/drinks/', 'DrinkController@store');
-Route::patch('/sessions/{session}/drinks/{drink}/', 'DrinkController@update');
 Route::delete('/sessions/{session}/drinks/{drink}/', 'DrinkController@destroy');
