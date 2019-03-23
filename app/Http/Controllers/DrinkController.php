@@ -30,6 +30,7 @@ class DrinkController extends Controller
         $drink = new Drink();
         $drink->amount = request('amount');
         $drink->unit = request('unit');
+        $drink->start = Carbon::now();
         $drink->session_id = $session->id;
         $drink->beverage_id = request('beverage_id');
         $drink->save();
