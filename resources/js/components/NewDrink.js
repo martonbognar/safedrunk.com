@@ -10,7 +10,7 @@ class NewDrink extends Component {
         this.state = {
             name: '',
             amount: '',
-            unit: '',
+            unit: Object.keys(UNITS)[0],
             percentage: '',
             startTime: new Date(),
             beverage_id: undefined,
