@@ -41,7 +41,17 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-
+                    @auth
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('sessions') }}">Sessions</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('beverage_create') }}">Beverages</a>
+                        </li>
+                    @endauth
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('faq') }}">FAQ</a>
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -57,32 +67,19 @@
                                 </li>
                             @endif
                         @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }} <span class="caret"></span>
-                                </a>
-
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('sessions') }}">
-                                        Sessions
-                                    </a>
-                                    <a class="dropdown-item" href="{{ route('beverage_create') }}">
-                                        Manage beverages
-                                    </a>
-                                    <a class="dropdown-item" href="{{ route('modify') }}">
-                                        Settings
-                                    </a>
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('modify') }}">Settings</a>
+                            </li>
+                            <li class="nav-item">
+                            <a class="nav-link" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
                                     </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                        @csrf
-                                    </form>
-                                </div>
                             </li>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
                         @endguest
                     </ul>
                 </div>

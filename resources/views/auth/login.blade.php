@@ -68,8 +68,8 @@
                 </div>
                 <hr>
                 <div class="form-group">
-                    <div class="col-md-6 col-md-offset-4">
-                        <a href="{{ url('/auth/google') }}" class="btn btn-google">Log in with Google</a>
+                    <div class="col-md-12 text-center">
+                        <a href="{{ url('/auth/google') }}" class="btn btn-google">Log in with your Google account</a>
                     </div>
                 </div>
             </div>
