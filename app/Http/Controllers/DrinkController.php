@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use App\Drink;
 use App\Session;
 use Carbon\Carbon;
@@ -22,7 +23,7 @@ class DrinkController extends Controller
     public function index(Session $session)
     {
         $user = Auth::user();
-        if ($beverage->user_id === $user->id) {
+        if ($session->user_id === $user->id) {
             return $session->drinks()->with('beverage')->get();
         } else {
             abort(403);
@@ -56,7 +57,7 @@ class DrinkController extends Controller
     public function destroy(Session $session, Drink $drink)
     {
         $user = Auth::user();
-        if ($beverage->user_id === $user->id) {
+        if ($session->user_id === $user->id) {
             $drink->delete();
             return response()->json(['id' => $drink->id]);
         } else {
