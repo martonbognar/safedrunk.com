@@ -66,10 +66,15 @@ class BeverageController extends Controller
      */
     public function update(Request $request, Beverage $beverage)
     {
-        $beverage->name = request('name');
-        $beverage->percentage = request('percentage');
-        $beverage->save();
-        return response()->json(['id' => $beverage->id]);
+        $user = Auth::user();
+        if ($beverage->user_id === $user->id || $user->administrator) {
+            $beverage->name = request('name');
+            $beverage->percentage = request('percentage');
+            $beverage->save();
+            return response()->json(['id' => $beverage->id]);
+        } else {
+            abort(403);
+        }
     }
 
     /**
@@ -80,7 +85,12 @@ class BeverageController extends Controller
      */
     public function destroy(Beverage $beverage)
     {
-        $beverage->delete();
-        return response()->json(['id' => $beverage->id]);
+        $user = Auth::user();
+        if ($beverage->user_id === $user->id || $user->administrator) {
+            $beverage->delete();
+            return response()->json(['id' => $beverage->id]);
+        } else {
+            abort(403);
+        }
     }
 }

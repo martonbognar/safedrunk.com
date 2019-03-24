@@ -42,10 +42,12 @@ class SessionController extends Controller
      */
     public function show(Session $session)
     {
-        $beverages = Beverage::all();
-        $drinks = $session->drinks()->get();
         $user = Auth::user();
-        return view('session', compact(['session', 'beverages', 'drinks', 'user']));
+        if ($beverage->user_id === $user->id) {
+            return view('session', compact(['session']));
+        } else {
+            abort(403);
+        }
     }
 
     /**
@@ -56,8 +58,12 @@ class SessionController extends Controller
      */
     public function destroy(Session $session)
     {
-        $id = $session->id;
-        $session->delete();
-        return response()->json(['id' => $id]);
+        $user = Auth::user();
+        if ($beverage->user_id === $user->id) {
+            $session->delete();
+            return response()->json(['id' => $session->id]);
+        } else {
+            abort(403);
+        }
     }
 }

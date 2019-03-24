@@ -21,7 +21,12 @@ class DrinkController extends Controller
      */
     public function index(Session $session)
     {
-        return $session->drinks()->with('beverage')->get();
+        $user = Auth::user();
+        if ($beverage->user_id === $user->id) {
+            return $session->drinks()->with('beverage')->get();
+        } else {
+            abort(403);
+        }
     }
 
     /**
@@ -50,7 +55,12 @@ class DrinkController extends Controller
      */
     public function destroy(Session $session, Drink $drink)
     {
-        $drink->delete();
-        return 'OK';
+        $user = Auth::user();
+        if ($beverage->user_id === $user->id) {
+            $drink->delete();
+            return response()->json(['id' => $drink->id]);
+        } else {
+            abort(403);
+        }
     }
 }
