@@ -46,6 +46,11 @@ class Sessions extends Component {
     }
 
     removeSession(id) {
+        let confirmed = confirm("Are you sure you want to delete this session? This will also delete all logged drinks for this session.");
+        if (!confirmed) {
+            return;
+        }
+
         let self = this;
         let index = -1;
         this.state.sessions.forEach(function (s, i) {

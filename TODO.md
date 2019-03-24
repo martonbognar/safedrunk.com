@@ -1,6 +1,4 @@
 - AJAX basic data update from the session page
 - Include the beverage form in the session page
-- Access control for every operation
-- Introduction page
-- Ok-cancel to deletions
-- Broken timezones
+- Deleting fails
+- Add check to beverage add

@@ -58,6 +58,11 @@ class Beverages extends Component {
     }
 
     remove(id) {
+        let confirmed = confirm("Are you sure you want to delete this beverage? This will also delete all logged drinks with this beverage.");
+        if (!confirmed) {
+            return;
+        }
+
         let self = this;
         let index = -1;
         this.state.beverages.forEach(function (s, i) {
