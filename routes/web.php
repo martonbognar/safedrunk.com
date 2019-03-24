@@ -16,7 +16,7 @@ Auth::routes();
 Route::get('auth/{provider}', 'Auth\SocialController@redirectToProvider');
 Route::get('auth/{provider}/callback', 'Auth\SocialController@handleProviderCallback');
 
-Route::get('/', 'HomeController@index')->name('sessions');
+Route::get('/', 'StaticController@intro')->name('intro');
 
 Route::get('/faq/', 'StaticController@faq')->name('faq');
 
@@ -34,6 +34,7 @@ Route::get('/beverages/create/', 'BeverageController@create')->name('beverage_cr
 Route::patch('/beverages/{beverage}/', 'BeverageController@update');
 Route::delete('/beverages/{beverage}/', 'BeverageController@destroy');
 
+Route::get('/sessions/all/', 'SessionController@showAll')->name('sessions');
 Route::get('/sessions/', 'SessionController@list');
 Route::post('/sessions/', 'SessionController@store');
 Route::get('/sessions/{session}/', 'SessionController@show');

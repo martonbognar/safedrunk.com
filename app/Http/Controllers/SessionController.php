@@ -14,6 +14,11 @@ class SessionController extends Controller
         $this->middleware('auth');
     }
 
+    public function showAll()
+    {
+        return view('sessions');
+    }
+
     public function list()
     {
         return Session::where('user_id', Auth::id())->get();

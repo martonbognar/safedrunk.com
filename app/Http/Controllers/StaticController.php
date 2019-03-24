@@ -13,4 +13,13 @@ class StaticController extends Controller
     {
         return view('faq');
     }
+
+    public function intro()
+    {
+        if (Auth::user()) {
+            return redirect()->route('sessions');
+        } else {
+            return view('intro');
+        }
+    }
 }
