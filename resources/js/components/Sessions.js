@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import intervalToText from './functions';
 
 class Sessions extends Component {
     constructor() {
@@ -35,7 +36,7 @@ class Sessions extends Component {
         axios.post(`/sessions`, { 'name': this.state.name })
             .then(function (response) {
                 let id = response.data.id;
-                let sessions = self.state.sessions.concat([{ 'id': id, 'name': self.state.name }]);
+                let sessions = self.state.sessions.concat([{ 'id': id, 'name': self.state.name, 'created_at': new Date() }]);
                 self.setState({ sessions: sessions, name: '' });
             })
             .catch(function (error) {
@@ -66,7 +67,7 @@ class Sessions extends Component {
 
     render() {
         let sessions = this.state.sessions.map(function (session) {
-            return <li className="list-group-item d-flex justify-content-between align-items-center" key={session.id}><a href={`/sessions/${session.id}`}>{session.name}</a>
+            return <li className="list-group-item d-flex justify-content-between align-items-center" key={session.id}><a href={`/sessions/${session.id}`}>{session.name} ({intervalToText(new Date(session.created_at + "Z"))})</a>
                 <button type="button" className="btn btn-danger" onClick={() => this.removeSession(session.id)}>Remove</button></li>;
         }, this);
         return (
