@@ -73,6 +73,9 @@ class NewDrink extends Component {
                     self.setState({ beverageList: response.data });
                     if (response.data.length === 0) {
                         self.setState({ beverage_id: undefined });
+                    } else {
+                        let beverage = response.data[0];
+                        self.setState({ name: beverage.name, percentage: beverage.percentage, beverage_id: beverage.id });
                     }
                 })
                 .catch(function (error) {
