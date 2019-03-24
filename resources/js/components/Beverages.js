@@ -9,6 +9,7 @@ class Beverages extends Component {
             name: '',
             percentage: '',
             submit: false,
+            searchList: [],
         };
 
         let self = this;
@@ -30,7 +31,22 @@ class Beverages extends Component {
 
     handleInputChanged(event) {
         const name = event.target.name;
-        this.setState({ [name]: event.target.value });
+        const value = event.target.value;
+        this.setState({ [name]: value });
+
+        if (value !== "") {
+            let self = this;
+
+            axios.get('/beverages/filter/' + value)
+                .then(function (response) {
+                    self.setState({ searchList: response.data });
+                })
+                .catch(function (error) {
+                    alert("There was a connection error. Please try reloading the page.");
+                });
+        } else {
+            this.setState({ searchList: [] });
+        }
     }
 
     handleCheckboxChanged(event) {
@@ -94,6 +110,12 @@ class Beverages extends Component {
                         <label htmlFor="name">Beverage name</label>
                         <input type="text" className="form-control" onChange={this.handleInputChanged} value={this.state.name} name="name" placeholder='Beverage Name' id="name" required />
                     </div>
+                    {this.state.searchList.length !== 0 && <div class="form-group">
+                        <label for="list">Please make sure the beverage is not present in the database:</label>
+                        <select id="list" class="form-control">
+                            {this.state.searchList.map((beverage) => <option>{beverage.name} ({beverage.percentage})</option>)}
+                        </select>
+                    </div>}
                     <div className="form-group">
                         <label htmlFor="percentage">Alcohol percentage (%)</label>
                         <input type="text" className="form-control" onChange={this.handleInputChanged} value={this.state.percentage} name="percentage" placeholder='Alcohol percentage (%)' id="percentage" required />
