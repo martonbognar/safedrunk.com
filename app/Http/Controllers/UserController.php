@@ -9,6 +9,11 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function personal()
     {
         return response()->json(['weight' => Auth::user()->weight, 'sex' => Auth::user()->sex]);

@@ -8,6 +8,11 @@ use Illuminate\Http\Request;
 
 class BeverageController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function listOwn()
     {
         return Beverage::where('user_id', Auth::id())->get();

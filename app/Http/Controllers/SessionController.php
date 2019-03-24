@@ -9,6 +9,11 @@ use Illuminate\Http\Request;
 
 class SessionController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function list()
     {
         return Session::where('user_id', Auth::id())->get();
