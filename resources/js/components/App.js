@@ -14,7 +14,7 @@ class App extends Component {
         let pieces = url.split("/");
 
         this.state = {
-            id: pieces[pieces.length - 2],
+            id: parseInt(pieces[pieces.length - 2]),
             basicData: {
                 sex: '',
                 weight: '',
@@ -63,7 +63,11 @@ class App extends Component {
 
     submitDrink(data) {
         let self = this;
-        axios.post(`/sessions/${this.state.id}/drinks`, { 'amount': data.amount, unit: data.unit, 'beverage_id': data.beverage_id })
+        let drink = { 'amount': data.amount, unit: data.unit, 'beverage_id': data.beverage_id };
+        if (data.modifyStart) {
+            drink.start = Math.floor(data.startTime.getTime() / 1000);
+        }
+        axios.post(`/sessions/${this.state.id}/drinks`, drink)
             .then(function (response) {
                 data.key = response.data.id;
                 self.setState({ drinks: self.state.drinks.concat([data]) });

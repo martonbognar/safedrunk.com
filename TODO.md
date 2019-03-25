@@ -1,5 +1,4 @@
-- AJAX basic data update from the session page
-- Include the beverage form in the session page
-- Deleting fails
 - Graph of the last 7 sessions
+- Include the beverage form in the session page
+- AJAX basic data update from the session page
 - Reduce code duplication in js

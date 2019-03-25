@@ -1,7 +1,9 @@
 function intervalToText(date) {
     let diff = ((new Date()).getTime() - date.getTime()) / 1000;
 
-    if (diff < 10) {
+    if (diff < 0) {
+        return 'in the future';
+    } else if (diff < 10) {
         return 'just now';
     } else if (diff < 60) {
         return parseInt(diff, 10) + ' seconds ago';

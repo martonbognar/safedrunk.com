@@ -17,6 +17,7 @@ class NewDrink extends Component {
             beverageList: [],
             submit: false,
             keyword: '',
+            modifyStart: false,
         };
 
         this.resetState = this.resetState.bind(this);
@@ -141,6 +142,14 @@ class NewDrink extends Component {
                             {unitList}
                         </select>
                     </div>
+                    {this.state.modifyStart && <div className="form-group col-md-6">
+                        <label htmlFor="startTime">Start time</label>
+                        <input type="datetime-local" onChange={this.handleStartTimeChanged} value={startString} className="form-control" id="startTime" required />
+                        <small className="form-text text-muted"><a href="#" onClick={() => this.setState({ modifyStart: false })}>Set to the current time</a></small>
+                    </div>}
+                    {!this.state.modifyStart && <div className="form-group col-md-6">
+                        <a href="#" onClick={() => this.setState({ modifyStart: true })}>Click here to modify the start time</a>
+                    </div>}
                 </div>
                 <div className="btn-group" role="group" aria-label="Form controls">
                     <button type="submit" className="btn btn-outline-success">Submit</button>
