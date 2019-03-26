@@ -42,6 +42,15 @@
                             </div>
                         </div>
 
+                        <div class="form-group row">
+                            <label class="col-md-4 col-form-label text-md-right"></label>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input type="checkbox" id="newsletter" class="form-check-input" name="newsletter" {{ $user->newsletter ? 'checked' : '' }}><label for="newsletter" class="form-check-label">Notify me about new features on the site</label>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
