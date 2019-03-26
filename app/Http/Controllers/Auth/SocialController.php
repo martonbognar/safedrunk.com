@@ -20,23 +20,29 @@ class SocialController extends Controller
     public function handleProviderCallback($provider)
     {
         $user = Socialite::driver($provider)->user();
-
-        $authUser = $this->findOrCreateUser($user, $provider);
-        Auth::login($authUser, true);
-        return redirect('/');
+        return $this->findOrCreateUser($user, $provider);
     }
 
     public function findOrCreateUser($user, $provider)
     {
+        $user = null;
         $authUser = User::where('provider_id', $user->id)->first();
+
         if ($authUser) {
-            return $authUser;
+            $user = $authUser;
+        } else {
+            $user = User::create([
+                'name'     => $user->name,
+                'email'    => $user->email,
+                'provider' => $provider,
+                'provider_id' => $user->id
+            ]);
         }
-        return User::create([
-            'name'     => $user->name,
-            'email'    => $user->email,
-            'provider' => $provider,
-            'provider_id' => $user->id
-        ]);
+        Auth::login($user, true);
+        if ($authUser) {
+            return redirect()->route('sessions');
+        } else {
+            return redirect()->route('modify');
+        }
     }
 }

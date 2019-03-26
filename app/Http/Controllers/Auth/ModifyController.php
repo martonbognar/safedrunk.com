@@ -41,8 +41,8 @@ class ModifyController extends Controller
         $user = Auth::user();
         $user->sex = $validated['sex'];
         $user->weight = $validated['weight'];
-        $user->newsletter = isset($validated['newsletter']);
+        $user->newsletter = $request->has('newsletter');
         $user->save();
-        return response()->json(['id' => $user->id]);
+        return redirect()->route('sessions');
     }
 }
