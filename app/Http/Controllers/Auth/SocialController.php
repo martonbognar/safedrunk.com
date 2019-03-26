@@ -25,20 +25,20 @@ class SocialController extends Controller
 
     public function findOrCreateUser($user, $provider)
     {
-        $user = null;
+        $existing = null;
         $authUser = User::where('provider_id', $user->id)->first();
 
         if ($authUser) {
-            $user = $authUser;
+            $existing = $authUser;
         } else {
-            $user = User::create([
+            $existing = User::create([
                 'name'     => $user->name,
                 'email'    => $user->email,
                 'provider' => $provider,
                 'provider_id' => $user->id
             ]);
         }
-        Auth::login($user, true);
+        Auth::login($existing, true);
         if ($authUser) {
             return redirect()->route('sessions');
         } else {
