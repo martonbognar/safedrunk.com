@@ -2,10 +2,15 @@ import React, { Component } from 'react';
 var Chart = require('chart.js');
 
 class Statistics extends Component {
-    componentDidMount() {
-        const node = this.node;
+    constructor(props) {
+        super(props);
+        this.canvas = React.createRef();
+        this.chart = null;
+    }
 
-        var myChart = new Chart(node, {
+    componentDidMount() {
+        const canvas = this.canvas.current;
+        this.chart = new Chart(canvas, {
           type: "bar",
           data: {
             labels: ["Red", "Blue", "Yellow"],
@@ -26,12 +31,10 @@ class Statistics extends Component {
 
       render() {
         return (
-          <div>
             <canvas
               style={{ width: 800, height: 300 }}
-              ref={node => (this.node = node)}
+              ref={this.canvas}
             />
-          </div>
         );
       }
 }
