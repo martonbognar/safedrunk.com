@@ -25,6 +25,8 @@ Route::post('/modify/', 'Auth\ModifyController@update')->name('modify_post');
 
 Route::get('/personal/', 'UserController@personal');
 
+Route::get('/statistics/', 'UserController@statistics');
+
 Route::get('/beverages/own/', 'BeverageController@listOwn');
 Route::get('/beverages/filter/{keyword}', 'BeverageController@listFiltered');
 
@@ -36,6 +38,7 @@ Route::delete('/beverages/{beverage}/', 'BeverageController@destroy');
 
 Route::get('/sessions/all/', 'SessionController@showAll')->name('sessions');
 Route::get('/sessions/', 'SessionController@list');
+Route::get('/sessions/recent/', 'SessionController@listRecent');
 Route::post('/sessions/', 'SessionController@store');
 Route::get('/sessions/{session}/', 'SessionController@show');
 Route::delete('/sessions/{session}/', 'SessionController@destroy');

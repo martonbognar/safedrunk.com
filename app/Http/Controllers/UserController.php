@@ -18,4 +18,9 @@ class UserController extends Controller
     {
         return response()->json(['weight' => Auth::user()->weight, 'sex' => Auth::user()->sex]);
     }
+
+    public function statistics()
+    {
+        return view('statistics');
+    }
 }

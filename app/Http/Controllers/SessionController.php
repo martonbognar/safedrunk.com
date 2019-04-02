@@ -24,6 +24,11 @@ class SessionController extends Controller
         return Session::where('user_id', Auth::id())->get();
     }
 
+    public function listRecent()
+    {
+        return Session::where('user_id', Auth::id())->orderBy('id', 'desc')->limit(7)->get();
+    }
+
     /**
      * Store a newly created resource in storage.
      *
