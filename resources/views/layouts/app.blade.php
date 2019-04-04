@@ -48,6 +48,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('beverage_create') }}">Beverages</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('statistics') }}">Statistics</a>
+                        </li>
                     @endauth
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('faq') }}">FAQ</a>

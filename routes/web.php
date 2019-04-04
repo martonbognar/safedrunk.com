@@ -25,7 +25,7 @@ Route::post('/modify/', 'Auth\ModifyController@update')->name('modify_post');
 
 Route::get('/personal/', 'UserController@personal');
 
-Route::get('/statistics/', 'UserController@statistics');
+Route::get('/statistics/', 'UserController@statistics')->name('statistics');
 
 Route::get('/beverages/own/', 'BeverageController@listOwn');
 Route::get('/beverages/filter/{keyword}', 'BeverageController@listFiltered');
