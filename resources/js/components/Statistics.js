@@ -68,12 +68,12 @@ class Statistics extends Component {
           {
             label: "Number of drinks",
             data: self.state.numberOfDrinks,
-            backgroundColor: "rgba(255, 99, 132, 0.2)",
+            backgroundColor: "#3490dc",
           },
           {
             label: "Amount of pure alcohol (cl)",
             data: self.state.alcoholConsumed,
-            backgroundColor: "rgba(54, 162, 235, 0.2)",
+            backgroundColor: "#e3342f",
           }
         ]
       }
@@ -83,7 +83,7 @@ class Statistics extends Component {
   render() {
     return (
       <canvas
-        style={{ width: 800, height: 300 }}
+        style={{ width: '100%' }}
         ref={this.canvas}
       />
     );

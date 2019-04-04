@@ -36,7 +36,7 @@ class Sessions extends Component {
         axios.post(`/sessions`, { 'name': this.state.name })
             .then(function (response) {
                 let id = response.data.id;
-                let sessions = self.state.sessions.concat([{ 'id': id, 'name': self.state.name, 'created_at': new Date() }]);
+                let sessions = [{ 'id': id, 'name': self.state.name, 'created_at': new Date() }].concat(self.state.sessions);
                 self.setState({ sessions: sessions, name: '' });
             })
             .catch(function (error) {
