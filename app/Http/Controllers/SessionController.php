@@ -21,12 +21,13 @@ class SessionController extends Controller
 
     public function list()
     {
-        return Session::where('user_id', Auth::id())->get();
+        return Session::where('user_id', Auth::id())->orderBy('id', 'desc')->get();
     }
 
     public function listRecent()
     {
-        return Session::where('user_id', Auth::id())->orderBy('id', 'desc')->limit(7)->get();
+        $array = Session::where('user_id', Auth::id())->orderBy('id', 'desc')->limit(7)->get()->toArray();
+        return response()->json(array_reverse($array));
     }
 
     /**
