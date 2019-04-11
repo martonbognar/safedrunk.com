@@ -4,8 +4,8 @@ import Calculator from './Calculator'
 import NewDrink from './NewDrink'
 
 class App extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         let url = window.location.href;
         if (url.slice(-1) !== '/') {

@@ -110,9 +110,9 @@ class Beverages extends Component {
                         <label htmlFor="name">Beverage name</label>
                         <input type="text" className="form-control" onChange={this.handleInputChanged} value={this.state.name} name="name" placeholder='Beverage Name' id="name" required />
                     </div>
-                    {this.state.searchList.length !== 0 && <div class="form-group">
-                        <label for="list">Please make sure the beverage is not present in the database:</label>
-                        <select id="list" class="form-control">
+                    {this.state.searchList.length !== 0 && <div className="form-group">
+                        <label htmlFor="list">Please make sure the beverage is not present in the database:</label>
+                        <select id="list" className="form-control">
                             {this.state.searchList.map((beverage) => <option>{beverage.name} ({beverage.percentage})</option>)}
                         </select>
                     </div>}

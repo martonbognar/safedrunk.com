@@ -1,5 +1,3 @@
-- Graph of the last 7 sessions
-- Make landing page nicer
 - Include the beverage form in the session page
 - AJAX basic data update from the session page
 - Reduce code duplication in js
