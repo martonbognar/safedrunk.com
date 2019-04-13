@@ -8,6 +8,13 @@
                 <div class="card-header">{{ __('Login') }}</div>
 
                 <div class="card-body">
+                    <div class="form-group">
+                        <div class="col-md-12 text-center">
+                            <a href="{{ url('/auth/google') }}"><img src="/images/google_signin.png"></a>
+                        </div>
+                    </div>
+                    <hr>
+                    <h5 class='mb-3 text-center'>Or log in with your SafeDrunk account</h5>
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
 
@@ -65,12 +72,6 @@
                             </div>
                         </div>
                     </form>
-                </div>
-                <hr>
-                <div class="form-group">
-                    <div class="col-md-12 text-center">
-                        <a href="{{ url('/auth/google') }}" class="btn btn-google">Log in with your Google account</a>
-                    </div>
                 </div>
             </div>
         </div>
