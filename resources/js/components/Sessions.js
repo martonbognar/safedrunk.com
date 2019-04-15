@@ -14,7 +14,7 @@ class Sessions extends Component {
 
         axios.get(`/sessions`)
             .then(function (response) {
-                self.setState({ sessions: response.data });
+                self.setState({ sessions: response.data.map((session) => { session.created_at = new Date(session.created_at + "Z"); return session; }) });
             })
             .catch(function (error) {
                 console.error(error);
@@ -72,7 +72,7 @@ class Sessions extends Component {
 
     render() {
         let sessions = this.state.sessions.map(function (session) {
-            return <li className="list-group-item d-flex justify-content-between align-items-center" key={session.id}><a href={`/sessions/${session.id}`}>{session.name} ({intervalToText(new Date(session.created_at + "Z"))})</a>
+            return <li className="list-group-item d-flex justify-content-between align-items-center" key={session.id}><a href={`/sessions/${session.id}`}>{session.name} ({intervalToText(session.created_at)})</a>
                 <button type="button" className="btn btn-danger" onClick={() => this.removeSession(session.id)}>Remove</button></li>;
         }, this);
         return (
