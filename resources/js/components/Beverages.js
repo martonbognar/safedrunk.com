@@ -31,10 +31,15 @@ class Beverages extends Component {
 
     handleInputChanged(event) {
         const name = event.target.name;
-        const value = event.target.value;
+        let value = event.target.value;
+
+        if (name === "percentage") {
+            value = value.replace(',', '.');
+        }
+
         this.setState({ [name]: value });
 
-        if (value !== "") {
+        if (name === "name" && value !== "") {
             let self = this;
 
             axios.get('/beverages/filter/' + value)
@@ -113,7 +118,7 @@ class Beverages extends Component {
                     {this.state.searchList.length !== 0 && <div className="form-group">
                         <label htmlFor="list">Please make sure the beverage is not present in the database:</label>
                         <select id="list" className="form-control">
-                            {this.state.searchList.map((beverage) => <option>{beverage.name} ({beverage.percentage})</option>)}
+                            {this.state.searchList.map((beverage) => <option key={beverage.id}>{beverage.name} ({beverage.percentage})</option>)}
                         </select>
                     </div>}
                     <div className="form-group">
