@@ -1,3 +1,7 @@
+- Time - alcohol chart for sessions
+- Compare the two different calculation algorithms
+- Smaller list on phones
+- Admin panel
+- NaN on iPhone
+- Modifying datetime on iPhone
 - Include the beverage form in the session page
-- AJAX basic data update from the session page
-- Reduce code duplication in js
