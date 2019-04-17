@@ -44,7 +44,7 @@ class App extends Component {
                             unit: drink.unit,
                             percentage: drink.beverage.percentage,
                             beverage_id: drink.beverage_id,
-                            startTime: new Date(drink.start + "Z"),
+                            startTime: new Date(drink.start),
                             key: drink.id,
                         }])
                     });

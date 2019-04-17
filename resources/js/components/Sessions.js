@@ -14,7 +14,7 @@ class Sessions extends Component {
 
         axios.get(`/sessions`)
             .then(function (response) {
-                self.setState({ sessions: response.data.map((session) => { session.created_at = new Date(session.created_at + "Z"); return session; }) });
+                self.setState({ sessions: response.data.map((session) => { session.created_at = new Date(session.created_at); return session; }) });
             })
             .catch(function (error) {
                 console.error(error);

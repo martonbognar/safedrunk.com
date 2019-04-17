@@ -8,6 +8,10 @@ class Drink extends Model
 {
     public $timestamps = false;
 
+    protected $casts = [
+        'start' => 'datetime:Y-m-d\TH:i:s\Z',
+    ];
+
     public function session()
     {
         return $this->belongsTo(Session::class);
