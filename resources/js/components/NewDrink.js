@@ -93,7 +93,8 @@ class NewDrink extends Component {
     }
 
     handleStartTimeChanged(event) {
-        this.setState({ startTime: new Date(event.target.value) });
+        let date = new Date(event.target.value);
+        this.setState({ startTime: date });
     }
 
     submitData() {
@@ -107,8 +108,7 @@ class NewDrink extends Component {
     }
 
     render() {
-        let startTime = new Date(this.state.startTime);
-        let startString = startTime.getFullYear() + '-' + ('0' + (startTime.getMonth() + 1)).slice(-2) + '-' + ('0' + startTime.getDate()).slice(-2) + 'T' + ('0' + startTime.getHours()).slice(-2) + ':' + ('0' + startTime.getMinutes()).slice(-2);
+        let startString = this.state.startTime.getFullYear() + '-' + ('0' + (this.state.startTime.getMonth() + 1)).slice(-2) + '-' + ('0' + this.state.startTime.getDate()).slice(-2) + 'T' + ('0' + this.state.startTime.getHours()).slice(-2) + ':' + ('0' + this.state.startTime.getMinutes()).slice(-2);
 
         let drinks = [];
 
