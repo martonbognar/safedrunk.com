@@ -93,7 +93,8 @@ class NewDrink extends Component {
     }
 
     handleStartTimeChanged(event) {
-        let date = new Date(event.target.value);
+        let arr = event.target.value.split(/[-T :]/).map((num) => parseInt(num));
+        let date = new Date(arr[0], arr[1] - 1, arr[2], arr[3], arr[4]);
         this.setState({ startTime: date });
     }
 
