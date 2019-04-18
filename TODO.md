@@ -1,7 +1,5 @@
 - Time - alcohol chart for sessions
 - Compare the two different calculation algorithms
-- Smaller list on phones
+- Compact list with cookie
 - Admin panel
-- NaN on iPhone
-- Modifying datetime on iPhone
 - Include the beverage form in the session page
