@@ -154,6 +154,8 @@ class App extends Component {
             );
         }, this);
 
+        let longSession = this.state.drinks.length > 0 && this.state.drinks[0].startTime.getTime() + (1000 * 60 * 60 * 14) < new Date().getTime();
+
         let newDrink = this.state.showNewDrink ? <NewDrink onChange={this.submitDrink} cancel={this.toggleDrinkForm} /> : <button className="btn btn-success" onClick={this.toggleDrinkForm}>Add a new drink</button>;
 
         let drinks = this.state.compact ? <ul className="list-group mb-3">{rows}</ul> : <div className="row">{rows}</div>;
@@ -168,6 +170,10 @@ class App extends Component {
                     </div>
                 </div>
                 <div className="card-body">
+                    {longSession &&
+                        <div class="alert alert-warning" role="alert">
+                            The first drink in this session was created more than 14 hours ago. If you add a new drink now, the calculated blood alcohol level might be very inaccurate. If you're starting now, please create another session. If you've been drinking for more than 14 hours, it's probably time to stop.
+                        </div>}
                     {newDrink}
                     <hr />
                     {drinks}

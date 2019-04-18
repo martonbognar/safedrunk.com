@@ -1,5 +1,3 @@
 - Time - alcohol chart for sessions
-- Compare the two different calculation algorithms
-- Compact list with cookie
 - Admin panel
 - Include the beverage form in the session page

@@ -29,16 +29,15 @@ class Calculator extends Component {
             return;
         }
 
-        let alcohol = 0;
+        let period = ((new Date()).getTime() - this.props.drinks[0].startTime.getTime()) / (1000 * 60 * 60);
 
-        this.props.drinks.forEach(drink => {
+        let grams = this.props.drinks.map(drink => {
             let amount = UNITS[drink.unit]['multiplier'] * drink.amount;
-            let alcoholml = (parseInt(amount, 10) / 10) * parseInt(drink.percentage, 10);
-            let grams = alcoholml * 0.789;
-            alcohol += this.ebac(grams, ((new Date()).getTime() - drink.startTime.getTime()) / (1000 * 60 * 60));
-        });
+            let alcoholml = (amount / 10) * drink.percentage;
+            return alcoholml * 0.789;
+        }).reduce((a, b) => a + b, 0);
 
-        this.setState({ value: alcohol.toFixed(5) });
+        this.setState({ value: this.ebac(grams, period).toFixed(5) });
     }
 
     ebac(alcohol, period) {
