@@ -5,10 +5,12 @@ import Beverages from './Beverages'
 import Sessions from './Sessions'
 import Statistics from './Statistics'
 
-if (document.getElementById('main')) {
+let main = document.getElementById('main');
+
+if (main) {
     ReactDOM.render(
-        <App />,
-        document.getElementById('main')
+        <App name={main.getAttribute("data-name")} />,
+        main
     );
 }
 

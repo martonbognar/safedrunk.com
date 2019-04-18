@@ -7,6 +7,8 @@ class App extends Component {
     constructor(props) {
         super(props);
 
+        let localStorageExists = typeof (Storage) !== 'undefined';
+
         let url = window.location.href;
         if (url.slice(-1) !== '/') {
             url += "/";
@@ -21,6 +23,7 @@ class App extends Component {
             },
             drinks: [],
             showNewDrink: false,
+            compact: localStorageExists && "true" === localStorage.compact,
         };
 
         let self = this;
@@ -59,6 +62,7 @@ class App extends Component {
         this.removeDrink = this.removeDrink.bind(this);
         this.duplicateDrink = this.duplicateDrink.bind(this);
         this.toggleDrinkForm = this.toggleDrinkForm.bind(this);
+        this.toggleCompact = this.toggleCompact.bind(this);
     }
 
     submitDrink(data) {
@@ -115,6 +119,14 @@ class App extends Component {
         this.setState({ showNewDrink: !this.state.showNewDrink });
     }
 
+    toggleCompact(event) {
+        let compact = event.target.checked;
+        localStorage.compact = compact;
+        this.setState({
+            compact: compact
+        });
+    }
+
     render() {
         if (this.state.basicData.sex === null || this.state.basicData.weight === null) {
             return (
@@ -125,29 +137,42 @@ class App extends Component {
         let rows = [];
 
         this.state.drinks.forEach(function (drink) {
-            rows.push(<Drink key={drink.key} id={drink.key} name={drink.name} amount={drink.amount} unit={drink.unit} percentage={drink.percentage} startTime={drink.startTime} onRemove={this.removeDrink} beverage_id={drink.beverage_id} onDuplicate={this.duplicateDrink} />);
+            rows.push(
+                <Drink
+                    key={drink.key}
+                    id={drink.key}
+                    name={drink.name}
+                    amount={drink.amount}
+                    unit={drink.unit}
+                    percentage={drink.percentage}
+                    startTime={drink.startTime}
+                    onRemove={this.removeDrink}
+                    beverage_id={drink.beverage_id}
+                    onDuplicate={this.duplicateDrink}
+                    compact={this.state.compact}
+                />
+            );
         }, this);
 
         let newDrink = this.state.showNewDrink ? <NewDrink onChange={this.submitDrink} cancel={this.toggleDrinkForm} /> : <button className="btn btn-success" onClick={this.toggleDrinkForm}>Add a new drink</button>;
 
-        let content = '';
-
-        if (this.state.basicData.weight !== 0 && this.state.basicData.weight !== '') {
-            content = (
-                <div>
-                    {newDrink}
-                    <hr />
-                    <div className="row">
-                        {rows}
-                    </div>
-                    <Calculator drinks={this.state.drinks} weight={this.state.basicData.weight} sex={this.state.basicData.sex} />
-                </div>
-            );
-        }
+        let drinks = this.state.compact ? <ul className="list-group mb-3">{rows}</ul> : <div className="row">{rows}</div>;
 
         return (
-            <div>
-                {content}
+            <div className="card">
+                <div className="card-header d-flex justify-content-between align-items-center">
+                    Session: {this.props.name}
+                    <div className="form-check form-check-inline mr-0">
+                        <input className="form-check-input" type="checkbox" id="compact" checked={this.state.compact} onChange={this.toggleCompact} />
+                        <label className="form-check-label" htmlFor="compact">Compact view</label>
+                    </div>
+                </div>
+                <div className="card-body">
+                    {newDrink}
+                    <hr />
+                    {drinks}
+                    <Calculator drinks={this.state.drinks} weight={this.state.basicData.weight} sex={this.state.basicData.sex} />
+                </div>
             </div>
         );
     }
