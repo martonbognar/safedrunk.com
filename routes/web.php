@@ -31,6 +31,8 @@ Route::get('/beverages/own/', 'BeverageController@listOwn');
 Route::get('/beverages/filter/{keyword}', 'BeverageController@listFiltered');
 
 Route::get('/beverages/', 'BeverageController@listCombined');
+Route::get('/beverages/pending', 'BeverageController@listPending');
+Route::get('/beverages/approve', 'BeverageController@approve');
 Route::post('/beverages/', 'BeverageController@store');
 Route::get('/beverages/create/', 'BeverageController@create')->name('beverage_create');
 Route::patch('/beverages/{beverage}/', 'BeverageController@update');

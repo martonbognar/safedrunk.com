@@ -30,6 +30,19 @@ class BeverageController extends Controller
         return $custom->merge(Beverage::where([['user_id', null], ['approved', true], ['name', 'LIKE', '%' . $keyword . '%']])->orderBy('name', 'asc')->get());
     }
 
+    public function listPending()
+    {
+        return Beverage::where('pending', true)->get();
+    }
+
+    public function approve()
+    {
+        if (!Auth::user()->administrator) {
+            abort(403);
+        }
+        return view('beverage_approve');
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -70,6 +83,13 @@ class BeverageController extends Controller
         if ($beverage->user_id === $user->id || $user->administrator) {
             $beverage->name = request('name');
             $beverage->percentage = request('percentage');
+            if ($user->administrator) {
+                $beverage->pending = request('pending');
+                $beverage->approved = request('approved');
+                if ($beverage->approved) {
+                    $beverage->user_id = null;
+                }
+            }
             $beverage->save();
             return response()->json(['id' => $beverage->id]);
         } else {

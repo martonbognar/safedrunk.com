@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App'
 import Beverages from './Beverages'
+import BeverageApprove from './BeverageApprove'
 import Sessions from './Sessions'
 import Statistics from './Statistics'
 
@@ -25,6 +26,13 @@ if (document.getElementById('beverage-manager')) {
     ReactDOM.render(
         <Beverages />,
         document.getElementById('beverage-manager')
+    );
+}
+
+if (document.getElementById('beverage-approve')) {
+    ReactDOM.render(
+        <BeverageApprove />,
+        document.getElementById('beverage-approve')
     );
 }
 
