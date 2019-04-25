@@ -76,6 +76,15 @@ class Statistics extends Component {
             backgroundColor: "#e3342f",
           }
         ]
+      },
+      options: {
+          scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero: true
+                  }
+              }]
+          }
       }
     });
   }

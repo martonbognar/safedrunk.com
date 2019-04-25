@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import intervalToText from './functions';
+import { intervalToText } from './functions';
 
 class Drink extends Component {
     constructor(props) {

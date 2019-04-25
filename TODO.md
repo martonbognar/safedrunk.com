@@ -1,3 +1,2 @@
-- Time - alcohol chart for sessions
-- Admin panel
 - Include the beverage form in the session page
+- TUrn off updating if BAC is 0

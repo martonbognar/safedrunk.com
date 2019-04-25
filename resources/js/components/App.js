@@ -171,7 +171,7 @@ class App extends Component {
                 </div>
                 <div className="card-body">
                     {longSession &&
-                        <div class="alert alert-warning" role="alert">
+                        <div className="alert alert-warning" role="alert">
                             The first drink in this session was created more than 14 hours ago. If you add a new drink now, the calculated blood alcohol level might be very inaccurate. If you're starting now, please create another session. If you've been drinking for more than 14 hours, it's probably time to stop.
                         </div>}
                     {newDrink}
