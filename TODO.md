@@ -1,2 +1,5 @@
 - Include the beverage form in the session page
-- TUrn off updating if BAC is 0
+- Move API URLs
+- Check for potential vulnerabilities
+- Reduce JS file size as much as possible
+- Open source project

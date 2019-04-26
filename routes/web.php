@@ -1,50 +1,58 @@
 <?php
 
 /*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
+/-------------
+/ API routes
+/-------------
 */
 
-Auth::routes();
-
-Route::get('auth/{provider}', 'Auth\SocialController@redirectToProvider');
-Route::get('auth/{provider}/callback', 'Auth\SocialController@handleProviderCallback');
-
-Route::get('/', 'StaticController@intro')->name('intro');
-
-Route::get('/faq/', 'StaticController@faq')->name('faq');
-
-Route::get('/modify/', 'Auth\ModifyController@edit')->name('modify');
-Route::post('/modify/', 'Auth\ModifyController@update')->name('modify_post');
-
-Route::get('/personal/', 'UserController@personal');
-
-Route::get('/statistics/', 'UserController@statistics')->name('statistics');
+Route::get('/beverages/', 'BeverageController@listCombined');
+Route::post('/beverages/', 'BeverageController@store');
 
 Route::get('/beverages/own/', 'BeverageController@listOwn');
 Route::get('/beverages/filter/{keyword}', 'BeverageController@listFiltered');
 
-Route::get('/beverages/', 'BeverageController@listCombined');
-Route::get('/beverages/pending', 'BeverageController@listPending');
-Route::get('/beverages/approve', 'BeverageController@approve');
-Route::post('/beverages/', 'BeverageController@store');
-Route::get('/beverages/create/', 'BeverageController@create')->name('beverage_create');
 Route::patch('/beverages/{beverage}/', 'BeverageController@update');
 Route::delete('/beverages/{beverage}/', 'BeverageController@destroy');
 
-Route::get('/sessions/all/', 'SessionController@showAll')->name('sessions');
+Route::get('/beverages/pending', 'BeverageController@listPending');
+Route::get('/beverages/approve', 'BeverageController@approve');
+
 Route::get('/sessions/', 'SessionController@list');
-Route::get('/sessions/recent/', 'SessionController@listRecent');
 Route::post('/sessions/', 'SessionController@store');
-Route::get('/sessions/{session}/', 'SessionController@show');
+
+Route::get('/sessions/recent/', 'SessionController@listRecent');
+
 Route::delete('/sessions/{session}/', 'SessionController@destroy');
 
 Route::get('/sessions/{session}/drinks/', 'DrinkController@index');
 Route::post('/sessions/{session}/drinks/', 'DrinkController@store');
 Route::delete('/sessions/{session}/drinks/{drink}/', 'DrinkController@destroy');
+
+Route::post('/modify/', 'Auth\ModifyController@update')->name('modify_post');
+
+/*
+/-------------
+/ Page routes
+/-------------
+*/
+
+Route::get('/', 'StaticController@intro')->name('intro');
+
+Route::get('/faq/', 'StaticController@faq')->name('faq');
+
+Auth::routes();
+Route::get('auth/{provider}', 'Auth\SocialController@redirectToProvider');
+Route::get('auth/{provider}/callback', 'Auth\SocialController@handleProviderCallback');
+
+Route::get('/sessions/all/', 'SessionController@showAll')->name('sessions');
+
+Route::get('/statistics/', 'UserController@statistics')->name('statistics');
+
+Route::get('/modify/', 'Auth\ModifyController@edit')->name('modify');
+
+Route::get('/personal/', 'UserController@personal');
+
+Route::get('/beverages/create/', 'BeverageController@create')->name('beverage_create');
+
+Route::get('/sessions/{session}/', 'SessionController@show');
