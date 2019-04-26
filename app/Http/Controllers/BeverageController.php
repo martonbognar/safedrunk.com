@@ -32,6 +32,9 @@ class BeverageController extends Controller
 
     public function listPending()
     {
+        if (!Auth::user()->administrator) {
+            abort(403);
+        }
         return Beverage::where('pending', true)->get();
     }
 
@@ -80,21 +83,21 @@ class BeverageController extends Controller
     public function update(Request $request, Beverage $beverage)
     {
         $user = Auth::user();
-        if ($beverage->user_id === $user->id || $user->administrator) {
-            $beverage->name = request('name');
-            $beverage->percentage = request('percentage');
-            if ($user->administrator) {
-                $beverage->pending = request('pending');
-                $beverage->approved = request('approved');
-                if ($beverage->approved) {
-                    $beverage->user_id = null;
-                }
-            }
-            $beverage->save();
-            return response()->json(['id' => $beverage->id]);
-        } else {
+        if ($beverage->user_id !== $user->id && !$user->administrator) {
             abort(403);
         }
+
+        $beverage->name = request('name');
+        $beverage->percentage = request('percentage');
+        if ($user->administrator) {
+            $beverage->pending = request('pending');
+            $beverage->approved = request('approved');
+            if ($beverage->approved) {
+                $beverage->user_id = null;
+            }
+        }
+        $beverage->save();
+        return response()->json(['id' => $beverage->id]);
     }
 
     /**
@@ -106,11 +109,11 @@ class BeverageController extends Controller
     public function destroy(Beverage $beverage)
     {
         $user = Auth::user();
-        if ($beverage->user_id === $user->id || $user->administrator) {
-            $beverage->delete();
-            return response()->json(['id' => $beverage->id]);
-        } else {
+        if ($beverage->user_id !== $user->id && !$user->administrator) {
             abort(403);
         }
+
+        $beverage->delete();
+        return response()->json(['id' => $beverage->id]);
     }
 }

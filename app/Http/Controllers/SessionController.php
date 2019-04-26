@@ -27,7 +27,7 @@ class SessionController extends Controller
     public function listRecent()
     {
         $array = Session::where('user_id', Auth::id())->orderBy('id', 'desc')->limit(7)->get()->toArray();
-        return response()->json(array_reverse($array));
+        return response()->json(array_reverse($array));  // TODO: i'm sure this can be done with a collection method
     }
 
     /**
@@ -54,11 +54,11 @@ class SessionController extends Controller
     public function show(Session $session)
     {
         $user = Auth::user();
-        if ($session->user_id === $user->id) {
-            return view('session', compact(['session']));
-        } else {
+        if ($session->user_id !== $user->id) {
             abort(403);
         }
+
+        return view('session', compact(['session']));
     }
 
     /**
@@ -70,11 +70,11 @@ class SessionController extends Controller
     public function destroy(Session $session)
     {
         $user = Auth::user();
-        if ($session->user_id === $user->id) {
-            $session->delete();
-            return response()->json(['id' => $session->id]);
-        } else {
+        if ($session->user_id !== $user->id) {
             abort(403);
         }
+
+        $session->delete();
+        return response()->json(['id' => $session->id]);
     }
 }

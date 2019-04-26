@@ -23,11 +23,11 @@ class DrinkController extends Controller
     public function index(Session $session)
     {
         $user = Auth::user();
-        if ($session->user_id === $user->id) {
-            return $session->drinks()->with('beverage')->get();
-        } else {
+        if ($session->user_id !== $user->id) {
             abort(403);
         }
+
+        return $session->drinks()->with('beverage')->get();
     }
 
     /**
@@ -61,11 +61,11 @@ class DrinkController extends Controller
     public function destroy(Session $session, Drink $drink)
     {
         $user = Auth::user();
-        if ($session->user_id === $user->id) {
-            $drink->delete();
-            return response()->json(['id' => $drink->id]);
-        } else {
+        if ($session->user_id !== $user->id) {
             abort(403);
         }
+
+        $drink->delete();
+        return response()->json(['id' => $drink->id]);
     }
 }

@@ -2,4 +2,6 @@
 - Move API URLs
 - Check for potential vulnerabilities
 - Reduce JS file size as much as possible
+- Make login more intuitive
+- Beverage static method to get all approved
 - Open source project

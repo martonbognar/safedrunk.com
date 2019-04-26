@@ -9,21 +9,9 @@ use Illuminate\Support\Facades\Auth;
 
 class ModifyController extends Controller
 {
-    /**
-     * Get a validator for an incoming modify request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
+    public function __construct()
     {
-        return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:6', 'confirmed'],
-            'sex' => ['required', 'in:male,female'],
-            'weight' => ['required', 'numeric'],
-        ]);
+        $this->middleware('auth');
     }
 
     public function edit()
