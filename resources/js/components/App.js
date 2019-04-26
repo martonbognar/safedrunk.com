@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Drink from './Drink'
 import Calculator from './Calculator'
 import NewDrink from './NewDrink'
+import BACGraph from './BACGraph';
 
 class App extends Component {
     constructor(props) {
@@ -178,6 +179,7 @@ class App extends Component {
                     <hr />
                     {drinks}
                     <Calculator drinks={this.state.drinks} weight={this.state.basicData.weight} sex={this.state.basicData.sex} />
+                    <BACGraph drinks={this.state.drinks} weight={this.state.basicData.weight} sex={this.state.basicData.sex} />
                 </div>
             </div>
         );

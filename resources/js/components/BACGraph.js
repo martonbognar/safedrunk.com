@@ -15,16 +15,25 @@ class BACGraph extends Component {
         this.chart = new Chart(canvas, {
             type: "line",
             data: {
-                labels: drinks.map(drink => drink.name),
+                labels: [],
                 datasets: [{
-                    data: drinks.map((drink) => drink.amount),
+                    data: [],
                     backgroundColor: "#3490dc",
                     borderColor: "#3490dc",
                     fill: false,
-                    label: "Blood Alcohol Content",
+                },
+                {
+                    data: [],
+                    backgroundColor: "#e3342f",
+                    borderColor: "#e3342f",
+                    borderDash: [20, 3, 3, 3, 3, 3, 3, 3],
+                    fill: false,
                 }]
             },
             options: {
+                legend: {
+                    display: false
+                },
                 scales: {
                     yAxes: [{
                         ticks: {
@@ -43,15 +52,34 @@ class BACGraph extends Component {
         let labels = [];
         let measurements = [];
 
+        let currentTime = new Date();
+
         if (drinks.length > 0) {
             let time = new Date(drinks[0].startTime.getTime());
+            let lastDot = new Date(drinks[drinks.length - 1].startTime.getTime());
+            lastDot.setHours(lastDot.getHours() + 2);
             let bac = 0;
             do {
+                bac = calculateEbac(drinks.filter(drink => drink.startTime <= time), time, { sex: sex, weight: weight });
+                if (time < lastDot) {
+                    labels.push(('0' + time.getHours()).slice(-2) + ':' + ('0' + time.getMinutes()).slice(-2));
+                    measurements.push(bac);
+                }
                 time.setMinutes(time.getMinutes() + 30);
-                labels.push(('0' + time.getHours()).slice(-2) + ':' + ('0' + time.getMinutes()).slice(-2));
-                bac = calculateEbac(drinks.filter(drink => drink.startTime < time), time, { sex: sex, weight: weight });
+            } while (bac > 0.01 && time < currentTime);
+
+            if (time > currentTime) {
+                labels.push(('0' + currentTime.getHours()).slice(-2) + ':' + ('0' + currentTime.getMinutes()).slice(-2));
+                bac = calculateEbac(drinks, currentTime, { sex: sex, weight: weight });
                 measurements.push(bac);
-            } while (bac > 0.01 && time < new Date());
+            } else {
+                labels.push(('0' + currentTime.getHours()).slice(-2) + ':' + ('0' + currentTime.getMinutes()).slice(-2));
+                let comeDown = Array(labels.length - 1).fill(null);
+                comeDown[comeDown.length - 1] = measurements[measurements.length - 1];
+                bac = calculateEbac(drinks, currentTime, { sex: sex, weight: weight });
+                comeDown.push(bac);
+                this.chart.data.datasets[1].data = comeDown;
+            }
         }
 
         this.chart.data.labels = labels;

@@ -1,31 +1,28 @@
 import React, { Component } from 'react';
 import { calculateEbac } from './functions';
 import Effects from './Effects'
-import BACGraph from './BACGraph';
 
 class Calculator extends Component {
     constructor(props) {
         super(props);
 
         this.state = { value: 0 };
+        this.calculate = this.calculate.bind(this);
     }
 
     componentDidMount() {
-        let sex = this.props.sex;
-        let weight = this.props.weight;
-        let drinks = this.props.drinks;
+        this.timerID = setInterval(this.calculate, 5000);
+    }
 
-        let self = this;
+    componentDidUpdate() {
+        this.calculate();
+    }
 
-        this.timerID = setInterval(
-            function () {
-                let value = calculateEbac(drinks, new Date(), { sex: sex, weight: weight });
-                if (value !== self.state.value) {
-                    self.setState({ value: value });
-                }
-            },
-            1000
-        );
+    calculate() {
+        let value = calculateEbac(this.props.drinks, new Date(), { sex: this.props.sex, weight: this.props.weight });
+        if (value !== this.state.value) {
+            this.setState({ value: value });
+        }
     }
 
     componentWillUnmount() {
@@ -36,7 +33,6 @@ class Calculator extends Component {
         return (
             <div id='result'>
                 <h2>Blood alcohol content: {this.state.value}%</h2>
-                <BACGraph drinks={this.props.drinks} weight={this.props.weight} sex={this.props.sex} />
                 <Effects percentage={this.state.value} />
             </div>
         );
