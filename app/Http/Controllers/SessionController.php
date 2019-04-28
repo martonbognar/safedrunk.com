@@ -26,8 +26,7 @@ class SessionController extends Controller
 
     public function listRecent()
     {
-        $array = Session::where('user_id', Auth::id())->orderBy('id', 'desc')->limit(7)->get()->toArray();
-        return response()->json(array_reverse($array));  // TODO: i'm sure this can be done with a collection method
+        return Session::where('user_id', Auth::id())->orderBy('id', 'desc')->limit(7)->get()->reverse()->values();
     }
 
     /**
