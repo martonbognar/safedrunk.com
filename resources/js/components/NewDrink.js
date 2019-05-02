@@ -69,7 +69,7 @@ class NewDrink extends Component {
         if (keyword !== "") {
             let self = this;
 
-            axios.get('/beverages/filter/' + keyword)
+            axios.get('/api/beverages/filter/' + keyword)
                 .then(function (response) {
                     self.setState({ beverageList: response.data });
                     if (response.data.length === 0) {

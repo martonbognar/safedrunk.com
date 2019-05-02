@@ -29,7 +29,7 @@ class App extends Component {
 
         let self = this;
 
-        axios.get('/personal/')
+        axios.get('/api/personal')
             .then(function (response) {
                 self.setState({ basicData: { sex: response.data.sex, weight: response.data.weight } });
             })
@@ -38,7 +38,7 @@ class App extends Component {
                 alert("There was a connection error. Please try reloading the page.");
             });
 
-        axios.get(`/sessions/${self.state.id}/drinks`)
+        axios.get(`/api/sessions/${self.state.id}/drinks`)
             .then(function (response) {
                 response.data.forEach(function (drink) {
                     self.setState({
@@ -72,7 +72,7 @@ class App extends Component {
         if (data.modifyStart) {
             drink.start = Math.floor(data.startTime.getTime() / 1000);
         }
-        axios.post(`/sessions/${this.state.id}/drinks`, drink)
+        axios.post(`/api/sessions/${this.state.id}/drinks`, drink)
             .then(function (response) {
                 data.key = response.data.id;
                 self.setState({ drinks: self.state.drinks.concat([data]) });
@@ -95,7 +95,7 @@ class App extends Component {
         let tempDrinks = this.state.drinks;
         let id = drink.props.id;
         tempDrinks.splice(index, 1);
-        axios.delete(`/sessions/${this.state.id}/drinks/${id}`)
+        axios.delete(`/api/sessions/${this.state.id}/drinks/${id}`)
             .then(function (response) {
                 self.setState({ drinks: tempDrinks });
             })
@@ -131,7 +131,7 @@ class App extends Component {
     render() {
         if (this.state.basicData.sex === null || this.state.basicData.weight === null) {
             return (
-                <div>In order to calculate your blood alcohol content, please fill out your <a href="/modify">basic data</a> first.</div>
+                <div>In order to calculate your blood alcohol content, please fill out your <a href="/settings">basic data</a> first.</div>
             );
         }
 

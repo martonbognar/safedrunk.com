@@ -1,5 +1,4 @@
 - Include the beverage form in the session page
-- Move API URLs
 - Reduce JS file size as much as possible
 - Make login more intuitive
 - Open source project

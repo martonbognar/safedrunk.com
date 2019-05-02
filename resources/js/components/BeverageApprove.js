@@ -10,7 +10,7 @@ class BeverageApprove extends Component {
 
         let self = this;
 
-        axios.get(`/beverages/pending`)
+        axios.get(`/api/beverages/pending`)
             .then(function (response) {
                 self.setState({ beverages: response.data });
             })
@@ -19,7 +19,6 @@ class BeverageApprove extends Component {
                 alert("There was a connection error. Please try reloading the page.");
             });
 
-        // this.handleInputChanged = this.handleInputChanged.bind(this);
         this.approve = this.approve.bind(this);
         this.reject = this.reject.bind(this);
     }
@@ -47,7 +46,7 @@ class BeverageApprove extends Component {
 
         let self = this;
 
-        axios.patch(`/beverages/${beverage.id}`, beverage)
+        axios.patch(`/api/beverages/${beverage.id}`, beverage)
             .then(function (response) {
                 let index = -1;
                 self.state.beverages.forEach(function (s, i) {
@@ -71,7 +70,7 @@ class BeverageApprove extends Component {
 
         let self = this;
 
-        axios.patch(`/beverages/${beverage.id}`, beverage)
+        axios.patch(`/api/beverages/${beverage.id}`, beverage)
             .then(function (response) {
                 let index = -1;
                 self.state.beverages.forEach(function (s, i) {

@@ -15,25 +15,29 @@ class Statistics extends Component {
 
     let self = this;
 
-    axios.get(`/sessions/recent`)
+    axios.get(`/api/sessions/recent`)
       .then(function (response) {
         let sessionNames = response.data.map((session) => session.name);
         let sessionIds = response.data.map((session) => session.id);
         self.setState({ sessions: sessionNames });
+
         for (let x = 0; x < sessionNames.length; ++x) {
-          axios.get(`/sessions/${sessionIds[x]}/drinks`).then(function (response) {
+          axios.get(`/api/sessions/${sessionIds[x]}/drinks`).then(function (response) {
             let copyNr = self.state.numberOfDrinks.slice();
             copyNr[x] = response.data.length;
             let copyAlc = self.state.alcoholConsumed.slice();
+
             copyAlc[x] = response.data.map((drink) => {
               return parseInt(UNITS[drink.unit]['multiplier'] * drink.amount, 10) * parseInt(drink.beverage.percentage, 10) / 100;
             }).reduce((s, a) => { return s + a }, 0);
+
             self.setState({ numberOfDrinks: copyNr, alcoholConsumed: copyAlc });
           }).catch(function (error) {
             console.error(error);
             alert("There was a connection error. Please try reloading the page.");
           });
         }
+
       })
       .catch(function (error) {
         console.error(error);

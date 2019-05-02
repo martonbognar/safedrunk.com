@@ -71,7 +71,7 @@
                             @endif
                         @else
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('modify') }}">Settings</a>
+                                <a class="nav-link" href="{{ route('settings') }}">Settings</a>
                             </li>
                             <li class="nav-item">
                             <a class="nav-link" href="{{ route('logout') }}"

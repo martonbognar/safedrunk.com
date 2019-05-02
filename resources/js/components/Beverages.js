@@ -14,7 +14,7 @@ class Beverages extends Component {
 
         let self = this;
 
-        axios.get(`/beverages/own`)
+        axios.get(`/api/beverages/own`)
             .then(function (response) {
                 self.setState({ beverages: response.data });
             })
@@ -42,7 +42,7 @@ class Beverages extends Component {
         if (name === "name" && value !== "") {
             let self = this;
 
-            axios.get('/beverages/filter/' + value)
+            axios.get(`/api/beverages/filter/${value}`)
                 .then(function (response) {
                     self.setState({ searchList: response.data });
                 })
@@ -66,7 +66,7 @@ class Beverages extends Component {
         let self = this;
         let beverage = { 'name': this.state.name, 'percentage': this.state.percentage, 'pending': this.state.submit };
 
-        axios.post(`/beverages`, beverage)
+        axios.post(`/api/beverages`, beverage)
             .then(function (response) {
                 beverage.id = response.data.id;
                 let beverages = self.state.beverages.concat([beverage]);
@@ -93,7 +93,7 @@ class Beverages extends Component {
         })
         let temp = this.state.beverages;
         temp.splice(index, 1);
-        axios.delete(`/beverages/${id}`)
+        axios.delete(`/api/beverages/${id}`)
             .then(function (response) {
                 self.setState({ beverages: temp });
             })

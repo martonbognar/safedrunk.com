@@ -12,7 +12,7 @@ class Sessions extends Component {
 
         let self = this;
 
-        axios.get(`/sessions`)
+        axios.get(`/api/sessions`)
             .then(function (response) {
                 self.setState({ sessions: response.data.map((session) => { session.created_at = new Date(session.created_at); return session; }) });
             })
@@ -33,7 +33,7 @@ class Sessions extends Component {
     handleSubmit(event) {
         event.preventDefault();
         let self = this;
-        axios.post(`/sessions`, { 'name': this.state.name })
+        axios.post(`/api/sessions`, { 'name': this.state.name })
             .then(function (response) {
                 let id = response.data.id;
                 let sessions = [{ 'id': id, 'name': self.state.name, 'created_at': new Date() }].concat(self.state.sessions);
@@ -60,7 +60,7 @@ class Sessions extends Component {
         })
         let temp = this.state.sessions;
         temp.splice(index, 1);
-        axios.delete(`/sessions/${id}`)
+        axios.delete(`/api/sessions/${id}`)
             .then(function (response) {
                 self.setState({ sessions: temp });
             })
