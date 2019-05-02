@@ -9,6 +9,13 @@
 
         gtag('config', 'UA-136505103-1');
     </script>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-pub-5210002685428807",
+            enable_page_level_ads: true
+        });
+    </script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -88,10 +95,21 @@
             @yield('content')
         </main>
 
-        <footer class="footer">
-            <div class="container text-center">
+        <footer class="footer text-center">
+            <div class="container">
                 <span class="text-muted">If you have any comments or feedback, please visit <a href="https://www.reddit.com/r/safedrunk/">r/safedrunk</a>!</span>
             </div>
+            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <!-- safedrunk -->
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-client="ca-pub-5210002685428807"
+                data-ad-slot="5775936368"
+                data-ad-format="auto"
+                data-full-width-responsive="true"></ins>
+            <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
         </footer>
     </div>
 </body>

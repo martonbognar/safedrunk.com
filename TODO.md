@@ -2,3 +2,4 @@
 - Reduce JS file size as much as possible
 - Different units for weight
 - Password resets
+- Fix BAC graph end for past sessions
