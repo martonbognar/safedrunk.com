@@ -73,10 +73,10 @@ class BACGraph extends Component {
                 bac = calculateEbac(drinks, currentTime, { sex: sex, weight: weight });
                 measurements.push(bac);
             } else {
-                labels.push(('0' + currentTime.getHours()).slice(-2) + ':' + ('0' + currentTime.getMinutes()).slice(-2));
+                labels.push(('0' + time.getHours()).slice(-2) + ':' + ('0' + time.getMinutes()).slice(-2));
                 let comeDown = Array(labels.length - 1).fill(null);
                 comeDown[comeDown.length - 1] = measurements[measurements.length - 1];
-                bac = calculateEbac(drinks, currentTime, { sex: sex, weight: weight });
+                bac = calculateEbac(drinks, time, { sex: sex, weight: weight });
                 comeDown.push(bac);
                 this.chart.data.datasets[1].data = comeDown;
             }
