@@ -1,6 +1,4 @@
 - Include the beverage form in the session page
 - Reduce JS file size as much as possible
-- Make login more intuitive
 - Different units for weight
 - Password resets
-- Register link on login page

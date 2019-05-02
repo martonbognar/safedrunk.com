@@ -8,14 +8,14 @@
                 <div class="card-header">{{ __('Login') }}</div>
 
                 <div class="card-body">
-                    <div class="form-group">
+                    <div class="form-group" id="login-chooser">
                         <div class="col-md-12 text-center">
                             <a href="{{ url('/auth/google') }}"><img src="/images/google_signin.png"></a>
+                            <br>
+                            <button class='mt-1 btn btn-outline-primary' onclick="document.getElementById('login-chooser').style.display = 'none'; document.getElementById('safedrunk-login').style.display = 'block';">Use a SafeDrunk account</button>
                         </div>
                     </div>
-                    <hr>
-                    <h5 class='mb-3 text-center'>Or log in with your SafeDrunk account</h5>
-                    <form method="POST" action="{{ route('login') }}">
+                    <form method="POST" action="{{ route('login') }}" id="safedrunk-login" style="display: none;">
                         @csrf
 
                         <div class="form-group row">
@@ -64,11 +64,9 @@
                                     {{ __('Login') }}
                                 </button>
 
-                                @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
-                                    </a>
-                                @endif
+                                <a class="btn btn-link" href="{{ route('register') }}">
+                                    {{ __('Register') }}
+                                </a>
                             </div>
                         </div>
                     </form>
