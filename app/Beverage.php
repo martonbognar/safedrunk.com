@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Beverage extends Model
 {
@@ -11,5 +12,15 @@ class Beverage extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public static function getApproved()
+    {
+        return static::where([['user_id', null], ['approved', true]]);
+    }
+
+    public static function getOwn()
+    {
+        return static::where('user_id', Auth::id());
     }
 }

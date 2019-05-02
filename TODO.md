@@ -1,8 +1,8 @@
 - Include the beverage form in the session page
 - Move API URLs
-- Check for potential vulnerabilities
 - Reduce JS file size as much as possible
 - Make login more intuitive
-- Beverage static method to get all approved
 - Open source project
 - Different units for weight
+- Password resets
+- Register link on login page

@@ -15,19 +15,20 @@ class BeverageController extends Controller
 
     public function listOwn()
     {
-        return Beverage::where('user_id', Auth::id())->get();
+        return Beverage::getOwn()->get();
     }
 
     public function listCombined()
     {
-        $custom = Beverage::where('user_id', Auth::id())->get();
-        return $custom->merge(Beverage::where([['user_id', null], ['approved', true]])->get());
+        $custom = Beverage::getOwn()->get();
+        return $custom->merge(Beverage::getApproved()->get());
     }
 
     public function listFiltered($keyword)
     {
-        $custom = Beverage::where([['user_id', Auth::id()], ['name', 'LIKE', '%' . $keyword . '%']])->orderBy('name', 'asc')->get();
-        return $custom->merge(Beverage::where([['user_id', null], ['approved', true], ['name', 'LIKE', '%' . $keyword . '%']])->orderBy('name', 'asc')->get());
+        $keyword = '%' . $keyword . '%';
+        $custom = Beverage::getOwn()->where('name', 'LIKE', $keyword)->orderBy('name', 'asc')->get();
+        return $custom->merge(Beverage::getApproved()->where('name', 'LIKE', $keyword)->orderBy('name', 'asc')->get());
     }
 
     public function listPending()
