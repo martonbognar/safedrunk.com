@@ -91,6 +91,7 @@ class BACGraph extends Component {
         return (
             <canvas
                 style={{ width: '100%' }}
+                className="mt-3"
                 ref={this.canvas}
             />
         );

@@ -5,3 +5,4 @@
 - Make login more intuitive
 - Beverage static method to get all approved
 - Open source project
+- Different units for weight
