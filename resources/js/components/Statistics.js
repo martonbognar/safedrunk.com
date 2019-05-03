@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import UNITS from './data/units';
+import { UNITS } from './data/units';
 var Chart = require('chart.js');
 
 class Statistics extends Component {

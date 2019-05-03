@@ -21,4 +21,10 @@ const UNITS = {
     },
 }
 
-export default UNITS;
+const WEIGHTS = {
+    'kg': 1,
+    'lbs': 0.4536,
+    'stone': 6.3503,
+}
+
+export { UNITS, WEIGHTS };

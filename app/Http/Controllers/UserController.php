@@ -16,7 +16,8 @@ class UserController extends Controller
 
     public function personal()
     {
-        return response()->json(['weight' => Auth::user()->weight, 'sex' => Auth::user()->sex]);
+        $user = Auth::user();
+        return response()->json(['weight' => $user->weight, 'sex' => $user->sex, 'weight_unit' => $user->weight_unit]);
     }
 
     public function statistics()

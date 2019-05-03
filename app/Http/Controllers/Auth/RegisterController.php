@@ -54,6 +54,7 @@ class RegisterController extends Controller
             'password' => ['required', 'string', 'min:6', 'confirmed'],
             'sex' => ['required', 'in:male,female'],
             'weight' => ['required', 'numeric'],
+            'weight_unit' => ['required', 'in:kg,lbs,stone'],
         ]);
     }
 
@@ -71,6 +72,7 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
             'sex' => $data['sex'],
             'weight' => $data['weight'],
+            'weight_unit' => $date['weight_unit'],
             'newsletter' => isset($data['newsletter']),
         ]);
     }

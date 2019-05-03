@@ -16,7 +16,6 @@ Route::patch('/api/beverages/{beverage}', 'BeverageController@update');
 Route::delete('/api/beverages/{beverage', 'BeverageController@destroy');
 
 Route::get('/api/beverages/pending', 'BeverageController@listPending');
-Route::get('/api/beverages/approve', 'BeverageController@approve');
 
 Route::get('/api/sessions', 'SessionController@list');
 Route::post('/api/sessions', 'SessionController@store');
@@ -54,5 +53,6 @@ Route::get('/settings', 'Auth\ModifyController@edit')->name('settings');
 Route::post('/settings', 'Auth\ModifyController@update')->name('settings_post');
 
 Route::get('/beverages/create', 'BeverageController@create')->name('beverage_create');
+Route::get('/beverages/approve', 'BeverageController@approve');
 
 Route::get('/sessions/{session}', 'SessionController@show');

@@ -3,6 +3,7 @@ import Drink from './Drink'
 import Calculator from './Calculator'
 import NewDrink from './NewDrink'
 import BACGraph from './BACGraph';
+import { WEIGHTS } from './data/units';
 
 class App extends Component {
     constructor(props) {
@@ -31,7 +32,7 @@ class App extends Component {
 
         axios.get('/api/personal')
             .then(function (response) {
-                self.setState({ basicData: { sex: response.data.sex, weight: response.data.weight } });
+                self.setState({ basicData: { sex: response.data.sex, weight: response.data.weight * WEIGHTS[response.data.weight_unit] } });
             })
             .catch(function (error) {
                 console.error(error);

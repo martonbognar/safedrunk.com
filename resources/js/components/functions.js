@@ -1,4 +1,4 @@
-import UNITS from './data/units';
+import { UNITS } from './data/units';
 
 function intervalToText(date) {
     let diff = Math.floor(((new Date()).getTime() - date.getTime()) / 1000);

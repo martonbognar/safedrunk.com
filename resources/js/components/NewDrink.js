@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import UNITS from './data/units';
+import { UNITS } from './data/units';
 
 
 class NewDrink extends Component {

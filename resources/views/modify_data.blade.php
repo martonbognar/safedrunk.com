@@ -31,12 +31,26 @@
                         <div class="form-group row">
                             <label for="weight" class="col-md-4 col-form-label text-md-right">{{ __('Weight') }}</label>
 
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <input id="weight" type="number" class="form-control{{ $errors->has('weight') ? ' is-invalid' : '' }}" name="weight" value="{{ $user->weight }}" required>
 
                                 @if ($errors->has('weight'))
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $errors->first('weight') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+
+                            <div class="col-md-2">
+                                <select id="weight_unit" name="weight_unit" class="form-control{{ $errors->has('weight_unit') ? ' is-invalid' : '' }}" required>
+                                    <option value="kg" {{ $user->weight_unit == "kg" ? 'selected' : '' }}>kg</option>
+                                    <option value="lbs" {{ $user->weight_unit == "lbs" ? 'selected' : '' }}>lbs</option>
+                                    <option value="stone" {{ $user->weight_unit == "stone" ? 'selected' : '' }}>stone</option>
+                                </select>
+
+                                @if ($errors->has('weight_unit'))
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('weight_unit') }}</strong>
                                     </span>
                                 @endif
                             </div>

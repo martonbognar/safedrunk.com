@@ -25,10 +25,12 @@ class ModifyController extends Controller
         $validated = $request->validate([
             'sex' => ['required', 'in:male,female'],
             'weight' => ['required', 'numeric'],
+            'weight_unit' => ['required', 'in:kg,lbs,stone'],
         ]);
         $user = Auth::user();
         $user->sex = $validated['sex'];
         $user->weight = $validated['weight'];
+        $user->weight_unit = $validated['weight_unit'];
         $user->newsletter = $request->has('newsletter');
         $user->save();
         return redirect()->route('sessions');
