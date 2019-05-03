@@ -42,7 +42,7 @@ class SocialController extends Controller
         if ($authUser) {
             return redirect()->route('sessions');
         } else {
-            return redirect()->route('modify');
+            return redirect()->route('settings');
         }
     }
 }
