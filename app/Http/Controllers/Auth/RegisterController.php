@@ -72,7 +72,7 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
             'sex' => $data['sex'],
             'weight' => $data['weight'],
-            'weight_unit' => $date['weight_unit'],
+            'weight_unit' => $data['weight_unit'],
             'newsletter' => isset($data['newsletter']),
         ]);
     }
