@@ -1,6 +1,7 @@
 # Priority 0
 
 - Favorite checking/react displaying
+- No favorite for quick adds
 - Name definition for drinks
 
 # Priority 1
