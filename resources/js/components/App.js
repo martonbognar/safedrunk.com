@@ -26,6 +26,7 @@ export default class App extends Component {
                 weight: '',
             },
             drinks: [],
+            favoriteList: [],
             showNewDrink: 'none',
             compact: localStorageExists && "true" === localStorage.compact,
         };
@@ -38,6 +39,14 @@ export default class App extends Component {
             })
             .catch(function (error) {
                 console.error(error);
+                alert("There was a connection error. Please try reloading the page.");
+            });
+
+        axios.get('/api/favorites')
+            .then(function (response) {
+                self.setState({ favoriteList: response.data });
+            })
+            .catch(function (error) {
                 alert("There was a connection error. Please try reloading the page.");
             });
 
@@ -68,6 +77,7 @@ export default class App extends Component {
         this.toggleDrinkForm = this.toggleDrinkForm.bind(this);
         this.cancelDrinkForm = this.cancelDrinkForm.bind(this);
         this.toggleCompact = this.toggleCompact.bind(this);
+        this.favoriteForDrink = this.favoriteForDrink.bind(this);
     }
 
     submitDrink(data) {
@@ -138,6 +148,16 @@ export default class App extends Component {
         });
     }
 
+    favoriteForDrink(drink) {
+        let favoriteId = undefined;
+        this.state.favoriteList.forEach(favorite => {
+            if (favorite.beverage_id === drink.beverage_id && favorite.amount === drink.amount && favorite.unit === drink.unit) {
+                favoriteId = favorite.id;
+            }
+        });
+        return favoriteId;
+    }
+
     render() {
         if (this.state.basicData.sex === null || this.state.basicData.weight === null) {
             return (
@@ -145,25 +165,22 @@ export default class App extends Component {
             );
         }
 
-        let rows = [];
-
-        this.state.drinks.forEach(function (drink) {
-            rows.push(
-                <Drink
-                    key={drink.key}
-                    id={drink.key}
-                    name={drink.name}
-                    amount={drink.amount}
-                    unit={drink.unit}
-                    percentage={drink.percentage}
-                    startTime={drink.startTime}
-                    onRemove={this.removeDrink}
-                    beverage_id={drink.beverage_id}
-                    onDuplicate={this.duplicateDrink}
-                    compact={this.state.compact}
-                />
-            );
-        }, this);
+        let rows = this.state.drinks.map(drink =>
+            <Drink
+                key={drink.key}
+                id={drink.key}
+                name={drink.name}
+                amount={drink.amount}
+                unit={drink.unit}
+                percentage={drink.percentage}
+                startTime={drink.startTime}
+                onRemove={this.removeDrink}
+                beverage_id={drink.beverage_id}
+                onDuplicate={this.duplicateDrink}
+                compact={this.state.compact}
+                favoriteId={this.favoriteForDrink(drink)}
+            />
+        );
 
         let longSession = this.state.drinks.length > 0 && this.state.drinks[0].startTime.getTime() + (1000 * 60 * 60 * 14) < new Date().getTime();
 

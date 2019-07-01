@@ -1,11 +1,7 @@
 # Priority 0
 
-- Favorite removing/checking
+- Favorite checking/react displaying
 - Name definition for drinks
-
-- Check how request variables work
-- Check how this works
-- Check empty strings for name
 
 # Priority 1
 
@@ -21,6 +17,7 @@
 # Priority 3
 
 - Reduce JS file size as much as possible
+- Move common view code to layout
 - Uniform variable naming
 - Bind instead of empty arrow functions?
 - HSTS

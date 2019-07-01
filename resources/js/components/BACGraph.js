@@ -11,7 +11,6 @@ class BACGraph extends Component {
 
     componentDidMount() {
         const canvas = this.canvas.current;
-        let drinks = this.props.drinks;
         this.chart = new Chart(canvas, {
             type: "line",
             data: {

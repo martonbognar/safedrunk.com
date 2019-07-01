@@ -1,4 +1,4 @@
-const EFFECT_LIST = [
+export default [
     {
         percentageFloor: 0.0001,
         percentageCeiling: 0.03,
@@ -108,5 +108,3 @@ const EFFECT_LIST = [
         ],
     },
 ];
-
-export default EFFECT_LIST;

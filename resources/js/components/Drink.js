@@ -7,7 +7,6 @@ export default class Drink extends Component {
 
         this.state = {
             timeText: intervalToText(this.props.startTime),
-            favorite_id: this.props.favoriteId,
         }
 
         this.remove = this.remove.bind(this);
@@ -38,8 +37,8 @@ export default class Drink extends Component {
 
     favorite() {
         let self = this;
-        if (this.state.favorite_id) {
-            axios.delete(`/api/favorites/${this.state.favorite_id}`)
+        if (this.props.favoriteId) {
+            axios.delete(`/api/favorites/${this.props.favoriteId}`)
                 .then(function (response) {
                     self.setState({ favorite_id: undefined });
                 })
@@ -70,7 +69,7 @@ export default class Drink extends Component {
                     <div className='btn-group' role='group' aria-label='Drink controls'>
                         <button onClick={this.duplicate} className='btn btn-sm btn-primary'>📋</button>
                         <button onClick={this.remove} className='btn btn-sm btn-danger'>🗑</button>
-                        <button onClick={this.favorite} className='btn btn-sm btn-success'>{this.favorite_id ? '★' : '☆'}</button>
+                        <button onClick={this.favorite} className='btn btn-sm btn-success'>{this.props.favoriteId ? '★' : '☆'}</button>
                     </div>
                 </li>
             );
@@ -85,7 +84,7 @@ export default class Drink extends Component {
                             <div className='btn-group' role='group' aria-label='Drink controls'>
                                 <button onClick={this.duplicate} className='btn btn-sm btn-primary'>Duplicate</button>
                                 <button onClick={this.remove} className='btn btn-sm btn-danger'>Remove</button>
-                                <button onClick={this.favorite} className='btn btn-sm btn-success'>{this.favorite_id ? 'Add to Favorites' : 'Remove from Favorites'}</button>
+                                <button onClick={this.favorite} className='btn btn-sm btn-success'>{this.props.favoriteId ? 'Add to Favorites' : 'Remove from Favorites'}</button>
                             </div>
 
                         </div>

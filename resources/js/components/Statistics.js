@@ -28,7 +28,7 @@ class Statistics extends Component {
             let copyAlc = self.state.alcoholConsumed.slice();
 
             copyAlc[x] = response.data.map((drink) => {
-              return parseInt(UNITS[drink.unit]['multiplier'] * drink.amount, 10) * parseInt(drink.beverage.percentage, 10) / 100;
+              return parseInt(UNITS[drink.unit]['multiplier'] * drink.amount, 10) * parseInt(drink.percentage, 10) / 100;
             }).reduce((s, a) => { return s + a }, 0);
 
             self.setState({ numberOfDrinks: copyNr, alcoholConsumed: copyAlc });
