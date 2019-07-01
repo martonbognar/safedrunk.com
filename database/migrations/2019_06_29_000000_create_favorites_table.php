@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateBeveragesTable extends Migration
+class CreateFavoritesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class CreateBeveragesTable extends Migration
      */
     public function up()
     {
-        Schema::create('beverages', function (Blueprint $table) {
+        Schema::create('favorites', function (Blueprint $table) {
             $table->increments('id');
-            $table->decimal('percentage', 5, 2);
-            $table->string('name');
-            $table->boolean('approved')->default(false);
-            $table->boolean('pending')->default(false);
-            $table->unsignedInteger('user_id')->nullable()->default(null);
+            $table->unsignedInteger('user_id');
+            $table->unsignedInteger('beverage_id');
+            $table->decimal('amount', 6, 2);
+            $table->enum('unit', ['cl', 'dl', 'fl_oz', 'pint_uk', 'pint_us']);
             $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('beverage_id')->references('id')->on('beverages')->onDelete('cascade');
         });
     }
 
@@ -31,6 +31,6 @@ class CreateBeveragesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('beverages');
+        Schema::dropIfExists('favorites');
     }
 }

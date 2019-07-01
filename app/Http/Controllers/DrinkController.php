@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use App\Drink;
 use App\Session;
+use App\Beverage;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -41,15 +42,29 @@ class DrinkController extends Controller
         $drink = new Drink();
         $drink->amount = request('amount');
         $drink->unit = request('unit');
+        $drink->name = request('name');
         if (request('start')) {
             $drink->start = Carbon::createFromTimestamp(request('start'));
         } else {
             $drink->start = Carbon::now();
         }
         $drink->session_id = $session->id;
-        $drink->beverage_id = request('beverage_id');
+        if (request('beverage_id')) {
+            $drink->beverage_id = request('beverage_id');
+            $drink->percentage = $drink->beverage->percentage;
+        } else {
+            $drink->percentage = request('percentage');
+        }
         $drink->save();
         return response()->json(['id' => $drink->id]);
+    }
+
+    public function duplicate(Request $request, Drink $drink)
+    {
+        $newDrink = $drink->replicate();
+        $newDrink->start = Carbon::createFromTimestamp(request('start'));
+        $newDrink->save();
+        return response()->json(['id' => $newDrink->id]);
     }
 
     /**

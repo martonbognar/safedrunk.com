@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import { UNITS } from './data/units';
+import { UNITS } from '../data/units';
 
-
-class NewDrink extends Component {
-
+export default class DefaultNewDrink extends Component {
     constructor(props) {
         super(props);
 
@@ -15,30 +13,16 @@ class NewDrink extends Component {
             startTime: new Date(),
             beverage_id: undefined,
             beverageList: [],
-            submit: false,
             keyword: '',
             modifyStart: false,
         };
 
-        this.resetState = this.resetState.bind(this);
-        this.refreshStartTime = this.refreshStartTime.bind(this);
         this.handlePresetChanged = this.handlePresetChanged.bind(this);
-        this.invalidatePreset = this.invalidatePreset.bind(this);
         this.handleAmountChanged = this.handleAmountChanged.bind(this);
         this.handleKeywordChanged = this.handleKeywordChanged.bind(this);
         this.handleStartTimeChanged = this.handleStartTimeChanged.bind(this);
         this.handleUnitChanged = this.handleUnitChanged.bind(this);
         this.submitData = this.submitData.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
-
-    resetState() {
-        this.setState({ name: '', amount: '', unit: '', percentage: '', startTime: new Date(), beverage_id: undefined });
-    }
-
-    refreshStartTime(event) {
-        event.preventDefault();
-        this.setState({ startTime: new Date() });
     }
 
     handlePresetChanged(event) {
@@ -47,10 +31,6 @@ class NewDrink extends Component {
                 this.setState({ name: beverage.name, percentage: beverage.percentage, beverage_id: beverage.id });
             }
         }, this);
-    }
-
-    invalidatePreset() {
-        this.setState({ beverage_id: undefined });
     }
 
     handleAmountChanged(event) {
@@ -100,12 +80,7 @@ class NewDrink extends Component {
 
     submitData() {
         this.props.onChange(this.state);
-        this.resetState();
-    }
-
-    handleSubmit(event) {
-        event.preventDefault();
-        this.submitData();
+        this.setState({ name: '', amount: '', percentage: '', startTime: new Date() });
     }
 
     render() {
@@ -120,7 +95,7 @@ class NewDrink extends Component {
         let unitList = Object.keys(UNITS).map((unit) => <option key={unit} value={unit}>{UNITS[unit].name}</option>);
 
         return (
-            <form onSubmit={this.handleSubmit} id='new-drink'>
+            <form onSubmit={this.submitData} id='new-drink'>
                 <div className="form-row">
                     <div className="form-group col-md-4">
                         <label htmlFor="keyword">Search for a beverage</label>
@@ -135,7 +110,7 @@ class NewDrink extends Component {
                     </div>
                     <div className="form-group col-md-2">
                         <label htmlFor="amount">Amount</label>
-                        <input type='number' step='0.1' min='1' onChange={this.handleAmountChanged} value={this.state.amount} placeholder='Amount' required className="form-control" id="amount" />
+                        <input type='number' step='0.1' min='0' onChange={this.handleAmountChanged} value={this.state.amount} placeholder='Amount' required className="form-control" id="amount" />
                     </div>
                     <div className="form-group col-md-2">
                         <label htmlFor="unit">Unit</label>
@@ -160,5 +135,3 @@ class NewDrink extends Component {
         );
     }
 }
-
-export default NewDrink;
