@@ -58,14 +58,16 @@ class BACGraph extends Component {
             let lastDot = new Date(drinks[drinks.length - 1].startTime.getTime());
             lastDot.setHours(lastDot.getHours() + 2);
             let bac = 0;
+            let consideredDrinks = [];
             do {
-                bac = calculateEbac(drinks.filter(drink => drink.startTime <= time), time, { sex: sex, weight: weight });
+                consideredDrinks = drinks.filter(drink => drink.startTime <= time);
+                bac = calculateEbac(consideredDrinks, time, { sex: sex, weight: weight });
                 if (time < lastDot) {
                     labels.push(('0' + time.getHours()).slice(-2) + ':' + ('0' + time.getMinutes()).slice(-2));
                     measurements.push(bac);
                 }
                 time.setMinutes(time.getMinutes() + 30);
-            } while (bac > 0.01 && time < currentTime);
+            } while ((bac > 0.01 || drinks.length !== consideredDrinks.length) && time < currentTime);
 
             if (time > currentTime) {
                 labels.push(('0' + currentTime.getHours()).slice(-2) + ':' + ('0' + currentTime.getMinutes()).slice(-2));
