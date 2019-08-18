@@ -5,9 +5,14 @@ export default class Drink extends Component {
     constructor(props) {
         super(props);
 
+        console.log(this.props.favoriteId);
+
         this.state = {
+            favorite: !!this.props.favoriteId,
             timeText: intervalToText(this.props.startTime),
         }
+
+        console.log(this.state);
 
         this.remove = this.remove.bind(this);
         this.duplicate = this.duplicate.bind(this);
@@ -40,7 +45,7 @@ export default class Drink extends Component {
         if (this.props.favoriteId) {
             axios.delete(`/api/favorites/${this.props.favoriteId}`)
                 .then(function (response) {
-                    self.setState({ favorite_id: undefined });
+                    self.setState({ favorite: false });
                 })
                 .catch(function (error) {
                     console.error(error);
@@ -53,7 +58,7 @@ export default class Drink extends Component {
                 amount: this.props.amount,
             })
                 .then(function (response) {
-                    self.setState({ favorite_id: response.data.id });
+                    self.setState({ favorite: true });
                 })
                 .catch(function (error) {
                     console.error(error);
@@ -85,7 +90,7 @@ export default class Drink extends Component {
                                 <button onClick={this.duplicate} className='btn btn-sm btn-primary'>Duplicate</button>
                                 <button onClick={this.remove} className='btn btn-sm btn-danger'>Remove</button>
                                 {this.props.beverage_id &&
-                                <button onClick={this.favorite} className='btn btn-sm btn-success'>{this.props.favoriteId ? 'Remove from Favorites' : 'Add to Favorites'}</button>
+                                <button onClick={this.favorite} className='btn btn-sm btn-success'>{this.state.favorite ? 'Remove from Favorites' : 'Add to Favorites'}</button>
                                 }
                             </div>
 
