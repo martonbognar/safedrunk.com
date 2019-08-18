@@ -1,11 +1,12 @@
 # Priority 0
 
 - Name definition for drinks
+- Basic data for guests
+- Select compare sessions
 
 # Priority 1
 
 - Mixed drinks
-- Temporary session
 - Compare session graphs
 
 # Priority 2

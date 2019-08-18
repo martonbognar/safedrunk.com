@@ -6,6 +6,7 @@ import BeverageApprove from './BeverageApprove'
 import Sessions from './Sessions'
 import Statistics from './Statistics'
 import Temporary from './Temporary';
+import Compare from './Compare';
 
 let main = document.getElementById('main');
 
@@ -48,5 +49,12 @@ if (document.getElementById('statistics')) {
     ReactDOM.render(
         <Statistics />,
         document.getElementById('statistics')
+    );
+}
+
+if (document.getElementById('compare')) {
+    ReactDOM.render(
+        <Compare />,
+        document.getElementById('compare')
     );
 }

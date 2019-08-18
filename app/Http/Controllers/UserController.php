@@ -32,6 +32,11 @@ class UserController extends Controller
         return view('statistics');
     }
 
+    public function compare()
+    {
+        return view('compare');
+    }
+
     public function addFavorite(Request $request)
     {
         $favorite = new Favorite;

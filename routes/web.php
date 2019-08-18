@@ -55,6 +55,7 @@ Route::get('/sessions', 'SessionController@showAll')->name('sessions');
 Route::get('/try', 'StaticController@temporary')->name('temporary');
 
 Route::get('/statistics', 'UserController@statistics')->name('statistics');
+Route::get('/compare', 'UserController@compare')->name('compare');
 
 Route::get('/settings', 'Auth\ModifyController@edit')->name('settings');
 Route::post('/settings', 'Auth\ModifyController@update')->name('settings_post');
