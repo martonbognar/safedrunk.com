@@ -5,6 +5,7 @@ import Beverages from './Beverages'
 import BeverageApprove from './BeverageApprove'
 import Sessions from './Sessions'
 import Statistics from './Statistics'
+import Temporary from './Temporary';
 
 let main = document.getElementById('main');
 
@@ -19,6 +20,13 @@ if (document.getElementById('session-manager')) {
     ReactDOM.render(
         <Sessions />,
         document.getElementById('session-manager')
+    );
+}
+
+if (document.getElementById('temporary')) {
+    ReactDOM.render(
+        <Temporary />,
+        document.getElementById('temporary')
     );
 }
 

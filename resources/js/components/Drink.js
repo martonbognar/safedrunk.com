@@ -74,7 +74,9 @@ export default class Drink extends Component {
                     <div className='btn-group' role='group' aria-label='Drink controls'>
                         <button onClick={this.duplicate} className='btn btn-sm btn-primary'>📋</button>
                         <button onClick={this.remove} className='btn btn-sm btn-danger'>🗑</button>
-                        <button onClick={this.favorite} className='btn btn-sm btn-success'>{this.props.favoriteId ? '★' : '☆'}</button>
+                        {(this.props.beverage_id && !this.props.temporary) &&
+                        <button onClick={this.favorite} className='btn btn-sm btn-success'>{this.props.favorite ? '★' : '☆'}</button>
+                        }
                     </div>
                 </li>
             );
@@ -89,7 +91,7 @@ export default class Drink extends Component {
                             <div className='btn-group' role='group' aria-label='Drink controls'>
                                 <button onClick={this.duplicate} className='btn btn-sm btn-primary'>Duplicate</button>
                                 <button onClick={this.remove} className='btn btn-sm btn-danger'>Remove</button>
-                                {this.props.beverage_id &&
+                                {(this.props.beverage_id && !this.props.temporary) &&
                                 <button onClick={this.favorite} className='btn btn-sm btn-success'>{this.state.favorite ? 'Remove from Favorites' : 'Add to Favorites'}</button>
                                 }
                             </div>

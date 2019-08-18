@@ -5,9 +5,8 @@ import DefaultNewDrink from './DrinkForms/Default'
 import BACGraph from './BACGraph';
 import { WEIGHTS } from './data/units';
 import QuickNewDrink from './DrinkForms/Quick';
-import FavoriteNewDrink from './DrinkForms/Favorite';
 
-export default class App extends Component {
+export default class Temporary extends Component {
     constructor(props) {
         super(props);
 
@@ -22,54 +21,17 @@ export default class App extends Component {
         this.state = {
             id: parseInt(pieces[pieces.length - 2]),
             basicData: {
-                sex: '',
-                weight: '',
+                sex: localStorageExists && localStorage.sex ? localStorage.sex : null,
+                weight: localStorageExists && localStorage.weight ? localStorage.weight : null,
             },
-            drinks: [],
-            favoriteList: [],
+            drinks: (localStorageExists && localStorage.drinks) ? JSON.parse(localStorage.drinks).map((drink) => {
+                drink.startTime = new Date(drink.startTime);
+                return drink;
+            }) : [],
             showNewDrink: 'none',
+            keygen: localStorageExists && localStorage.keygen ? localStorage.keygen : 0,
             compact: localStorageExists && "true" === localStorage.compact,
         };
-
-        let self = this;
-
-        axios.get('/api/personal')
-            .then(function (response) {
-                self.setState({ basicData: { sex: response.data.sex, weight: response.data.weight * WEIGHTS[response.data.weight_unit] } });
-            })
-            .catch(function (error) {
-                console.error(error);
-                alert("There was a connection error. Please try reloading the page.");
-            });
-
-        axios.get('/api/favorites')
-            .then(function (response) {
-                self.setState({ favoriteList: response.data });
-            })
-            .catch(function (error) {
-                alert("There was a connection error. Please try reloading the page.");
-            });
-
-        axios.get(`/api/sessions/${self.state.id}/drinks`)
-            .then(function (response) {
-                response.data.forEach(function (drink) {
-                    self.setState({
-                        drinks: self.state.drinks.concat([{
-                            name: drink.name,
-                            amount: drink.amount,
-                            unit: drink.unit,
-                            percentage: drink.percentage,
-                            beverage_id: drink.beverage_id,
-                            startTime: new Date(drink.start),
-                            key: drink.id,
-                        }])
-                    });
-                });
-            })
-            .catch(function (error) {
-                console.error(error);
-                alert("There was a connection error. Please try reloading the page.");
-            });
 
         this.submitDrink = this.submitDrink.bind(this);
         this.removeDrink = this.removeDrink.bind(this);
@@ -77,30 +39,28 @@ export default class App extends Component {
         this.toggleDrinkForm = this.toggleDrinkForm.bind(this);
         this.cancelDrinkForm = this.cancelDrinkForm.bind(this);
         this.toggleCompact = this.toggleCompact.bind(this);
-        this.favoriteForDrink = this.favoriteForDrink.bind(this);
+        this.saveDrinks = this.saveDrinks.bind(this);
     }
 
+    saveDrinks() {
+          localStorage.drinks = JSON.stringify(this.state.drinks);
+          localStorage.keygen = this.state.keygen;
+      }
+
     submitDrink(data) {
-        let self = this;
         if (data.modifyStart) {
             data.start = Math.floor(data.startTime.getTime() / 1000);
         }
-        axios.post(`/api/sessions/${this.state.id}/drinks`, data)
-            .then(function (response) {
-                data.key = response.data.id;
-                self.setState({ drinks: self.state.drinks.concat([data]) });
-            })
-            .catch(function (error) {
-                console.error(error);
-                alert("There was a connection error. Please try reloading the page.");
-            });
+        data.key = this.state.keygen;
+        this.setState({keygen: this.state.keygen + 1});
+        this.setState({drinks: this.state.drinks.concat([data])}, this.saveDrinks);
         this.setState({ showNewDrink: 'none' });
     }
 
     removeDrink(drink) {
-        let self = this;
+        console.log(this.state.drinks);
+        console.log(drink);
         let index = -1;
-        // TODO: ?
         this.state.drinks.forEach(function (d, i) {
             if (d.key === drink.props.id) {
                 index = i;
@@ -109,28 +69,17 @@ export default class App extends Component {
         let tempDrinks = this.state.drinks;
         let id = drink.props.id;
         tempDrinks.splice(index, 1);
-        axios.delete(`/api/sessions/${this.state.id}/drinks/${id}`)
-            .then(function (response) {
-                self.setState({ drinks: tempDrinks });
-            })
-            .catch(function (error) {
-                console.error(error);
-                alert("There was a connection error. Please try reloading the page.");
-            });
+        this.setState({drinks: tempDrinks}, this.saveDrinks);
     }
 
     duplicateDrink(drink) {
-        axios.post(`/api/sessions/${this.state.id}/drinks/${drink.id}/duplicate`, { start: Date.now() })
-            .then(function (response) {
-                drink.key = response.data.id;
-                drink.id = response.data.id;
-                self.setState({ drinks: self.state.drinks.concat([drink]) });
-            })
-            .catch(function (error) {
-                console.error(error);
-                alert("There was a connection error. Please try reloading the page.");
-            });
-        this.setState({ showNewDrink: 'none' });
+        this.submitDrink({
+            name: drink.name,
+            amount: drink.amount,
+            percentage: drink.percentage,
+            unit: drink.unit,
+            startTime: Date.now(),
+        });
     }
 
     toggleDrinkForm(event) {
@@ -147,16 +96,6 @@ export default class App extends Component {
         this.setState({
             compact: compact
         });
-    }
-
-    favoriteForDrink(drink) {
-        let favoriteId = undefined;
-        this.state.favoriteList.forEach(favorite => {
-            if (favorite.beverage_id === drink.beverage_id && favorite.amount === drink.amount && favorite.unit === drink.unit) {
-                favoriteId = favorite.id;
-            }
-        });
-        return favoriteId;
     }
 
     render() {
@@ -179,7 +118,7 @@ export default class App extends Component {
                 beverage_id={drink.beverage_id}
                 onDuplicate={this.duplicateDrink}
                 compact={this.state.compact}
-                favoriteId={this.favoriteForDrink(drink)}
+                temporary={true}
             />
         );
 
@@ -192,12 +131,10 @@ export default class App extends Component {
                 newDrink =
                     <div className="btn-group" role="group" aria-label="Form controls">
                         <button type="submit" name="quick" className="btn btn-outline-primary" onClick={this.toggleDrinkForm}>Quick add</button>
-                        <button type="button" name="favorite" className="btn btn-outline-primary" onClick={this.toggleDrinkForm}>Favorites</button>
                         <button type="button" name="default" className="btn btn-outline-primary" onClick={this.toggleDrinkForm}>Beverage list</button>
                     </div>;
                 break;
             case 'quick': newDrink = <QuickNewDrink onChange={this.submitDrink} cancel={this.cancelDrinkForm} />; break;
-            case 'favorite': newDrink = <FavoriteNewDrink onChange={this.submitDrink} cancel={this.cancelDrinkForm} />; break;
             default: newDrink = <DefaultNewDrink onChange={this.submitDrink} cancel={this.cancelDrinkForm} />;
         }
 

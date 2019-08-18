@@ -10,7 +10,7 @@ class BeverageController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except(['listFiltered']);
     }
 
     public function listOwn()
@@ -27,8 +27,19 @@ class BeverageController extends Controller
     public function listFiltered($keyword)
     {
         $keyword = '%' . $keyword . '%';
-        $custom = Beverage::getOwn()->where('name', 'LIKE', $keyword)->orderBy('name', 'asc')->get();
-        return $custom->merge(Beverage::getApproved()->where('name', 'LIKE', $keyword)->orderBy('name', 'asc')->get());
+        $public = Beverage::getApproved()->where('name', 'LIKE', $keyword)->orderBy('name', 'asc')->get();
+        if (Auth::user()) {
+            $custom = Beverage::getOwn()->where('name', 'LIKE', $keyword)->orderBy('name', 'asc')->get();
+            return $custom->merge($public);
+        } else {
+            return $public;
+        }
+    }
+
+    public function listFilteredPublic($keyword)
+    {
+        $keyword = '%' . $keyword . '%';
+        return Beverage::getApproved()->where('name', 'LIKE', $keyword)->orderBy('name', 'asc')->get();
     }
 
     public function listPending()

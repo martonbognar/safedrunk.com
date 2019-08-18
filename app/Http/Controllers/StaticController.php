@@ -22,4 +22,13 @@ class StaticController extends Controller
             return view('intro');
         }
     }
+
+    public function temporary()
+    {
+        if (Auth::user()) {
+            return redirect()->route('sessions');
+        } else {
+            return view('temporary');
+        }
+    }
 }

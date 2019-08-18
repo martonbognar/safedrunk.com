@@ -11,6 +11,7 @@ class Calculator extends Component {
     }
 
     componentDidMount() {
+        this.calculate();
         this.timerID = setInterval(this.calculate, 5000);
     }
 

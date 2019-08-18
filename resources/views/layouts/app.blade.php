@@ -52,6 +52,11 @@
                             <a class="nav-link" href="{{ route('statistics') }}">Statistics</a>
                         </li>
                     @endauth
+                    @guest
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('temporary') }}">Try it out</a>
+                        </li>
+                    @endguest
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('faq') }}">FAQ</a>
                         </li>

@@ -52,6 +52,8 @@ Route::get('/auth/{provider}/callback', 'Auth\SocialController@handleProviderCal
 
 Route::get('/sessions', 'SessionController@showAll')->name('sessions');
 
+Route::get('/try', 'StaticController@temporary')->name('temporary');
+
 Route::get('/statistics', 'UserController@statistics')->name('statistics');
 
 Route::get('/settings', 'Auth\ModifyController@edit')->name('settings');
