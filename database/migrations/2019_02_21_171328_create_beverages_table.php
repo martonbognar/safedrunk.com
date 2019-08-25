@@ -19,6 +19,7 @@ class CreateBeveragesTable extends Migration
             $table->string('name');
             $table->boolean('approved')->default(false);
             $table->boolean('pending')->default(false);
+            $table->boolean('mixed')->default(false);
             $table->unsignedInteger('user_id')->nullable()->default(null);
             $table->foreign('user_id')->references('id')->on('users');
         });

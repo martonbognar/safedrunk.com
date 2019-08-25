@@ -14,6 +14,11 @@ class Beverage extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function ingredients()
+    {
+        return $this->belongsToMany(Beverage::class, 'mixed', 'beverage_id', 'ingredient_id');
+    }
+
     public static function getApproved()
     {
         return static::where([['user_id', null], ['approved', true]]);

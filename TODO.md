@@ -8,6 +8,7 @@
 
 - Mixed drinks
 - Compare session graphs
+- Laravel Passport
 
 # Priority 2
 
