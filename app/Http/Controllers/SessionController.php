@@ -11,12 +11,29 @@ class SessionController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->only(['showAll', 'show']);
+        $this->middleware('auth:api')->except(['showAll', 'show']);
     }
 
     public function showAll()
     {
         return view('sessions');
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Session  $session
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Session $session)
+    {
+        $user = Auth::user();
+        if ($session->user_id !== $user->id) {
+            abort(403);
+        }
+
+        return view('session', compact(['session']));
     }
 
     public function list()
@@ -42,22 +59,6 @@ class SessionController extends Controller
         $session->user_id = Auth::id();
         $session->save();
         return response()->json(['id' => $session->id]);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Session  $session
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Session $session)
-    {
-        $user = Auth::user();
-        if ($session->user_id !== $user->id) {
-            abort(403);
-        }
-
-        return view('session', compact(['session']));
     }
 
     /**

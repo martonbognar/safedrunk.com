@@ -14,6 +14,7 @@
 
 - Password resets
 - Rethink graph drawing (+hide effects?)
+- Admin middleware
 
 # Priority 3
 

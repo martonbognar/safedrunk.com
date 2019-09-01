@@ -10,7 +10,26 @@ class BeverageController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->except(['listFiltered']);
+        $this->middleware('auth')->only(['approve', 'create']);
+        $this->middleware('auth:api')->except(['approve', 'create', 'listFiltered']);
+    }
+
+    public function approve()
+    {
+        if (!Auth::user()->administrator) {
+            abort(403);
+        }
+        return view('beverage_approve');
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view('beverages');
     }
 
     public function listOwn()
@@ -48,24 +67,6 @@ class BeverageController extends Controller
             abort(403);
         }
         return Beverage::where('pending', true)->get();
-    }
-
-    public function approve()
-    {
-        if (!Auth::user()->administrator) {
-            abort(403);
-        }
-        return view('beverage_approve');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return view('beverages');
     }
 
     /**

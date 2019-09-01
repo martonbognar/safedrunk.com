@@ -11,7 +11,8 @@ class ModifyController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->only('edit');
+        $this->middleware('auth:api')->except('edit');
     }
 
     public function edit()
