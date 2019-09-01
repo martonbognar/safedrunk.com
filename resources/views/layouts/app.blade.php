@@ -51,6 +51,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('statistics') }}">Statistics</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('compare') }}">Compare</a>
+                        </li>
                     @endauth
                     @guest
                         <li class="nav-item">

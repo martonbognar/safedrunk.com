@@ -21,9 +21,11 @@ export default class Temporary extends Component {
         this.state = {
             id: parseInt(pieces[pieces.length - 2]),
             basicData: {
-                sex: localStorageExists && localStorage.sex ? localStorage.sex : null,
-                weight: localStorageExists && localStorage.weight ? localStorage.weight : null,
+                sex: localStorageExists && localStorage.sex ? localStorage.sex : 'female',
+                weight: localStorageExists && localStorage.weight ? localStorage.weight : 0,
+                weightUnit: localStorageExists && localStorage.weightUnit ? localStorage.weightUnit : 'kg',
             },
+            basicDataEditing: false,
             drinks: (localStorageExists && localStorage.drinks) ? JSON.parse(localStorage.drinks).map((drink) => {
                 drink.startTime = new Date(drink.startTime);
                 return drink;
@@ -40,21 +42,57 @@ export default class Temporary extends Component {
         this.cancelDrinkForm = this.cancelDrinkForm.bind(this);
         this.toggleCompact = this.toggleCompact.bind(this);
         this.saveDrinks = this.saveDrinks.bind(this);
+        this.handleSexChanged = this.handleSexChanged.bind(this);
+        this.handleWeightChanged = this.handleWeightChanged.bind(this);
+        this.handleUnitChanged = this.handleUnitChanged.bind(this);
+        this.handleSave = this.handleSave.bind(this);
+        this.saveBasicData = this.saveBasicData.bind(this);
     }
 
     saveDrinks() {
-          localStorage.drinks = JSON.stringify(this.state.drinks);
-          localStorage.keygen = this.state.keygen;
-      }
+        localStorage.drinks = JSON.stringify(this.state.drinks);
+        localStorage.keygen = this.state.keygen;
+    }
 
     submitDrink(data) {
         if (data.modifyStart) {
             data.start = Math.floor(data.startTime.getTime() / 1000);
         }
         data.key = this.state.keygen;
-        this.setState({keygen: this.state.keygen + 1});
-        this.setState({drinks: this.state.drinks.concat([data])}, this.saveDrinks);
+        this.setState({ keygen: this.state.keygen + 1 });
+        this.setState({ drinks: this.state.drinks.concat([data]) }, this.saveDrinks);
         this.setState({ showNewDrink: 'none' });
+    }
+
+    handleSexChanged(event) {
+        let sex = event.target.value;
+        let basicData = this.state.basicData;
+        basicData.sex = sex;
+        this.setState({ basicData: basicData, basicDataEditing: true }, this.saveBasicData);
+    }
+
+    handleWeightChanged(event) {
+        let weight = event.target.value;
+        let basicData = this.state.basicData;
+        basicData.weight = weight;
+        this.setState({ basicData: basicData, basicDataEditing: true }, this.saveBasicData);
+    }
+
+    handleUnitChanged(event) {
+        let unit = event.target.value;
+        let basicData = this.state.basicData;
+        basicData.weightUnit = unit;
+        this.setState({ basicData: basicData, basicDataEditing: true }, this.saveBasicData);
+    }
+
+    saveBasicData() {
+        localStorage.weightUnit = this.state.basicData.weightUnit;
+        localStorage.sex = this.state.basicData.sex;
+        localStorage.weight = this.state.basicData.weight;
+      }
+
+    handleSave(event) {
+        this.setState({ basicDataEditing: false });
     }
 
     removeDrink(drink) {
@@ -69,7 +107,7 @@ export default class Temporary extends Component {
         let tempDrinks = this.state.drinks;
         let id = drink.props.id;
         tempDrinks.splice(index, 1);
-        this.setState({drinks: tempDrinks}, this.saveDrinks);
+        this.setState({ drinks: tempDrinks }, this.saveDrinks);
     }
 
     duplicateDrink(drink) {
@@ -99,9 +137,21 @@ export default class Temporary extends Component {
     }
 
     render() {
-        if (this.state.basicData.sex === null || this.state.basicData.weight === null) {
+        if (this.state.basicData.weight === 0 || this.state.basicDataEditing) {
             return (
-                <div>In order to calculate your blood alcohol content, please fill out your <a href="/settings">basic data</a> first.</div>
+                <div>
+                    <select id="sex" name="sex" className="form-control" required value={this.state.basicData.sex} onChange={this.handleSexChanged}>
+                        <option value="female">Female</option>
+                        <option value="male">Male</option>
+                    </select>
+                    <input id="weight" type="number" className="form-control" name="weight" required placeholder='Weight' value={this.state.basicData.weight} onChange={this.handleWeightChanged} />
+                    <select id="weight_unit" name="weight_unit" className="form-control" required value={this.state.basicData.weightUnit} onChange={this.handleUnitChanged}>
+                        <option value="kg">kg</option>
+                        <option value="lbs">lbs</option>
+                        <option value="stone">stone</option>
+                    </select>
+                    <button onClick={this.handleSave}>Save</button>
+                </div>
             );
         }
 
@@ -145,6 +195,7 @@ export default class Temporary extends Component {
                 <div className="card-header d-flex justify-content-between align-items-center">
                     Session: {this.props.name}
                     <div className="form-check form-check-inline mr-0">
+                        <button onClick={() => {this.setState({ basicDataEditing: true })}}>Basic data</button>
                         <input className="form-check-input" type="checkbox" id="compact" checked={this.state.compact} onChange={this.toggleCompact} />
                         <label className="form-check-label" htmlFor="compact">Compact view</label>
                     </div>
@@ -157,8 +208,8 @@ export default class Temporary extends Component {
                     {newDrink}
                     <hr />
                     {drinks}
-                    <Calculator drinks={this.state.drinks} weight={this.state.basicData.weight} sex={this.state.basicData.sex} />
-                    <BACGraph drinks={this.state.drinks} weight={this.state.basicData.weight} sex={this.state.basicData.sex} />
+                    <Calculator drinks={this.state.drinks} weight={this.state.basicData.weight * WEIGHTS[this.state.basicData.weightUnit]} sex={this.state.basicData.sex} />
+                    <BACGraph drinks={this.state.drinks} weight={this.state.basicData.weight * WEIGHTS[this.state.basicData.weightUnit]} sex={this.state.basicData.sex} />
                 </div>
             </div>
         );

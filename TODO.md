@@ -2,13 +2,13 @@
 
 - Name definition for drinks
 - Basic data for guests
-- Select compare sessions
+- Session names in compare
+- Changing compare breaks things
 
 # Priority 1
 
 - Mixed drinks
-- Compare session graphs
-- Laravel Passport
+- Replace socialite with google solution
 
 # Priority 2
 
