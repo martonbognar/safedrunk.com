@@ -45,25 +45,21 @@ export default class Compare extends Component {
     loadDrinks(index, sessionId) {
         let drinksName = 'drinks' + index;
         let sessionName = 'session' + index;
-        let origin = (index == 1) ? this.state.drinks1 : this.state.drinks2;
         let self = this;
         axios.get(`/api/sessions/${sessionId}/drinks`)
             .then(function (response) {
-                self.setState({[drinksName]: []}, () => {
-                    response.data.forEach(function (drink) {
-                        self.setState({
-                            [drinksName]: origin.concat([{
-                                name: drink.name,
-                                amount: drink.amount,
-                                unit: drink.unit,
-                                percentage: drink.percentage,
-                                beverage_id: drink.beverage_id,
-                                startTime: new Date(drink.start),
-                                key: drink.id,
-                            }]),
-                            [sessionName]: sessionId,
-                        });
-                    });
+                let drinks = response.data.map((drink) => ({
+                    name: drink.name,
+                    amount: drink.amount,
+                    unit: drink.unit,
+                    percentage: drink.percentage,
+                    beverage_id: drink.beverage_id,
+                    startTime: new Date(drink.start),
+                    key: drink.id,
+                }));
+                self.setState({
+                    [drinksName]: drinks,
+                    [sessionName]: sessionId,
                 });
             })
             .catch(function (error) {
@@ -74,18 +70,20 @@ export default class Compare extends Component {
 
     handleSessionChanged(event) {
         let sessionId = event.target.value;
+        const sessionIndex = `sessionName${event.target.name}`;
+        const sessionName = event.target.options[event.target.selectedIndex].text;
         let index = event.target.name;
-        this.loadDrinks(index, sessionId);
+        this.setState({ [sessionIndex]: sessionName}, () => {this.loadDrinks(index, sessionId)});
     }
 
     render() {
         let session1 = null;
         let session2 = null;
         if (this.state.session1 !== 0) {
-            session1 = <div><h2>{this.sessionName1}</h2><BACGraph drinks={this.state.drinks1} weight={this.state.basicData.weight} sex={this.state.basicData.sex} /></div>;
+            session1 = <div><h2>{this.state.sessionName1}</h2><BACGraph drinks={this.state.drinks1} weight={this.state.basicData.weight} sex={this.state.basicData.sex} /></div>;
         }
         if (this.state.session2 !== 0) {
-            session2 = <div><h2>{this.sessionName2}</h2><BACGraph drinks={this.state.drinks2} weight={this.state.basicData.weight} sex={this.state.basicData.sex} /></div>;
+            session2 = <div><h2>{this.state.sessionName2}</h2><BACGraph drinks={this.state.drinks2} weight={this.state.basicData.weight} sex={this.state.basicData.sex} /></div>;
         }
         return (
             <div>

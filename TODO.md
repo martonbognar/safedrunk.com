@@ -1,9 +1,6 @@
 # Priority 0
 
 - Name definition for drinks
-- Basic data for guests
-- Session names in compare
-- Changing compare breaks things
 
 # Priority 1
 
