@@ -5,6 +5,7 @@ Route::post('/beverages', 'BeverageController@store');
 
 Route::get('/beverages/own', 'BeverageController@listOwn');
 Route::get('/beverages/filter/{keyword}', 'BeverageController@listFiltered');
+Route::get('/public/beverages/filter/{keyword}', 'BeverageController@listFilteredPublic');
 
 Route::patch('/beverages/{beverage}', 'BeverageController@update');
 Route::delete('/beverages/{beverage', 'BeverageController@destroy');

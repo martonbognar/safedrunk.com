@@ -5,6 +5,7 @@
 # Priority 1
 
 - Mixed drinks
+- Beverage search component
 - Replace socialite with google solution
 
 # Priority 2
@@ -12,6 +13,7 @@
 - Password resets
 - Rethink graph drawing (+hide effects?)
 - Admin middleware
+- Compare in same graph
 
 # Priority 3
 

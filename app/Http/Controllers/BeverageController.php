@@ -43,12 +43,12 @@ class BeverageController extends Controller
         return $custom->merge(Beverage::getApproved()->get());
     }
 
-    public function listFiltered($keyword)
+    public function listFiltered(Request $request, $keyword)
     {
         $keyword = '%' . $keyword . '%';
         $public = Beverage::getApproved()->where('name', 'LIKE', $keyword)->orderBy('name', 'asc')->get();
-        if (Auth::user()) {
-            $custom = Beverage::getOwn()->where('name', 'LIKE', $keyword)->orderBy('name', 'asc')->get();
+        if ($request->user('api')) {
+            $custom = Beverage::where([['user_id', $request->user('api')->id], ['name', 'LIKE', $keyword]])->orderBy('name', 'asc')->get();
             return $custom->merge($public);
         } else {
             return $public;
@@ -79,10 +79,22 @@ class BeverageController extends Controller
     {
         $beverage = new Beverage();
         $beverage->name = request('name');
-        $beverage->percentage = request('percentage');
         $beverage->pending = request('pending');
         $beverage->user_id = Auth::id();
+        $beverage->mixed = request('mixed');
+        $beverage->percentage = request('percentage');
         $beverage->save();
+        if ($beverage->mixed) {
+            $total = request('total_cl');
+            foreach (request('ingredients') as $ingredient) {
+                $ingredientBeverage = Beverage::find($ingredient['id']);
+                $amount = $ingredient['amount_cl'] / $total;
+                $percentage = $amount * $ingredientBeverage->percentage;
+                $beverage->ingredients()->attach($ingredientBeverage->id, ['percentage' => $percentage]);
+            }
+            $beverage->percentage = 0;
+            $beverage->save();
+        }
         return response()->json(['id' => $beverage->id]);
     }
 

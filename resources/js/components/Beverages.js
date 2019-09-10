@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { UNITS } from './data/units';
+import BeverageLookup from './BeverageLookup';
 
 class Beverages extends Component {
     constructor() {
@@ -7,9 +9,18 @@ class Beverages extends Component {
         this.state = {
             beverages: [],
             name: '',
+            mixed: false,
+            ingredients: [],
+            totalAmount: '',
+            totalUnit: Object.keys(UNITS)[0],
             percentage: '',
             submit: false,
             searchList: [],
+            ingredientUnit: Object.keys(UNITS)[0],
+            ingredientAmount: '',
+            ingredientId: undefined,
+            ingredientName: '',
+            ingredientPercentage: 0,
         };
 
         let self = this;
@@ -25,6 +36,7 @@ class Beverages extends Component {
 
         this.handleInputChanged = this.handleInputChanged.bind(this);
         this.handleCheckboxChanged = this.handleCheckboxChanged.bind(this);
+        this.addIngredient = this.addIngredient.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.remove = this.remove.bind(this);
     }
@@ -61,11 +73,28 @@ class Beverages extends Component {
         });
     }
 
+    addIngredient(event) {
+        let ingredients = this.state.ingredients;
+        ingredients.push({
+            id: this.state.ingredientId,
+            name: this.state.ingredientName,
+            percentage: this.state.ingredientPercentage,
+            amount: this.state.ingredientAmount,
+            unit: this.state.ingredientUnit,
+            amount_cl: UNITS[this.state.ingredientUnit]['multiplier'] * this.state.ingredientAmount,
+        });
+        this.setState({ ingredients: ingredients, ingredientAmount: '', ingredientId: undefined, ingredientName: '' });
+    }
+
     handleSubmit(event) {
         event.preventDefault();
         let self = this;
         let beverage = { 'name': this.state.name, 'percentage': this.state.percentage, 'pending': this.state.submit };
-
+        if (this.state.mixed) {
+            beverage.mixed = true;
+            beverage.total_cl = UNITS[this.state.totalUnit]['multiplier'] * this.state.totalAmount;
+            beverage.ingredients = this.state.ingredients;
+        }
         axios.post(`/api/beverages`, beverage)
             .then(function (response) {
                 beverage.id = response.data.id;
@@ -108,6 +137,40 @@ class Beverages extends Component {
             return <li className="list-group-item d-flex justify-content-between align-items-center" key={beverage.id}>{beverage.name} ({beverage.percentage}%)
                 <button type="button" className="btn btn-danger" onClick={() => this.remove(beverage.id)}>Remove</button></li>;
         }, this);
+
+        let percentage = null;
+        if (this.state.mixed) {
+            let unitList = Object.keys(UNITS).map((unit) => <option key={unit} value={unit}>{UNITS[unit].name}</option>);
+            let ingredientList = this.state.ingredients.map((beverage) => <li key={beverage.id}>{beverage.name} {beverage.amount} {UNITS[beverage.unit]['name']}</li>)
+            percentage = <div>
+                Full drink: <input type="number" name="totalAmount" value={this.state.totalAmount} onChange={this.handleInputChanged} />
+                <select onChange={this.handleInputChanged} value={this.state.totalUnit} className="form-control" name="totalUnit" required>
+                    {unitList}
+                </select>
+                Add new ingredient:
+                <BeverageLookup onBeverageSelect={(beverage) => {this.setState((beverage != undefined) ? { ingredientId: beverage.id, ingredientName: beverage.name, ingredientPercentage: beverage.percentage } : {ingredientId: undefined, ingredientName: '', ingredientPercentage: ''})}} />
+                <div className="form-group col-md-2">
+                    <label htmlFor="amount">Amount</label>
+                    <input type='number' step='0.1' min='0' onChange={this.handleInputChanged} value={this.state.ingredientAmount} placeholder='Amount' required className="form-control" name="ingredientAmount" />
+                </div>
+                <div className="form-group col-md-2">
+                    <label htmlFor="unit">Unit</label>
+                    <select onChange={this.handleInputChanged} value={this.state.ingredientUnit} className="form-control" name="ingredientUnit" required>
+                        {unitList}
+                    </select>
+                </div>
+                <button onClick={this.addIngredient}>Add</button>
+                <ul>
+                    {ingredientList}
+                </ul>
+            </div>
+        } else {
+            percentage = <div className="form-group">
+                <label htmlFor="percentage">Alcohol percentage (%)</label>
+                <input type="text" className="form-control" onChange={this.handleInputChanged} value={this.state.percentage} name="percentage" placeholder='Alcohol percentage (%)' id="percentage" required />
+            </div>;
+        }
+
         return (
             <div>
                 <form onSubmit={this.handleSubmit}>
@@ -122,9 +185,12 @@ class Beverages extends Component {
                         </select>
                     </div>}
                     <div className="form-group">
-                        <label htmlFor="percentage">Alcohol percentage (%)</label>
-                        <input type="text" className="form-control" onChange={this.handleInputChanged} value={this.state.percentage} name="percentage" placeholder='Alcohol percentage (%)' id="percentage" required />
+                        <div className="form-check">
+                            <input className="form-check-input" type="checkbox" name="mixed" id="mixed" checked={this.state.mixed} onChange={this.handleCheckboxChanged} />
+                            <label className="form-check-label" htmlFor="mixed">Mixed drink (contains multiple alcoholic ingredients)</label>
+                        </div>
                     </div>
+                    {percentage}
                     <div className="form-group">
                         <div className="form-check">
                             <input className="form-check-input" type="checkbox" name="submit" id="submit" checked={this.state.submit} onChange={this.handleCheckboxChanged} />
