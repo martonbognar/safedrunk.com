@@ -16,7 +16,7 @@ class Beverage extends Model
 
     public function ingredients()
     {
-        return $this->belongsToMany(Beverage::class, 'mixed', 'beverage_id', 'ingredient_id');
+        return $this->belongsToMany(Beverage::class, 'mixed', 'beverage_id', 'ingredient_id')->withPivot('percentage');
     }
 
     public static function getApproved()

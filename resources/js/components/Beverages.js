@@ -74,6 +74,7 @@ class Beverages extends Component {
     }
 
     addIngredient(event) {
+        event.preventDefault();
         let ingredients = this.state.ingredients;
         ingredients.push({
             id: this.state.ingredientId,
@@ -138,42 +139,39 @@ class Beverages extends Component {
                 <button type="button" className="btn btn-danger" onClick={() => this.remove(beverage.id)}>Remove</button></li>;
         }, this);
 
-        let percentage = null;
-        if (this.state.mixed) {
-            let unitList = Object.keys(UNITS).map((unit) => <option key={unit} value={unit}>{UNITS[unit].name}</option>);
-            let ingredientList = this.state.ingredients.map((beverage) => <li key={beverage.id}>{beverage.name} {beverage.amount} {UNITS[beverage.unit]['name']}</li>)
-            percentage = <div>
-                Full drink: <input type="number" name="totalAmount" value={this.state.totalAmount} onChange={this.handleInputChanged} />
-                <select onChange={this.handleInputChanged} value={this.state.totalUnit} className="form-control" name="totalUnit" required>
+        let percentage = <div className="form-group">
+            <label htmlFor="percentage">Alcohol percentage (%)</label>
+            <input type="text" className="form-control" onChange={this.handleInputChanged} value={this.state.percentage} name="percentage" placeholder='Alcohol percentage (%)' id="percentage" required />
+        </div>;
+        let unitList = Object.keys(UNITS).map((unit) => <option key={unit} value={unit}>{UNITS[unit].name}</option>);
+        let ingredientList = this.state.ingredients.map((beverage) => <li key={beverage.id}>{beverage.name} {beverage.amount} {UNITS[beverage.unit]['name']}</li>);
+        let mixedForm = <div><form>
+            Full drink: <input type="number" name="totalAmount" value={this.state.totalAmount} onChange={this.handleInputChanged} />
+            <select onChange={this.handleInputChanged} value={this.state.totalUnit} className="form-control" name="totalUnit" required>
+                {unitList}
+            </select>
+            Add new ingredient:
+                <BeverageLookup onBeverageSelect={(beverage) => { this.setState((beverage != undefined) ? { ingredientId: beverage.id, ingredientName: beverage.name, ingredientPercentage: beverage.percentage } : { ingredientId: undefined, ingredientName: '', ingredientPercentage: '' }) }} />
+            <div className="form-group col-md-2">
+                <label htmlFor="amount">Amount</label>
+                <input type='number' step='0.1' min='0' onChange={this.handleInputChanged} value={this.state.ingredientAmount} placeholder='Amount' required className="form-control" name="ingredientAmount" />
+            </div>
+            <div className="form-group col-md-2">
+                <label htmlFor="unit">Unit</label>
+                <select onChange={this.handleInputChanged} value={this.state.ingredientUnit} className="form-control" name="ingredientUnit" required>
                     {unitList}
                 </select>
-                Add new ingredient:
-                <BeverageLookup onBeverageSelect={(beverage) => {this.setState((beverage != undefined) ? { ingredientId: beverage.id, ingredientName: beverage.name, ingredientPercentage: beverage.percentage } : {ingredientId: undefined, ingredientName: '', ingredientPercentage: ''})}} />
-                <div className="form-group col-md-2">
-                    <label htmlFor="amount">Amount</label>
-                    <input type='number' step='0.1' min='0' onChange={this.handleInputChanged} value={this.state.ingredientAmount} placeholder='Amount' required className="form-control" name="ingredientAmount" />
-                </div>
-                <div className="form-group col-md-2">
-                    <label htmlFor="unit">Unit</label>
-                    <select onChange={this.handleInputChanged} value={this.state.ingredientUnit} className="form-control" name="ingredientUnit" required>
-                        {unitList}
-                    </select>
-                </div>
-                <button onClick={this.addIngredient}>Add</button>
-                <ul>
-                    {ingredientList}
-                </ul>
             </div>
-        } else {
-            percentage = <div className="form-group">
-                <label htmlFor="percentage">Alcohol percentage (%)</label>
-                <input type="text" className="form-control" onChange={this.handleInputChanged} value={this.state.percentage} name="percentage" placeholder='Alcohol percentage (%)' id="percentage" required />
-            </div>;
-        }
+            <button type="submit" onClick={this.addIngredient}>Add</button>
+        </form>
+            <ul>
+                {ingredientList}
+            </ul>
+        </div>;
 
         return (
             <div>
-                <form onSubmit={this.handleSubmit}>
+                <form onSubmit={this.handleSubmit} id="beverage-submit">
                     <div className="form-group">
                         <label htmlFor="name">Beverage name</label>
                         <input type="text" className="form-control" onChange={this.handleInputChanged} value={this.state.name} name="name" placeholder='Beverage Name' id="name" required />
@@ -186,19 +184,20 @@ class Beverages extends Component {
                     </div>}
                     <div className="form-group">
                         <div className="form-check">
-                            <input className="form-check-input" type="checkbox" name="mixed" id="mixed" checked={this.state.mixed} onChange={this.handleCheckboxChanged} />
-                            <label className="form-check-label" htmlFor="mixed">Mixed drink (contains multiple alcoholic ingredients)</label>
-                        </div>
-                    </div>
-                    {percentage}
-                    <div className="form-group">
-                        <div className="form-check">
                             <input className="form-check-input" type="checkbox" name="submit" id="submit" checked={this.state.submit} onChange={this.handleCheckboxChanged} />
                             <label className="form-check-label" htmlFor="submit">Submit this beverage to the public database</label>
                         </div>
                     </div>
-                    <button type="submit" className="btn btn-primary">Create beverage</button>
+                    <div className="form-group">
+                        <div className="form-check">
+                            <input className="form-check-input" type="checkbox" name="mixed" id="mixed" checked={this.state.mixed} onChange={this.handleCheckboxChanged} />
+                            <label className="form-check-label" htmlFor="mixed">Mixed drink (contains multiple alcoholic ingredients)</label>
+                        </div>
+                    </div>
+                    {(!this.state.mixed) && percentage}
                 </form>
+                {this.state.mixed && mixedForm}
+                <button type="submit" className="btn btn-primary" form="beverage-submit">Create beverage</button>
                 <hr />
                 <ul className="list-group mt-3">
                     {beverages}

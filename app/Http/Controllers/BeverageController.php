@@ -81,18 +81,19 @@ class BeverageController extends Controller
         $beverage->name = request('name');
         $beverage->pending = request('pending');
         $beverage->user_id = Auth::id();
-        $beverage->mixed = request('mixed');
-        $beverage->percentage = request('percentage');
+        $beverage->mixed = (request('mixed') != null) && request('mixed');
+        $beverage->percentage = request('percentage') ?? 0;
         $beverage->save();
         if ($beverage->mixed) {
             $total = request('total_cl');
+            $percentage = 0;
             foreach (request('ingredients') as $ingredient) {
                 $ingredientBeverage = Beverage::find($ingredient['id']);
                 $amount = $ingredient['amount_cl'] / $total;
-                $percentage = $amount * $ingredientBeverage->percentage;
-                $beverage->ingredients()->attach($ingredientBeverage->id, ['percentage' => $percentage]);
+                $percentage += $amount * ($ingredientBeverage->percentage / 100.0);
+                $beverage->ingredients()->attach($ingredientBeverage->id, ['percentage' => $amount]);
             }
-            $beverage->percentage = 0;
+            $beverage->percentage = $percentage * 100;
             $beverage->save();
         }
         return response()->json(['id' => $beverage->id]);

@@ -8,7 +8,7 @@ Route::get('/beverages/filter/{keyword}', 'BeverageController@listFiltered');
 Route::get('/public/beverages/filter/{keyword}', 'BeverageController@listFilteredPublic');
 
 Route::patch('/beverages/{beverage}', 'BeverageController@update');
-Route::delete('/beverages/{beverage', 'BeverageController@destroy');
+Route::delete('/beverages/{beverage}', 'BeverageController@destroy');
 
 Route::get('/beverages/pending', 'BeverageController@listPending');
 
