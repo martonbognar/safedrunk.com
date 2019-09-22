@@ -143,26 +143,51 @@ class Beverages extends Component {
             <label htmlFor="percentage">Alcohol percentage (%)</label>
             <input type="text" className="form-control" onChange={this.handleInputChanged} value={this.state.percentage} name="percentage" placeholder='Alcohol percentage (%)' id="percentage" required />
         </div>;
+
         let unitList = Object.keys(UNITS).map((unit) => <option key={unit} value={unit}>{UNITS[unit].name}</option>);
+
         let ingredientList = this.state.ingredients.map((beverage) => <li key={beverage.id}>{beverage.name} {beverage.amount} {UNITS[beverage.unit]['name']}</li>);
+
         let mixedForm = <div><form>
-            Full drink: <input type="number" name="totalAmount" value={this.state.totalAmount} onChange={this.handleInputChanged} />
-            <select onChange={this.handleInputChanged} value={this.state.totalUnit} className="form-control" name="totalUnit" required>
-                {unitList}
-            </select>
+            <div class="form-group row">
+                <div className="form-group col-md-4">
+                    Full drink:
+                </div>
+                <div className="form-group col-md-4">
+                    <label htmlFor="amount">Amount</label>
+                    <input type='number' step='0.1' min='0' onChange={this.handleInputChanged} value={this.state.totalAmount} placeholder='Amount' required className="form-control" name="totalAmount" />
+                </div>
+                <div className="form-group col-md-2">
+                    <label htmlFor="unit">Unit</label>
+                    <select onChange={this.handleInputChanged} value={this.state.totalUnit} className="form-control" name="totalUnit" required>
+                        {unitList}
+                    </select>
+                </div>
+            </div>
+            <hr />
             Add new ingredient:
-                <BeverageLookup onBeverageSelect={(beverage) => { this.setState((beverage != undefined) ? { ingredientId: beverage.id, ingredientName: beverage.name, ingredientPercentage: beverage.percentage } : { ingredientId: undefined, ingredientName: '', ingredientPercentage: '' }) }} />
-            <div className="form-group col-md-2">
-                <label htmlFor="amount">Amount</label>
-                <input type='number' step='0.1' min='0' onChange={this.handleInputChanged} value={this.state.ingredientAmount} placeholder='Amount' required className="form-control" name="ingredientAmount" />
+                <BeverageLookup onBeverageSelect={(beverage) => { this.setState((beverage != undefined) ? { ingredientId: beverage.id, ingredientName: beverage.name, ingredientPercentage: beverage.percentage } : { ingredientId: undefined, ingredientName: '', ingredientPercentage: '' }) }} label="Search for an ingredient" />
+
+
+            <div class="form-group row">
+                <div className="form-group col-md-4">
+                    Ingredient details:
+                </div>
+                <div className="form-group col-md-4">
+                    <label htmlFor="amount">Amount</label>
+                    <input type='number' step='0.1' min='0' onChange={this.handleInputChanged} value={this.state.ingredientAmount} placeholder='Ingredient amount' required className="form-control" name="ingredientAmount" />
+                </div>
+
+                <div className="form-group col-md-2">
+                    <label htmlFor="unit">Unit</label>
+                    <select onChange={this.handleInputChanged} value={this.state.ingredientUnit} className="form-control" name="ingredientUnit" required>
+                        {unitList}
+                    </select>
+                </div>
             </div>
-            <div className="form-group col-md-2">
-                <label htmlFor="unit">Unit</label>
-                <select onChange={this.handleInputChanged} value={this.state.ingredientUnit} className="form-control" name="ingredientUnit" required>
-                    {unitList}
-                </select>
-            </div>
-            <button type="submit" onClick={this.addIngredient}>Add</button>
+
+
+            <button type="submit" onClick={this.addIngredient} className='btn btn-success'>Add ingredient to beverage</button>
         </form>
             <ul>
                 {ingredientList}

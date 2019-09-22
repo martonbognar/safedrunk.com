@@ -46,12 +46,12 @@ export default class BeverageLookup extends Component {
 
     render() {
         return (
-            <div>
-                <div className="form-group">
-                    <label htmlFor="name">Beverage name</label>
-                    <input type="text" className="form-control" onChange={this.handleSearch} value={this.state.term} name="name" placeholder='Beverage Name' id="name" required />
+            <div class="form-group row">
+                <div className="form-group col-md-6">
+                    <label htmlFor="name">{this.props.label}</label>
+                    <input type="text" className="form-control" onChange={this.handleSearch} value={this.state.term} name="name" placeholder={this.props.label} id="name" required />
                 </div>
-                <div className="form-group">
+                <div className="form-group col-md-6">
                     <label htmlFor="list">Matching beverages:</label>
                     <select id="list" className="form-control" onChange={this.updateSelected}>
                         {this.state.searchList.map((beverage) => <option key={beverage.id} value={beverage.id}>{beverage.name} ({beverage.percentage})</option>)}
