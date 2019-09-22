@@ -93,7 +93,13 @@
         </nav>
 
         <main class="pt-4">
-            @yield('content')
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        @yield('content')
+                    </div>
+                </div>
+            </div>
         </main>
 
         <footer class="footer text-center">
