@@ -20,8 +20,17 @@ class BACGraph extends Component {
         let currentTime = new Date();
 
         if (drinks.length > 0) {
-            let time = new Date(drinks[0].startTime.getTime());
+            let time = new Date(drinks[0].startTime.getTime())
             let lastDot = new Date(drinks[drinks.length - 1].startTime.getTime());
+            drinks.forEach((drink) => {
+                let current = new Date(drink.startTime.getTime());
+                if (current < time) {
+                    time = current;
+                }
+                if (lastDot < current) {
+                    lastDot = current;
+                }
+            });
             lastDot.setHours(lastDot.getHours() + 2);
             let bac = 0;
             let consideredDrinks = [];

@@ -29,7 +29,14 @@ function calculateEbac(drinks, endTime, userData) {
         return 0;
     }
 
-    let period = (endTime.getTime() - drinks[0].startTime.getTime()) / (1000 * 60 * 60);
+    let earliest = drinks[0].startTime.getTime();
+    drinks.forEach((drink) => {
+        if (drink.startTime.getTime() < earliest) {
+            earliest = drink.startTime.getTime();
+        }
+    });
+
+    let period = (endTime.getTime() - earliest) / (1000 * 60 * 60);
 
     let grams = drinks.map(drink => {
         let amount = UNITS[drink.unit]['multiplier'] * drink.amount;

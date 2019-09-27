@@ -17,7 +17,7 @@
 
 # Priority 3
 
-- Reduce JS file size as much as possible
+- Reduce JS file size as much as possible (current: 855 KiB)
 - Move common view code to layout
 - Uniform variable naming
 - Bind instead of empty arrow functions?

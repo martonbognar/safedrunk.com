@@ -6,7 +6,7 @@ import BACGraph from './BACGraph';
 import { WEIGHTS } from './data/units';
 import QuickNewDrink from './DrinkForms/Quick';
 
-export default class Temporary extends Component {
+export default class Try extends Component {
     constructor(props) {
         super(props);
 
@@ -193,7 +193,7 @@ export default class Temporary extends Component {
         return (
             <div className="card">
                 <div className="card-header d-flex justify-content-between align-items-center">
-                    Session: {this.props.name}
+                    Temporary session
                     <div className="form-check form-check-inline mr-0">
                         <button onClick={() => {this.setState({ basicDataEditing: true })}}>Basic data</button>
                         <input className="form-check-input" type="checkbox" id="compact" checked={this.state.compact} onChange={this.toggleCompact} />
