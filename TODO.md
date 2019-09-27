@@ -14,12 +14,16 @@
 - Rethink graph drawing (+hide effects?)
 - Admin middleware
 - Compare in same graph
+- try keygen int
+- basic data editing component
+- function to get earliest/latest drink
 
 # Priority 3
 
 - Reduce JS file size as much as possible (current: 855 KiB)
 - Move common view code to layout
 - Uniform variable naming
+- change setstate functions
 - Bind instead of empty arrow functions?
 - HSTS
 - Do we need the username?

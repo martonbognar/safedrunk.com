@@ -5,14 +5,10 @@ export default class Drink extends Component {
     constructor(props) {
         super(props);
 
-        console.log(this.props.favoriteId);
-
         this.state = {
             favorite: !!this.props.favoriteId,
             timeText: intervalToText(this.props.startTime),
         }
-
-        console.log(this.state);
 
         this.remove = this.remove.bind(this);
         this.duplicate = this.duplicate.bind(this);
@@ -33,11 +29,11 @@ export default class Drink extends Component {
     }
 
     remove() {
-        this.props.onRemove(this);
+        this.props.onRemove(this.props);
     }
 
     duplicate() {
-        this.props.onDuplicate(this);
+        this.props.onDuplicate(this.props);
     }
 
     favorite() {

@@ -6,47 +6,54 @@ import BACGraph from './BACGraph';
 import { WEIGHTS } from './data/units';
 import QuickNewDrink from './DrinkForms/Quick';
 
+const localStorageError = <p>It seems like your browser does not support LocalStorage (or it's turned off). Please upgrade to a modern browser, change your settings, or create an account to try out the site (LocalStorage is not required after you log in).</p>;
+
 export default class Try extends Component {
     constructor(props) {
         super(props);
 
-        let localStorageExists = typeof (Storage) !== 'undefined';
+        this.state = this.getStateFromLS();
 
-        let url = window.location.href;
-        if (url.slice(-1) !== '/') {
-            url += "/";
-        }
-        let pieces = url.split("/");
-
-        this.state = {
-            id: parseInt(pieces[pieces.length - 2]),
-            basicData: {
-                sex: localStorageExists && localStorage.sex ? localStorage.sex : 'female',
-                weight: localStorageExists && localStorage.weight ? localStorage.weight : 0,
-                weightUnit: localStorageExists && localStorage.weightUnit ? localStorage.weightUnit : 'kg',
-            },
-            basicDataEditing: false,
-            drinks: (localStorageExists && localStorage.drinks) ? JSON.parse(localStorage.drinks).map((drink) => {
-                drink.startTime = new Date(drink.startTime);
-                return drink;
-            }) : [],
-            showNewDrink: 'none',
-            keygen: localStorageExists && localStorage.keygen ? localStorage.keygen : 0,
-            compact: localStorageExists && "true" === localStorage.compact,
-        };
-
+        this.getStateFromLS = this.getStateFromLS.bind(this);
+        this.saveDrinks = this.saveDrinks.bind(this);
         this.submitDrink = this.submitDrink.bind(this);
+        this.handleValueChanged = this.handleValueChanged.bind(this);
+        this.handleSave = this.handleSave.bind(this);
         this.removeDrink = this.removeDrink.bind(this);
         this.duplicateDrink = this.duplicateDrink.bind(this);
         this.toggleDrinkForm = this.toggleDrinkForm.bind(this);
         this.cancelDrinkForm = this.cancelDrinkForm.bind(this);
         this.toggleCompact = this.toggleCompact.bind(this);
-        this.saveDrinks = this.saveDrinks.bind(this);
-        this.handleSexChanged = this.handleSexChanged.bind(this);
-        this.handleWeightChanged = this.handleWeightChanged.bind(this);
-        this.handleUnitChanged = this.handleUnitChanged.bind(this);
-        this.handleSave = this.handleSave.bind(this);
-        this.saveBasicData = this.saveBasicData.bind(this);
+        this.basicDataComponent = this.basicDataComponent.bind(this);
+        this.longSessionWarning = this.longSessionWarning.bind(this);
+        this.addDrinkComponent = this.addDrinkComponent.bind(this);
+    }
+
+    getStateFromLS() {
+        let localStorageExists = typeof (Storage) !== 'undefined';
+
+        if (!localStorageExists) {
+            return { localStorageExists: false };
+        }
+
+        return {
+            localStorageExists: true,
+            basicDataEditing: false,
+            showNewDrink: 'none',
+            basicData: {
+                sex: localStorage.sex ? localStorage.sex : 'female',
+                weight: localStorage.weight ? localStorage.weight : 0,
+                weightUnit: localStorage.weightUnit ? localStorage.weightUnit : 'kg',
+            },
+            drinks: localStorage.drinks
+                ? JSON.parse(localStorage.drinks).map((drink) => {
+                    drink.startTime = new Date(drink.startTime);
+                    return drink;
+                })
+                : [],
+            keygen: localStorage.keygen ? localStorage.keygen : 0,
+            compact: "true" === localStorage.compact,
+        };
     }
 
     saveDrinks() {
@@ -59,64 +66,46 @@ export default class Try extends Component {
             data.start = Math.floor(data.startTime.getTime() / 1000);
         }
         data.key = this.state.keygen;
-        this.setState({ keygen: this.state.keygen + 1 });
-        this.setState({ drinks: this.state.drinks.concat([data]) }, this.saveDrinks);
-        this.setState({ showNewDrink: 'none' });
+        this.setState({
+            keygen: this.state.keygen + 1,
+            showNewDrink: 'none',
+            drinks: this.state.drinks.concat([data])
+        }, this.saveDrinks);
     }
 
-    handleSexChanged(event) {
-        let sex = event.target.value;
+    handleValueChanged(event) {
+        let name = event.target.name;
+        let value = event.target.value;
         let basicData = this.state.basicData;
-        basicData.sex = sex;
-        this.setState({ basicData: basicData, basicDataEditing: true }, this.saveBasicData);
+        basicData[name] = value;
+        localStorage[name] = value;
+        this.setState({ basicData: basicData, basicDataEditing: true });
     }
 
-    handleWeightChanged(event) {
-        let weight = event.target.value;
-        let basicData = this.state.basicData;
-        basicData.weight = weight;
-        this.setState({ basicData: basicData, basicDataEditing: true }, this.saveBasicData);
-    }
-
-    handleUnitChanged(event) {
-        let unit = event.target.value;
-        let basicData = this.state.basicData;
-        basicData.weightUnit = unit;
-        this.setState({ basicData: basicData, basicDataEditing: true }, this.saveBasicData);
-    }
-
-    saveBasicData() {
-        localStorage.weightUnit = this.state.basicData.weightUnit;
-        localStorage.sex = this.state.basicData.sex;
-        localStorage.weight = this.state.basicData.weight;
-      }
-
-    handleSave(event) {
+    handleSave() {
         this.setState({ basicDataEditing: false });
     }
 
     removeDrink(drink) {
-        console.log(this.state.drinks);
-        console.log(drink);
         let index = -1;
         this.state.drinks.forEach(function (d, i) {
-            if (d.key === drink.props.id) {
+            if (d.key === drink.id) {
                 index = i;
             }
         })
         let tempDrinks = this.state.drinks;
-        let id = drink.props.id;
         tempDrinks.splice(index, 1);
         this.setState({ drinks: tempDrinks }, this.saveDrinks);
     }
 
     duplicateDrink(drink) {
+        console.log(drink);
         this.submitDrink({
             name: drink.name,
             amount: drink.amount,
             percentage: drink.percentage,
             unit: drink.unit,
-            startTime: Date.now(),
+            startTime: new Date(),
         });
     }
 
@@ -136,26 +125,65 @@ export default class Try extends Component {
         });
     }
 
-    render() {
-        if (this.state.basicData.weight === 0 || this.state.basicDataEditing) {
-            return (
-                <div>
-                    <select id="sex" name="sex" className="form-control" required value={this.state.basicData.sex} onChange={this.handleSexChanged}>
-                        <option value="female">Female</option>
-                        <option value="male">Male</option>
-                    </select>
-                    <input id="weight" type="number" className="form-control" name="weight" required placeholder='Weight' value={this.state.basicData.weight} onChange={this.handleWeightChanged} />
-                    <select id="weight_unit" name="weight_unit" className="form-control" required value={this.state.basicData.weightUnit} onChange={this.handleUnitChanged}>
-                        <option value="kg">kg</option>
-                        <option value="lbs">lbs</option>
-                        <option value="stone">stone</option>
-                    </select>
-                    <button onClick={this.handleSave}>Save</button>
-                </div>
-            );
+    basicDataComponent() {
+        return <div>
+            <select name="sex" className="form-control" required value={this.state.basicData.sex} onChange={this.handleValueChanged}>
+                <option value="female">Female</option>
+                <option value="male">Male</option>
+            </select>
+            <input type="number" className="form-control" name="weight" required placeholder='Weight' value={this.state.basicData.weight} onChange={this.handleValueChanged} />
+            <select name="weightUnit" className="form-control" required value={this.state.basicData.weightUnit} onChange={this.handleValueChanged}>
+                <option value="kg">kg</option>
+                <option value="lbs">lbs</option>
+                <option value="stone">stone</option>
+            </select>
+            <button className="btn btn-outline-success" onClick={this.handleSave}>Save</button>
+        </div>;
+    }
+
+    longSessionWarning() {
+        if (this.state.drinks.length === 0) {
+            return null;
         }
 
-        let rows = this.state.drinks.map(drink =>
+        let earliest = this.state.drinks[0].startTime.getTime();
+        this.state.drinks.forEach((drink) => {
+            if (drink.startTime.getTime() < earliest) {
+                earliest = drink.startTime.getTime();
+            }
+        });
+
+        if (earliest + (1000 * 60 * 60 * 14) < new Date().getTime()) {
+            return <div className="alert alert-warning" role="alert">
+                The first drink in this session was created more than 14 hours ago. If you add a new drink now, the calculated blood alcohol level might be very inaccurate. If you're starting now, please create another session. If you've been drinking for more than 14 hours, it's probably time to stop.
+            </div>;
+        } else {
+            return null;
+        }
+    }
+
+    addDrinkComponent() {
+        switch (this.state.showNewDrink) {
+            case 'none':
+                return <div className="btn-group" role="group" aria-label="Form controls">
+                    <button name="quick" className="btn btn-outline-primary" onClick={this.toggleDrinkForm}>Quick add</button>
+                    <button name="default" className="btn btn-outline-primary" onClick={this.toggleDrinkForm}>Beverage list</button>
+                </div>;
+            case 'quick': return <QuickNewDrink onChange={this.submitDrink} cancel={this.cancelDrinkForm} />;
+            default: return <DefaultNewDrink onChange={this.submitDrink} cancel={this.cancelDrinkForm} />;
+        }
+    }
+
+    render() {
+        if (this.state.localStorageExists === false) {
+            return localStorageError;
+        }
+
+        if (this.state.basicData.weight === 0 || this.state.basicDataEditing) {
+            return this.basicDataComponent();
+        }
+
+        let drinks = this.state.drinks.map(drink =>
             <Drink
                 key={drink.key}
                 id={drink.key}
@@ -172,42 +200,23 @@ export default class Try extends Component {
             />
         );
 
-        let longSession = this.state.drinks.length > 0 && this.state.drinks[0].startTime.getTime() + (1000 * 60 * 60 * 14) < new Date().getTime();
-
-        let newDrink = null;
-
-        switch (this.state.showNewDrink) {
-            case 'none':
-                newDrink =
-                    <div className="btn-group" role="group" aria-label="Form controls">
-                        <button type="submit" name="quick" className="btn btn-outline-primary" onClick={this.toggleDrinkForm}>Quick add</button>
-                        <button type="button" name="default" className="btn btn-outline-primary" onClick={this.toggleDrinkForm}>Beverage list</button>
-                    </div>;
-                break;
-            case 'quick': newDrink = <QuickNewDrink onChange={this.submitDrink} cancel={this.cancelDrinkForm} />; break;
-            default: newDrink = <DefaultNewDrink onChange={this.submitDrink} cancel={this.cancelDrinkForm} />;
-        }
-
-        let drinks = this.state.compact ? <ul className="list-group mb-3">{rows}</ul> : <div className="row">{rows}</div>;
+        let drinkContainer = this.state.compact ? <ul className="list-group mb-3">{drinks}</ul> : <div className="row">{drinks}</div>;
 
         return (
             <div className="card">
                 <div className="card-header d-flex justify-content-between align-items-center">
                     Temporary session
                     <div className="form-check form-check-inline mr-0">
-                        <button onClick={() => {this.setState({ basicDataEditing: true })}}>Basic data</button>
                         <input className="form-check-input" type="checkbox" id="compact" checked={this.state.compact} onChange={this.toggleCompact} />
                         <label className="form-check-label" htmlFor="compact">Compact view</label>
+                        <button className="btn btn-outline-primary ml-2" onClick={() => { this.setState({ basicDataEditing: true }) }}>Settings</button>
                     </div>
                 </div>
                 <div className="card-body">
-                    {longSession &&
-                        <div className="alert alert-warning" role="alert">
-                            The first drink in this session was created more than 14 hours ago. If you add a new drink now, the calculated blood alcohol level might be very inaccurate. If you're starting now, please create another session. If you've been drinking for more than 14 hours, it's probably time to stop.
-                        </div>}
-                    {newDrink}
+                    {this.longSessionWarning()}
+                    {this.addDrinkComponent()}
                     <hr />
-                    {drinks}
+                    {drinkContainer}
                     <Calculator drinks={this.state.drinks} weight={this.state.basicData.weight * WEIGHTS[this.state.basicData.weightUnit]} sex={this.state.basicData.sex} />
                     <BACGraph drinks={this.state.drinks} weight={this.state.basicData.weight * WEIGHTS[this.state.basicData.weightUnit]} sex={this.state.basicData.sex} />
                 </div>

@@ -102,12 +102,12 @@ export default class App extends Component {
         let index = -1;
         // TODO: ?
         this.state.drinks.forEach(function (d, i) {
-            if (d.key === drink.props.id) {
+            if (d.key === drink.id) {
                 index = i;
             }
         })
         let tempDrinks = this.state.drinks;
-        let id = drink.props.id;
+        let id = drink.id;
         tempDrinks.splice(index, 1);
         axios.delete(`/api/sessions/${this.state.id}/drinks/${id}`)
             .then(function (response) {
