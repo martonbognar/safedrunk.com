@@ -6,7 +6,11 @@ import BACGraph from './BACGraph';
 import {WEIGHTS} from './data/units';
 import QuickNewDrink from './DrinkForms/Quick';
 
-const localStorageError = <p>It seems like your browser does not support LocalStorage (or it's turned off). Please upgrade to a modern browser, change your settings, or create an account to try out the site (LocalStorage is not required after you log in).</p>;
+const localStorageError = <p>
+  It seems like your browser does not support LocalStorage (or it's turned off).
+  Please upgrade to a modern browser, change your settings, or create an account
+  to try out the site (LocalStorage is not required after you log in).
+</p>;
 
 export default class Try extends Component {
   constructor(props) {
@@ -155,7 +159,11 @@ export default class Try extends Component {
 
     if (earliest + (1000 * 60 * 60 * 14) < new Date().getTime()) {
       return <div className="alert alert-warning" role="alert">
-                The first drink in this session was created more than 14 hours ago. If you add a new drink now, the calculated blood alcohol level might be very inaccurate. If you're starting now, please create another session. If you've been drinking for more than 14 hours, it's probably time to stop.
+        The first drink in this session was created more than 14 hours ago.
+        If you add a new drink now, the calculated blood alcohol level might be
+        very inaccurate. If you're starting now, please create another session.
+        If you've been drinking for more than 14 hours, it's probably time to
+        stop.
       </div>;
     } else {
       return null;
@@ -205,7 +213,7 @@ export default class Try extends Component {
     return (
       <div className="card">
         <div className="card-header d-flex justify-content-between align-items-center">
-                    Temporary session
+          Temporary session
           <div className="form-check form-check-inline mr-0">
             <input className="form-check-input" type="checkbox" id="compact" checked={this.state.compact} onChange={this.toggleCompact} />
             <label className="form-check-label" htmlFor="compact">Compact view</label>
