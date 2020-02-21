@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { UNITS } from './data/units';
-var Chart = require('chart.js');
+import React, {Component} from 'react';
+import {UNITS} from './data/units';
+const Chart = require('chart.js');
 
 class Statistics extends Component {
   constructor(props) {
@@ -8,41 +8,42 @@ class Statistics extends Component {
     this.canvas = React.createRef();
     this.chart = null;
     this.state = {
-      sessions: ["", "", "", "", "", "", ""],
+      sessions: ['', '', '', '', '', '', ''],
       numberOfDrinks: [0, 0, 0, 0, 0, 0, 0],
       alcoholConsumed: [0, 0, 0, 0, 0, 0, 0],
     };
 
-    let self = this;
+    const self = this;
 
     axios.get(`/api/sessions/recent`)
-      .then(function (response) {
-        let sessionNames = response.data.map((session) => session.name);
-        let sessionIds = response.data.map((session) => session.id);
-        self.setState({ sessions: sessionNames });
+        .then(function(response) {
+          const sessionNames = response.data.map((session) => session.name);
+          const sessionIds = response.data.map((session) => session.id);
+          self.setState({sessions: sessionNames});
 
-        for (let x = 0; x < sessionNames.length; ++x) {
-          axios.get(`/api/sessions/${sessionIds[x]}/drinks`).then(function (response) {
-            let copyNr = self.state.numberOfDrinks.slice();
-            copyNr[x] = response.data.length;
-            let copyAlc = self.state.alcoholConsumed.slice();
+          for (let x = 0; x < sessionNames.length; ++x) {
+            axios.get(`/api/sessions/${sessionIds[x]}/drinks`).then(function(response) {
+              const copyNr = self.state.numberOfDrinks.slice();
+              copyNr[x] = response.data.length;
+              const copyAlc = self.state.alcoholConsumed.slice();
 
-            copyAlc[x] = response.data.map((drink) => {
-              return parseInt(UNITS[drink.unit]['multiplier'] * drink.amount, 10) * parseInt(drink.percentage, 10) / 100;
-            }).reduce((s, a) => { return s + a }, 0);
+              copyAlc[x] = response.data.map((drink) => {
+                return parseInt(UNITS[drink.unit]['multiplier'] * drink.amount, 10) * parseInt(drink.percentage, 10) / 100;
+              }).reduce((s, a) => {
+                return s + a;
+              }, 0);
 
-            self.setState({ numberOfDrinks: copyNr, alcoholConsumed: copyAlc });
-          }).catch(function (error) {
-            console.error(error);
-            alert("There was a connection error. Please try reloading the page.");
-          });
-        }
-
-      })
-      .catch(function (error) {
-        console.error(error);
-        alert("There was a connection error. Please try reloading the page.");
-      });
+              self.setState({numberOfDrinks: copyNr, alcoholConsumed: copyAlc});
+            }).catch(function(error) {
+              console.error(error);
+              alert('There was a connection error. Please try reloading the page.');
+            });
+          }
+        })
+        .catch(function(error) {
+          console.error(error);
+          alert('There was a connection error. Please try reloading the page.');
+        });
   }
 
   setState(obj) {
@@ -63,40 +64,40 @@ class Statistics extends Component {
 
   componentDidMount() {
     const canvas = this.canvas.current;
-    let self = this;
+    const self = this;
     this.chart = new Chart(canvas, {
-      type: "bar",
+      type: 'bar',
       data: {
         labels: self.state.sessions,
         datasets: [
           {
-            label: "Number of drinks",
+            label: 'Number of drinks',
             data: self.state.numberOfDrinks,
-            backgroundColor: "#3490dc",
+            backgroundColor: '#3490dc',
           },
           {
-            label: "Amount of pure alcohol (cl)",
+            label: 'Amount of pure alcohol (cl)',
             data: self.state.alcoholConsumed,
-            backgroundColor: "#e3342f",
-          }
-        ]
+            backgroundColor: '#e3342f',
+          },
+        ],
       },
       options: {
-          scales: {
-              yAxes: [{
-                  ticks: {
-                      beginAtZero: true
-                  }
-              }]
-          }
-      }
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true,
+            },
+          }],
+        },
+      },
     });
   }
 
   render() {
     return (
       <canvas
-        style={{ width: '100%' }}
+        style={{width: '100%'}}
         ref={this.canvas}
       />
     );
