@@ -11,8 +11,7 @@ class SessionController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->only(['showAll', 'show']);
-        $this->middleware('auth:api')->except(['showAll', 'show']);
+        $this->middleware('auth');
     }
 
     public function showAll()

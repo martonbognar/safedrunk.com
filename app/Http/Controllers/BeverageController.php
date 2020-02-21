@@ -10,8 +10,7 @@ class BeverageController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->only(['approve', 'create']);
-        $this->middleware('auth:api')->except(['approve', 'create', 'listFiltered']);
+        $this->middleware('auth')->except(['listFiltered']);
     }
 
     public function approve()

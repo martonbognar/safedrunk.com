@@ -11,6 +11,7 @@
 - Replace socialite with google solution
 - Testing
 - Favicon
+- Don't calculate ebac twice
 
 # Priority 2
 
