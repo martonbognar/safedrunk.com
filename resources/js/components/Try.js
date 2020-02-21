@@ -227,7 +227,7 @@ export default class Try extends Component {
           <hr />
           {drinkContainer}
           <Calculator drinks={this.state.drinks} weight={this.state.basicData.weight * WEIGHTS[this.state.basicData.weightUnit]} sex={this.state.basicData.sex} />
-          <BACGraph drinks={this.state.drinks} weight={this.state.basicData.weight * WEIGHTS[this.state.basicData.weightUnit]} sex={this.state.basicData.sex} />
+          <BACGraph drinks={this.state.drinks} userData={{weight: this.state.basicData.weight * WEIGHTS[this.state.basicData.weightUnit], sex: this.state.basicData.sex}} />
         </div>
       </div>
     );
