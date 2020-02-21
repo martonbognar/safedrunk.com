@@ -8,11 +8,6 @@ use Illuminate\Http\Request;
 
 class BeverageController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth')->except(['listFiltered']);
-    }
-
     public function approve()
     {
         if (!Auth::user()->administrator) {
@@ -46,12 +41,8 @@ class BeverageController extends Controller
     {
         $keyword = '%' . $keyword . '%';
         $public = Beverage::getApproved()->where('name', 'LIKE', $keyword)->orderBy('name', 'asc')->get();
-        if ($request->user('api')) {
-            $custom = Beverage::where([['user_id', $request->user('api')->id], ['name', 'LIKE', $keyword]])->orderBy('name', 'asc')->get();
-            return $custom->merge($public);
-        } else {
-            return $public;
-        }
+        $custom = Beverage::where([['user_id', Auth::user()->id], ['name', 'LIKE', $keyword]])->orderBy('name', 'asc')->get();
+        return $custom->merge($public);
     }
 
     public function listFilteredPublic($keyword)
