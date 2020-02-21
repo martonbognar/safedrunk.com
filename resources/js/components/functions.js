@@ -46,7 +46,7 @@ function ebacSteps(drinks, userData) {
     comeDown: [],
   };
 
-  if (drink.length === 0) {
+  if (drinks.length === 0) {
     return data;
   }
 

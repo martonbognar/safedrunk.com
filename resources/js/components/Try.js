@@ -103,7 +103,6 @@ export default class Try extends Component {
   }
 
   duplicateDrink(drink) {
-    console.log(drink);
     this.submitDrink({
       name: drink.name,
       amount: drink.amount,
@@ -205,7 +204,7 @@ export default class Try extends Component {
         onDuplicate={this.duplicateDrink}
         compact={this.state.compact}
         temporary={true}
-      />
+      />,
     );
 
     const drinkContainer = this.state.compact ? <ul className="list-group mb-3">{drinks}</ul> : <div className="row">{drinks}</div>;

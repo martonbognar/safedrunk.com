@@ -12,9 +12,12 @@ class BACGraph extends Component {
 
   updateGraph() {
     const data = ebacSteps(this.props.drinks, this.props.userData);
-    this.chart.data.labels = data.output.keys;
-    this.chart.data.datasets[0].data = data.output.values;
-    this.chart.data.datasets[1].data = data.comeDown.values;
+    const keys = [].concat(...data.output.map((obj) => Object.keys(obj)));
+    const regular = [].concat(...data.output.map((obj) => Object.values(obj)));
+    const comeDown = [].concat(...data.comeDown.map((obj) => Object.values(obj)));
+    this.chart.data.labels = keys;
+    this.chart.data.datasets[0].data = regular;
+    this.chart.data.datasets[1].data = comeDown;
     this.chart.update();
   }
 

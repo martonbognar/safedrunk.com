@@ -120,10 +120,12 @@ export default class App extends Component {
   }
 
   duplicateDrink(drink) {
-    axios.post(`/api/sessions/${this.state.id}/drinks/${drink.id}/duplicate`, {start: Date.now()})
+    const self = this;
+    axios.post(`/api/sessions/${this.state.id}/drinks/${drink.id}/duplicate`)
         .then(function(response) {
           drink.key = response.data.id;
           drink.id = response.data.id;
+          drink.startTime = new Date();
           self.setState({drinks: self.state.drinks.concat([drink])});
         })
         .catch(function(error) {
@@ -180,7 +182,7 @@ export default class App extends Component {
         onDuplicate={this.duplicateDrink}
         compact={this.state.compact}
         favoriteId={this.favoriteForDrink(drink)}
-      />
+      />,
     );
 
     const longSession = this.state.drinks.length > 0 && this.state.drinks[0].startTime.getTime() + (1000 * 60 * 60 * 14) < new Date().getTime();
@@ -221,7 +223,7 @@ export default class App extends Component {
           <hr />
           {drinks}
           <Calculator drinks={this.state.drinks} weight={this.state.basicData.weight} sex={this.state.basicData.sex} />
-          <BACGraph drinks={this.state.drinks} weight={this.state.basicData.weight} sex={this.state.basicData.sex} />
+          <BACGraph drinks={this.state.drinks} userData={this.state.basicData} />
         </div>
       </div>
     );

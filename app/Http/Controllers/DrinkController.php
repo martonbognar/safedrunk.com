@@ -59,10 +59,10 @@ class DrinkController extends Controller
         return response()->json(['id' => $drink->id]);
     }
 
-    public function duplicate(Request $request, Drink $drink)
+    public function duplicate(Request $request, Session $session, Drink $drink)
     {
         $newDrink = $drink->replicate();
-        $newDrink->start = Carbon::createFromTimestamp(request('start'));
+        $newDrink->start = Carbon::now();
         $newDrink->save();
         return response()->json(['id' => $newDrink->id]);
     }

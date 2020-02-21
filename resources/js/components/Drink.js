@@ -20,7 +20,7 @@ export default class Drink extends Component {
         () => this.setState({
           timeText: intervalToText(this.props.startTime),
         }),
-        1000
+        1000,
     );
   }
 
@@ -29,11 +29,18 @@ export default class Drink extends Component {
   }
 
   remove() {
-    this.props.onRemove(this.props);
+    this.props.onRemove({'id': this.props.id});
   }
 
   duplicate() {
-    this.props.onDuplicate(this.props);
+    this.props.onDuplicate({
+      id: this.props.id,
+      name: this.props.name,
+      amount: this.props.amount,
+      unit: this.props.unit,
+      percentage: this.props.percentage,
+      beverage_id: this.props.beverage_id,
+    });
   }
 
   favorite() {
