@@ -1,12 +1,16 @@
 # Priority 0
 
-- Name definition for drinks
+- More visible Try button
+- Duplicate should just be a client side thing?
+- Favorite list update when starred
 
 # Priority 1
 
 - Mixed drinks
 - Beverage search component
 - Replace socialite with google solution
+- Testing
+- Favicon
 
 # Priority 2
 

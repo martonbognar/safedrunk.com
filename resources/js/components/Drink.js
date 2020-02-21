@@ -78,7 +78,7 @@ export default class Drink extends Component {
             <button onClick={this.duplicate} className='btn btn-sm btn-primary'>📋</button>
             <button onClick={this.remove} className='btn btn-sm btn-danger'>🗑</button>
             {(this.props.beverage_id && !this.props.temporary) &&
-                        <button onClick={this.favorite} className='btn btn-sm btn-success'>{this.props.favorite ? '★' : '☆'}</button>
+                        <button onClick={this.favorite} className='btn btn-sm btn-success'>{this.state.favorite ? '★' : '☆'}</button>
             }
           </div>
         </li>
