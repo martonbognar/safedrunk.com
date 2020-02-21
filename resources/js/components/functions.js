@@ -74,8 +74,7 @@ function ebacSteps(drinks, userData) {
     data['output'].push({[label]: bac});
   } else {
     const label = ('0' + time.getHours()).slice(-2) + ':' + ('0' + time.getMinutes()).slice(-2);
-    data['comeDown'] = Array(labels.length - 1).fill(null);
-    data['comeDown'][data['comeDown'].length - 1] = data['output'][data['output'].length - 1];
+    data['comeDown'].push(data['output'][data['output'].length - 1]);
     bac = calculateEbac(drinks, time, userData);
     data['comeDown'].push({[label]: bac});
   }

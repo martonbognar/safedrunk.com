@@ -13,8 +13,12 @@ class BACGraph extends Component {
   updateGraph() {
     const data = ebacSteps(this.props.drinks, this.props.userData);
     const keys = [].concat(...data.output.map((obj) => Object.keys(obj)));
+    if (data.comeDown.length === 2) {
+      keys.push(Object.keys(data.comeDown[1])[0]);
+    }
     const regular = [].concat(...data.output.map((obj) => Object.values(obj)));
-    const comeDown = [].concat(...data.comeDown.map((obj) => Object.values(obj)));
+    const comeDownBase = regular.length > 1 ? Array(regular.length - 1).fill(null) : [];
+    const comeDown = comeDownBase.concat(...data.comeDown.map((obj) => Object.values(obj)));
     this.chart.data.labels = keys;
     this.chart.data.datasets[0].data = regular;
     this.chart.data.datasets[1].data = comeDown;
