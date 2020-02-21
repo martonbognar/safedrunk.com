@@ -85,10 +85,10 @@ export default class Compare extends Component {
     let session1 = null;
     let session2 = null;
     if (this.state.session1 !== 0) {
-      session1 = <div><h2>{this.state.sessionName1}</h2><BACGraph drinks={this.state.drinks1} weight={this.state.basicData.weight} sex={this.state.basicData.sex} /></div>;
+      session1 = <div><h2>{this.state.sessionName1}</h2><BACGraph drinks={this.state.drinks1} userData={this.state.basicData} /></div>;
     }
     if (this.state.session2 !== 0) {
-      session2 = <div><h2>{this.state.sessionName2}</h2><BACGraph drinks={this.state.drinks2} weight={this.state.basicData.weight} sex={this.state.basicData.sex} /></div>;
+      session2 = <div><h2>{this.state.sessionName2}</h2><BACGraph drinks={this.state.drinks2} userData={this.state.basicData} /></div>;
     }
     return (
       <div>
