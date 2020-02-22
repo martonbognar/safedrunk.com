@@ -9,11 +9,14 @@ use App\Beverage;
 use App\Favorite;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
+
 class UserController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except(['tokenLogin']);
     }
 
     public function personal()
@@ -52,5 +55,23 @@ class UserController extends Controller
     {
         $favorite->delete();
         return response()->json(['id' => $favorite->id]);
+    }
+
+    public function tokenLogin(Request $request) {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+            'device_name' => 'required'
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        if (! $user || ! Hash::check($request->password, $user->password)) {
+            throw ValidationException::withMessages([
+                'email' => ['The provided credentials are incorrect.'],
+            ]);
+        }
+
+        return $user->createToken($request->device_name)->plainTextToken;
     }
 }

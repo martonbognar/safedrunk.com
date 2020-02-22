@@ -23,3 +23,5 @@ Route::middleware('auth:airlock')->post('/sessions/{session}/drinks/{drink}/dupl
 Route::middleware('auth:airlock')->delete('/sessions/{session}/drinks/{drink}', 'DrinkController@destroy');
 
 Route::middleware('auth:airlock')->get('/personal', 'UserController@personal');
+
+Route::middleware('guest')->post('/airlock/token', 'UserController@tokenLogin');
