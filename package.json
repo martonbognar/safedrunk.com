@@ -28,6 +28,11 @@
         "sass-loader": "^7.3.1"
     },
     "dependencies": {
-        "chart.js": "^2.9.3"
+        "@types/jest": "^25.2.1",
+        "@types/node": "^13.11.0",
+        "@types/react": "^16.9.32",
+        "@types/react-dom": "^16.9.6",
+        "chart.js": "^2.9.3",
+        "typescript": "^3.8.3"
     }
 }

@@ -2,66 +2,50 @@ import React, {Component} from 'react';
 import Drink from './Drink';
 import Calculator from './Calculator';
 import DefaultNewDrink from './DrinkForms/Default';
-import BACGraph from './BACGraph';
 import {WEIGHTS} from './data/units';
 import QuickNewDrink from './DrinkForms/Quick';
 import SVGGraph from './SVGGraphs';
-import UnifiedDrinkAdd from './DrinkForms/Unified';
 
-const localStorageError = <p>
-  It seems like your browser does not support LocalStorage (or it's turned off).
-  Please upgrade to a modern browser, change your settings, or create an account
-  to try out the site (LocalStorage is not required after you log in).
-</p>;
-
-export default class Try extends Component {
+export default abstract class Session extends Component {
   constructor(props) {
     super(props);
 
-    this.state = this.getStateFromLS();
+    this.state = {
+      basicData: {
+        sex: "female",
+        weight: 0,
+        weightUnit: 'kg',
+      }
+    };
 
-    this.getStateFromLS = this.getStateFromLS.bind(this);
-    this.saveDrinks = this.saveDrinks.bind(this);
+    this.loadState = this.loadState.bind(this);
+    this.saveState = this.saveState.bind(this);
+
+    // //////////////////////////////////////////////////////////////////////
+
     this.submitDrink = this.submitDrink.bind(this);
     this.handleValueChanged = this.handleValueChanged.bind(this);
     this.handleSave = this.handleSave.bind(this);
     this.removeDrink = this.removeDrink.bind(this);
     this.duplicateDrink = this.duplicateDrink.bind(this);
     this.toggleDrinkForm = this.toggleDrinkForm.bind(this);
+    this.cancelDrinkForm = this.cancelDrinkForm.bind(this);
     this.basicDataComponent = this.basicDataComponent.bind(this);
     this.longSessionWarning = this.longSessionWarning.bind(this);
+    this.addDrinkComponent = this.addDrinkComponent.bind(this);
   }
 
-  getStateFromLS() {
-    const localStorageExists = typeof (Storage) !== 'undefined';
-
-    if (!localStorageExists) {
-      return {localStorageExists: false};
-    }
-
-    return {
-      localStorageExists: true,
-      basicDataEditing: false,
-      showNewDrink: false,
-      basicData: {
-        sex: localStorage.sex ? localStorage.sex : 'female',
-        weight: localStorage.weight ? localStorage.weight : 0,
-        weightUnit: localStorage.weightUnit ? localStorage.weightUnit : 'kg',
-      },
-      drinks: localStorage.drinks
-                ? JSON.parse(localStorage.drinks).map((drink) => {
-                  drink.startTime = new Date(drink.startTime);
-                  return drink;
-                })
-                : [],
-      keygen: localStorage.keygen ? localStorage.keygen : 0,
-    };
+  componentDidMount() {
+    this.loadState();
   }
 
-  saveDrinks() {
-    localStorage.drinks = JSON.stringify(this.state.drinks);
-    localStorage.keygen = this.state.keygen;
-  }
+  abstract loadState(): void;
+
+  abstract saveState(): void;
+
+  abstract storeDrink(): number;
+
+  // //////////////////////////////////////////
 
   submitDrink(data) {
     if (data.modifyStart) {
@@ -111,7 +95,11 @@ export default class Try extends Component {
   }
 
   toggleDrinkForm(event) {
-    this.setState({showNewDrink: !this.state.showNewDrink});
+    this.setState({showNewDrink: event.target.name});
+  }
+
+  cancelDrinkForm() {
+    this.setState({showNewDrink: 'none'});
   }
 
   basicDataComponent() {
@@ -155,6 +143,18 @@ export default class Try extends Component {
     }
   }
 
+  addDrinkComponent() {
+    switch (this.state.showNewDrink) {
+      case 'none':
+        return <div className="btn-group" role="group" aria-label="Form controls">
+          <button name="quick" className="btn btn-outline-primary" onClick={this.toggleDrinkForm}>Quick add</button>
+          <button name="default" className="btn btn-outline-primary" onClick={this.toggleDrinkForm}>Beverage list</button>
+        </div>;
+      case 'quick': return <QuickNewDrink onChange={this.submitDrink} cancel={this.cancelDrinkForm} />;
+      default: return <DefaultNewDrink onChange={this.submitDrink} cancel={this.cancelDrinkForm} />;
+    }
+  }
+
   render() {
     if (this.state.localStorageExists === false) {
       return localStorageError;
@@ -162,10 +162,6 @@ export default class Try extends Component {
 
     if (this.state.basicData.weight === 0 || this.state.basicDataEditing) {
       return this.basicDataComponent();
-    }
-
-    if (this.state.showNewDrink) {
-      return <UnifiedDrinkAdd onChange={this.submitDrink} cancel={this.toggleDrinkForm} />;
     }
 
     const drinks = this.state.drinks.map((drink) =>
@@ -198,9 +194,7 @@ export default class Try extends Component {
         </div>
         <div className="card-body">
           {this.longSessionWarning()}
-          <div className="text-center">
-            <button name="quick" className="btn btn-outline-primary" onClick={this.toggleDrinkForm}>New drink</button>
-          </div>
+          {this.addDrinkComponent()}
           <hr />
           {drinkContainer}
           <Calculator drinks={this.state.drinks} weight={this.state.basicData.weight * WEIGHTS[this.state.basicData.weightUnit]} sex={this.state.basicData.sex} />
