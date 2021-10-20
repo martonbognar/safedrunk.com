@@ -37,10 +37,8 @@ export default class UnifiedDrinkAdd extends Component {
 
   handleNumberChanged(event) {
     const input = event.target.value.replace(',', '.');
-    if (isNaN(input)) {
-      this.setState({[event.target.name]: ''});
-    } else {
-      this.setState({[event.target.name]: parseFloat(input)});
+    if (!isNaN(input)) {
+      this.setState({[event.target.name]: input});
     }
   }
 
@@ -72,7 +70,7 @@ export default class UnifiedDrinkAdd extends Component {
         <div className='row'>
           <div className="col-xs">
             <div className="input-group">
-              <input type='number' step='0.01' min='0' onChange={this.handleNumberChanged} value={this.state.percentage} placeholder='Percentage' required className="form-control" name="percentage" />
+              <input type='text' onChange={this.handleNumberChanged} value={this.state.percentage} placeholder='Percentage' required className="form-control" name="percentage" />
               <div className="input-group-append">
                 <span className="input-group-text" id="basic-addon2">%</span>
               </div>

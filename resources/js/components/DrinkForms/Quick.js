@@ -74,11 +74,11 @@ export default class QuickNewDrink extends Component {
           </div>
           <div className="form-group col-md-4">
             <label htmlFor="percentage">Percentage</label>
-            <input type='number' step='0.01' min='0' onChange={this.handleNumberChanged} value={this.state.percentage} placeholder='Percentage' required className="form-control" name="percentage" />
+            <input type='text' onChange={this.handleNumberChanged} value={this.state.percentage} placeholder='Percentage' required className="form-control" name="percentage" />
           </div>
           <div className="form-group col-md-2">
             <label htmlFor="amount">Amount</label>
-            <input type='number' step='0.1' min='0' onChange={this.handleNumberChanged} value={this.state.amount} placeholder='Amount' required className="form-control" name="amount" />
+            <input type='text' onChange={this.handleNumberChanged} value={this.state.amount} placeholder='Amount' required className="form-control" name="amount" />
           </div>
           <div className="form-group col-md-2">
             <label htmlFor="unit">Unit</label>
